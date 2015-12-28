@@ -93,6 +93,30 @@ namespace PIWebSharp
         public List<string> CategoryNames { get; set; }
     }
 
+    public class AFAtrribute : BaseResponse
+    {
+        public string Type { get; set; }
+        public string TypeQualifier { get; set; }
+        public string DefaultUnitsName { get; set; }
+        public string DataReferencePlugIn { get; set; }
+        public string ConfigString { get; set; }
+        public bool IsConfigurationItem { get; set; }
+        public bool IsExcluded { get; set; }
+        public bool IsHidden { get; set; }
+        public List<string> CategoryNames { get; set; }
+        public bool Step { get; set; }
+    }
+
+    public class AFValue
+    {
+        public DateTime Timestamp { get; set; }
+        public string Value { get; set; }
+        public string UnitsAbbreviation { get; set; }
+        public bool Good { get; set; }
+        public bool Questionable { get; set; }
+        public bool Substituted { get; set; }
+    }
+
     public class AFElementTemplate : BaseResponse
     {
         public bool AllowElementToExtend { get; set; }
