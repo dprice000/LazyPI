@@ -22,9 +22,37 @@ namespace PIWebSharp
         Any
     }
 
+    public enum SearchMode
+    {
+        None,
+        StartInclusive,
+        EndInclusive,
+        Inclusive,
+        Overlapped,
+        InProgress,
+        BackwardFromStartTime,
+        ForwardFromStartTime,
+        BackwardFromEndTime,
+        ForwardFromEndTime,
+        ForwardInProgress
+    }
+
     public class LinksResponse
     {
         public string Self { get; set; }
+    }
+
+    /// <summary>
+    /// A Base Object that all elements are derived from.
+    /// </summary>
+    public abstract class BaseResponse
+    {
+        public string WebID { get; set; }
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Path { get; set; }
+        public LinksResponse Links { get; set; }
     }
 
     public class HomeResponse
@@ -35,105 +63,71 @@ namespace PIWebSharp
         public string System { get; set; }
     }
 
-    public class AFServer
+    public class AFServer : BaseResponse
     {
-        public string WebID { get; set; }
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Path { get; set; }
         public bool IsConnected { get; set; }
         public string ServerVersion { get; set; }
-        public LinksResponse Links { get; set; }
     }
 
-    public class AFDB
+    public class AFDB : BaseResponse
     {
-        public string WebID { get; set; }
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Path { get; set; }
-        public LinksResponse Links { get; set; }
     }
 
-    public class UnitClass
+    public class UnitClass : BaseResponse
     {
-        public string WebID { get; set; }
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
         public string CanonicalUnitName { get; set; }
         public string CanonicalUnitAbbreviation { get; set; }
-        public string Path { get; set; }
-        public LinksResponse Links { get; set; }
     }
 
-    public class AttributeCategory
+    public class AttributeCategory : BaseResponse
     {
-        public string WebID { get; set; }
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Path { get; set; }
-        public LinksResponse Links { get; set; }
     }
 
-    public class ElementCategory
+    public class ElementCategory : BaseResponse
     {
-        public string WebID { get; set; }
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Path { get; set; }
-        public LinksResponse Links { get; set; }
     }
 
-    public class AFElement
+    public class AFElement : BaseResponse
     {
-        public string WebID { get; set; }
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string Path { get; set; }
-        public string Description { get; set; }
         public string TemplateName { get; set; }
         public List<string> CategoryNames { get; set; }
-        public LinksResponse Links { get; set; } 
     }
 
-    public class AFElementList
+    public class AFElementTemplate : BaseResponse
     {
-        public LinksResponse Links { get; set; }
-        public List<AFElement> Items { get; set; }
+        public bool AllowElementToExtend { get; set; }
+        public List<string> CategoryNames { get; set; }
     }
 
-    public class ElementCategoryList
+    public class AFEventFrame : BaseResponse
     {
-        public LinksResponse Links { get; set; }
-        public List<ElementCategory> Items { get; set; }
+        public string TemplateName { get; set; }
+        public List<string> CategoryNames { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public bool AreValuesCaptured { get; set; }
     }
 
-    public class AttributeCategoryList
+    public class AFEnumerationSet : BaseResponse
     {
-        public LinksResponse Links { get; set; }
-        public List<AttributeCategory> List { get; set; }
     }
 
-    public class UnitClassList
+    public class AFTable : BaseResponse
     {
-        public LinksResponse Links { get; set; }
-        public List<UnitClass> Items { get; set; }
+        public List<string> CategoryNames { get; set; }
     }
 
-    public class AFDBList
+    public class AFTableCategory : BaseResponse
     {
-        public LinksResponse Links { get; set; }
-        public List<AFDB> Items { get; set; } 
     }
 
-    public class AFServerList
+    /// <summary>
+    /// Used to handle any response that includes a list of items
+    /// </summary>
+    /// <typeparam name="T">The type to be held in the Items list</typeparam>
+    public class ResponseList<T>
     {
         public LinksResponse Links { get; set; }
-        public List<AFServer> Items { get; set; }
+        public List<T> Items { get; set; }
     }
 }
