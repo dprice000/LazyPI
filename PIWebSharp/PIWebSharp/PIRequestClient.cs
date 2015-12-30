@@ -12,12 +12,12 @@ namespace PIWebSharp
     public class PIRequestClient
     {
         string _serverAddress = "";
-        RestClient client;
+        RestClient _client;
 
         public PIRequestClient(string apiServerName)
         {
             _serverAddress = "https://" + apiServerName + "/webapi";
-            client = new RestClient(_serverAddress);
+            _client = new RestClient(_serverAddress);
         }
 
         #region "Home"
@@ -28,7 +28,7 @@ namespace PIWebSharp
         public HomeResponse Home()
         {
             var request = new RestRequest("/home");
-            return client.Execute<HomeResponse>(request).Data;
+            return _client.Execute<HomeResponse>(request).Data;
         }
         #endregion
 
@@ -40,9 +40,9 @@ namespace PIWebSharp
         /// <returns>A single AFDB object.</returns>
         public AFDB GetAFDB(string webID)
         {
-            var request = new RestRequest("/assetdatabases");
-            request.AddParameter("webId", webID);
-            return client.Execute<AFDB>(request).Data;
+            var request = new RestRequest("/assetdatabases/{webId}");
+            request.AddUrlSegment("webId", webID);
+            return _client.Execute<AFDB>(request).Data;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("/assetdatabases");
             request.AddParameter("path", path);
-            return client.Execute<AFDB>(request).Data;
+            return _client.Execute<AFDB>(request).Data;
         }
 
         /// <summary>
@@ -64,9 +64,9 @@ namespace PIWebSharp
         /// <param name="webID"></param>
         public void DeleteAFDB(string webID)
         {
-            var request = new RestRequest("/assetdatabases", Method.DELETE);
-            request.AddParameter("webId", webID);
-            client.Execute(request);
+            var request = new RestRequest("/assetdatabases/{webId}", Method.DELETE);
+            request.AddUrlSegment("webId", webID);
+            _client.Execute(request);
         }
 
         //TODO: Implement CreateAttributeCategory
@@ -88,15 +88,15 @@ namespace PIWebSharp
         public ResponseList<AttributeCategory> GetAttributeCategories(string afdbWID)
         {
             var request = new RestRequest("/assetdatabases/{webId}/attributecategories");
-            request.AddParameter("webId", afdbWID);
-            return client.Execute<ResponseList<AttributeCategory>>(request).Data;
+            request.AddUrlSegment("webId", afdbWID);
+            return _client.Execute<ResponseList<AttributeCategory>>(request).Data;
         }
 
         public ResponseList<ElementCategory> GetElementCategories(string afdbWID)
         {
             var request = new RestRequest("/assetdatabases/{webId}/elementcategories");
-            request.AddParameter("webId", afdbWID);
-            return client.Execute<ResponseList<ElementCategory>>(request).Data;
+            request.AddUrlSegment("webId", afdbWID);
+            return _client.Execute<ResponseList<ElementCategory>>(request).Data;
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace PIWebSharp
             request.AddParameter("nameFilter", nameFilter);
             request.AddParameter("templateName", templateName);
 
-            return client.Execute<ResponseList<AFElement>>(request).Data;
+            return _client.Execute<ResponseList<AFElement>>(request).Data;
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("/assetdatabases/{webId}/elements");
 
-            request.AddParameter("webId", rootWID);
+            request.AddUrlSegment("webId", rootWID);
 
             if (nameFilter != null)
                 request.AddParameter("nameFilter", nameFilter);
@@ -151,7 +151,7 @@ namespace PIWebSharp
             request.AddParameter("maxCount", maxCount);
 
 
-            return client.Execute<ResponseList<AFElement>>(request).Data;
+            return _client.Execute<ResponseList<AFElement>>(request).Data;
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("/assetdatabases/{webId}/elementtemplates");
 
-            request.AddParameter("webId", afdbWID);
+            request.AddUrlSegment("webId", afdbWID);
 
             if(query != null)
                 request.AddParameter("query", query);
@@ -178,7 +178,7 @@ namespace PIWebSharp
             request.AddParameter("sortOrder", sortOrder);
             request.AddParameter("maxCount", maxCount);
 
-            return client.Execute<ResponseList<AFElementTemplate>>(request).Data;
+            return _client.Execute<ResponseList<AFElementTemplate>>(request).Data;
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace PIWebSharp
 
             request.AddUrlSegment("webId", webID);
 
-            return client.Execute<ResponseList<AFEnumerationSet>>(request).Data;
+            return _client.Execute<ResponseList<AFEnumerationSet>>(request).Data;
         }
 
         /// <summary>
@@ -246,7 +246,7 @@ namespace PIWebSharp
             request.AddParameter("startIndex", startIndex);
             request.AddParameter("maxCount", maxCount);
 
-            return client.Execute<ResponseList<AFEventFrame>>(request).Data;
+            return _client.Execute<ResponseList<AFEventFrame>>(request).Data;
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace PIWebSharp
             var request = new RestRequest("/assetdatabases/{webId}/tablecategories");
             request.AddUrlSegment("webId", afdbID);
 
-            return client.Execute<ResponseList<AFTableCategory>>(request).Data;
+            return _client.Execute<ResponseList<AFTableCategory>>(request).Data;
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace PIWebSharp
             var request = new RestRequest("/assetdatabases/{webId}/tables");
             request.AddUrlSegment("webId", afdbID);
 
-            return client.Execute<ResponseList<AFTable>>(request).Data;
+            return _client.Execute<ResponseList<AFTable>>(request).Data;
         }
         #endregion
 
@@ -284,7 +284,7 @@ namespace PIWebSharp
         public ResponseList<AFServer> GetAFServerList()
         {
             var request = new RestRequest("/assetservers");
-            return client.Execute<ResponseList<AFServer>>(request).Data;
+            return _client.Execute<ResponseList<AFServer>>(request).Data;
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("/assetservers");
             request.AddParameter("webId", WID);
-            return client.Execute<AFServer>(request).Data;
+            return _client.Execute<AFServer>(request).Data;
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("/assetservers");
             request.AddParameter("path", path);
-            return client.Execute<AFServer>(request).Data;
+            return _client.Execute<AFServer>(request).Data;
         }
 
         //TODO: Implement CreateAssetDatabase
@@ -325,7 +325,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("/assetservers");
             request.AddParameter("name", name);
-            return client.Execute<AFServer>(request).Data;
+            return _client.Execute<AFServer>(request).Data;
         }
 
         /// <summary>
@@ -337,7 +337,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("assetservers/{webId}/assetsdatabases");
             request.AddUrlSegment("webId", AFServerWID);
-            return client.Execute<ResponseList<AFDB>>(request).Data;
+            return _client.Execute<ResponseList<AFDB>>(request).Data;
         }
 
         /// <summary>
@@ -349,7 +349,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("assetservers/{webId}/unitclasses");
             request.AddUrlSegment("webId", AFServerWID);
-            return client.Execute<ResponseList<UnitClass>>(request).Data;
+            return _client.Execute<ResponseList<UnitClass>>(request).Data;
         }
         #endregion
 
@@ -363,7 +363,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("/attributes/{webId}");
             request.AddUrlSegment("webId", webID);
-            return client.Execute<AFAtrribute>(request).Data;
+            return _client.Execute<AFAtrribute>(request).Data;
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace PIWebSharp
         {
             var request = new RestRequest("/attributes");
             request.AddParameter("path", path);
-            return client.Execute<AFAtrribute>(request).Data;
+            return _client.Execute<AFAtrribute>(request).Data;
         }
 
         /// <summary>
@@ -390,7 +390,7 @@ namespace PIWebSharp
             request.AddUrlSegment("webId", attr.WebID);
             request.AddBody(attr);
 
-            var statusCode  = client.Execute(request).StatusCode;
+            var statusCode  = _client.Execute(request).StatusCode;
 
             return ((int)statusCode == 204 ? true : false);
         }
@@ -405,7 +405,7 @@ namespace PIWebSharp
             var request = new RestRequest("/attributes/{webId}", Method.DELETE);
             request.AddUrlSegment("webId", webID);
 
-            var statusCode = client.Execute(request).StatusCode;
+            var statusCode = _client.Execute(request).StatusCode;
 
             return ((int)statusCode == 204 ? true : false);
         }
@@ -422,7 +422,7 @@ namespace PIWebSharp
             request.AddUrlSegment("webId", attr.WebID);
             request.AddBody(attr);
 
-            var statusCode = client.Execute(request).StatusCode;
+            var statusCode = _client.Execute(request).StatusCode;
 
             return ((int)statusCode == 201 ? true : false);
         }
@@ -442,7 +442,7 @@ namespace PIWebSharp
 
             request.AddUrlSegment("webId", attrWID);
 
-            return client.Execute<AFValue>(request).Data;
+            return _client.Execute<AFValue>(request).Data;
         }
 
         /// <summary>
@@ -459,7 +459,7 @@ namespace PIWebSharp
             request.AddUrlSegment("webId", attrWID);
             request.AddBody(value);
 
-            var statusCode = client.Execute(request).StatusCode;
+            var statusCode = _client.Execute(request).StatusCode;
 
             return ((int)statusCode == 204 ? true : false);
         }
