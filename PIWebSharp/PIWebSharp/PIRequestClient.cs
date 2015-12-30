@@ -657,6 +657,83 @@ namespace PIWebSharp
         #endregion
 
         #region "DataServer"
+
+            public ResponseList<DataServer> GetDataServers()
+            {
+                var request = new RestRequest("/dataservers");
+
+                return _client.Execute<ResponseList<DataServer>>(request).Data;
+            }
+
+            public DataServer GetDataServer(string serverWID)
+            {
+                var request = new RestRequest("/dataservers/{webId}");
+                request.AddUrlSegment("webId", webId);
+
+                return _client.Execute<DataServer>(request);
+            }
+
+            public DataServer GetDataServerByPath(string path)
+            {
+                var request = new RestRequest("/dataservers");
+                request.AddParameter("path", path);
+
+                return _client.Execute<DataServer>(request).Data;
+            }
+
+            public bool CreateEnumerationSet(stirng dataServerWID, EnumerationSet enumSet)
+            {
+                var request = new RestRequest("/dataservers/{webId}/enumerationsets", Method.POST);
+                request.AddUrlSegment("webId", dataServerWID);
+                request.AddBody(enumSet);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 201 ? true : false);
+            }
+
+            public bool CreatePoint(string dataServerWID, DataPoint point)
+            {
+                var request = new RestRequest("/dataservers/{webId}/points");
+                request.AddUrlSegment("webId", dataServerWID);
+                request.AddBody(point);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 201 ? true : false);
+            }   
+
+            public DataServer GetDataServerByName(string name)
+            {
+                var request = new RestRequest("/dataservers");
+                request.AddParameter("name", name);
+
+                return _client.Execute<DataServer>(request).Data;
+            }
+
+            public ResponseList<EnumerationSet> GetEnumerationSets(string dataServerWID)
+            {
+                var request = new RestRequest("/dataservers/{webId}/enumerationssets");
+                request.AddUrlSegment("webId", dataServerWID);
+
+                return _client.Execute<ResponseList<EnumerationSet>>(request).Data;
+            }
+
+            public ResponseList<DataPoint> GetPoints(string dataServerWID, string nameFilter, int startIndex, int maxCount)
+            {
+                var request = new RestRequest("/dataservers/{webId}/points");
+                request.AddUrlSegment("webId", dataServerWID);
+                request.AddParameter("nameFilter", nameFilter);
+                request.AddParameter("startIndex", startIndex);
+                request.AddParameter("maxCount", maxCount);
+
+                return _client.Execute<ResponseList<DataPoint>>(request).Data;
+
+            }            
+        #endregion
+
+        #region "Element"
+        
         #endregion
     }
 }

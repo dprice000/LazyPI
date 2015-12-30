@@ -127,6 +127,12 @@ namespace PIWebSharp
         public string System { get; set; }
     }
 
+    public class DataServer : BaseResponse
+    {
+        public bool IsConnected { get; set; }
+        public string ServerVersion { get; set; }
+    }
+
     public class AFServer : BaseResponse
     {
         public bool IsConnected { get; set; }
@@ -207,6 +213,13 @@ namespace PIWebSharp
 
     public class AFTableCategory : BaseResponse
     {
+    }
+
+    public class DataPoint :BaseResponse
+    {
+        public string PointClass { get; set; }
+        public string PointType { get; set; }
+        public bool Future { get; set; }
     }
 
     /// <summary>
