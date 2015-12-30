@@ -108,6 +108,17 @@ namespace PIWebSharp
         public LinksResponse Links { get; set; }
     }
 
+    public class SystemConfiguration
+    {
+        public List<string> AuthenticationMethods { get; set; }
+        public string CorsHeaders { get; set; }
+        public string CorsMethods { get; set; }
+        public string CorsOrigins { get; set; }
+        public bool CorsSupportsCredentials { get; set; }
+        public DateTime Timestamp { get; set; }
+        public bool VerifyExtensionAssemblySignature { get; set; }
+    }
+
     public class HomeResponse
     {
         public string Self { get; set; }

@@ -616,5 +616,47 @@ namespace PIWebSharp
                 return _client.Execute<ResponseList<AFValue>>(request).Data;
             }
         #endregion
+
+        #region "Configuration"
+
+            public SystemConfiguration ListConfiguration()
+            {
+                var request = new RestRequest("/system/configuration"); 
+
+                return _client.Execute<SystemConfiguration>(request).Data;
+            }
+
+            public string GetConfigurationItemValue(string key)
+            {
+                var request = new RestRequest("/system/configuration/{key}");
+                request.AddUrlSegment("key", key);
+
+                return _client.Execute<string>(request).Data;
+            }
+
+            public bool DeleteConfigurationItem(string key)
+            {
+                var request = new RestRequest("/system/configuration/{key}");
+                request.AddUrlSegment("key", key);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 202 ? true : false);
+
+            }
+
+            public bool PutConfiguration(string key)
+            {
+                var request = new RestRequest("/system/configuration/{key}");
+                request.AddUrlSegment("key", key);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 202 ? true : false);
+            }
+        #endregion
+
+        #region "DataServer"
+        #endregion
     }
 }
