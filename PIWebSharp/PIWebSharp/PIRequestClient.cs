@@ -563,5 +563,58 @@ namespace PIWebSharp
                 return _client.Execute<ResponseList<AttributeTemplate>>(request).Data;
             }       
         #endregion
+
+        #region "Calculation"
+            public ResponseList<AFValue> GetAtIntervals(string objWID, string expression, DateTime startTime, DateTime endTime, TimeSpan sampleInterval)
+            {
+                var request = new RestRequest("/calculation/intervals");
+                request.AddParameter("webId", objWID);
+                request.AddParameter("expression", expression);
+                request.AddParameter("startTime", startTime);
+                request.AddParameter("endTime", endTime);
+                request.AddParameter("sampleInterval", sampleInterval);
+
+                return _client.Execute<ResponseList<AFValue>>(request).Data;
+            }
+
+            public ResponseList<AFValue> GetAtRecorded(string objWID, string expression, DateTime startTime, DateTime endTime)
+            {
+                var request = new RestRequest("/calculation/recorded");
+                request.AddParameter("webId", objWID);
+                request.AddParameter("expression", expression);
+                request.AddParameter("startTime", startTime);
+                request.AddParameter("endTime", endTime);
+
+                return _client.Execute<ResponseList<AFValue>>(request).Data;
+            }
+
+            public ResponseList<AFValue> GetAtTimes(string objWID, string expression, DateTime time, string sortOrder)
+            {
+                var request = new RestRequest("/calculation/times");
+                request.AddParameter("webId", objWID);
+                request.AddParameter("expression", expression);
+                request.AddParameter("time", time);
+                request.AddParameter("sortOrder", sortOrder);
+
+                return _client.Execute<ResponseList<AFValue>>(request).Data;
+            }
+
+            public ResponseList<AFValue> GetSummary(string objWID, string expression, DateTime startTime, DateTime endTime, SummaryType summaryType, CalculationBasis calculationBasis, TimeType timeType, string summaryDuration, SampleType sampleType, TimeSpan sampleInterval)
+            {
+                var request = new RestRequest("/calculation/summary");
+                request.AddParameter("webId", objWID);
+                request.AddParameter("expression", expression);
+                request.AddParameter("startTime", startTime;
+                request.AddParameter("endTime", endTime);
+                request.AddParameter("summaryType", summaryType);
+                request.AddParameter("calculationBasis");
+                request.AddParameter("timeType", timeType);
+                request.AddParameter("summaryDuration", summaryDuration);
+                request.AddParameter("sampleType", sampleType);
+                request.AddParameter("sampleInterval", sampleInterval);
+
+                return _client.Execute<ResponseList<AFValue>>(request).Data;
+            }
+        #endregion
     }
 }

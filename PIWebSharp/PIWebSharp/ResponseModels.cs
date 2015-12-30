@@ -6,6 +6,59 @@ using System.Threading.Tasks;
 
 namespace PIWebSharp
 {
+
+    /// <summary>
+    /// Values to indicate which summary type calculation(s) should be performed. 
+    /// </summary>
+    public enum SummaryType
+    {
+        None,
+        Total,
+        Average,
+        Minimum,
+        Maximum,
+        Range,
+        StdDev,
+        PopulationStdDev,
+        Count,
+        PercentGood,
+        All,
+        AllForNonNumeric
+    }
+
+    /// <summary>
+    /// Defines the timestamp returned for a value when a summary calculation is done. 
+    /// </summary>
+    public enum TimeType
+    {
+        Auto,
+        EarliestTime,
+        MostRecentTime
+    }
+
+    /// <summary>
+    /// Defines the evaluation of an expression over a time range.
+    /// </summary>
+    public enum SampleType
+    {
+        ExpressionRecordedValues,
+        Interval
+    }
+
+    /// <summary>
+    /// Defines the possible calculation options when performing summary calculations over time-series data.
+    /// </summary>
+    public enum CalculationBasis
+    {
+        TimeWeighted,
+        EventWeighted,
+        TimeWeightedContinuous,
+        TimeWeightedDiscrete,
+        EventWeightedExcludeMostRecentEvent,
+        EventWeightedExcludeEarliestEvent,
+        EventWeightedIncludeBothEnds
+    }
+
     /// <summary>
     /// The possible values for the type of an element
     /// </summary>
