@@ -464,5 +464,104 @@ namespace PIWebSharp
             return ((int)statusCode == 204 ? true : false);
         }
         #endregion
+
+        #region "AttributeCategory"
+
+            public AttributeCategory GetAttributeCategory(string webID)
+            {
+                var request = new RestRequest("/attributecategories/{webId}");
+                request.AddUrlSegment("webId", webID);
+
+                return _client.Execute<AttributeCategory>(request).Data;
+            }
+
+            public AttributeCategory GetAttributeCategoryByPath(string path)
+            {
+                var request = new RestRequest("/attributecategories");
+                request.AddParameter("path", path);
+
+                return _client.Execute<AttributeCategory>(request).Data;
+            }
+
+            public bool UpdateAttributeCategory(AttributeCategory attrCat)
+            {
+                var request = new RestRequest("/attributecategories/{webId}", Method.PATCH);
+                request.AddUrlSegment("webId", attrCat.WebID);
+                request.AddBody(attrCat);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 204 ? true : false);
+            }
+
+            public bool DeleteAttributeCategory(AttributeCategory attrCat)
+            {
+                var request = new RestRequest("/attributecategories/{webId}", Method.DELETE);
+                request.AddUrlSegment("webId", attrCat.WebID);
+
+                var statusCode = _client.Execute(attrCat).StatusCode;
+
+                return ((int)statusCode == 204 ? true : false);
+            }
+        #endregion
+
+        #region "AttributeTemplate"
+
+            public AttributeTemplate GetAttributeTemplate(string webID)
+            {
+                var request = new RestRequest("/attributetemplates/{webId}");
+                request.AddUrlSegment("webId", webId);
+
+                return _client.Execute<AttributeTemplate>(request).Data;
+            }
+
+            public AttributeTemplate GetAttributeTemplateByPath(string path)
+            {
+                var request = new RestRequest("/attributetemplates");
+                request.AddParameter("path", path);
+
+                return _client.Execute<AttributeTemplate>(request).Data;
+            }
+
+            public bool UpdateAttributeTemplate(AttributeTemplate attrTemp)
+            {
+                var request = new RestRequest("/attributetemplates/{webId}", Method.PATCH);
+                request.AddUrlSegment("webId", webId);
+                request.AddBody(attrTemp);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 204 ? true : false);
+            }
+
+            public bool DeleteAttributeTemplate(AttributeTemplate attrTemp)
+            {
+                var request = new RestRequest("/attributetemplates/{webId}");
+                request.AddParameter("webId", webId);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 204 ? true : false);
+            }
+
+            //This really creates a childe attributetemplate
+            public bool CreateAttributeTemplate(AttributeTemplate attrTemp)
+            {
+                var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
+                request.AddUrlSegment("webId", attrTemp.WebID);
+                request.AddBody(attrTemp);
+
+                var statusCode = _client.Execute(request).StatusCode;
+                return ((int)statusCode == 201 ? true : false);
+            }
+
+            public ResponseList<AttributeTemplate> GetChildAttributeTemplates(string webId)
+            {
+                var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
+                request.AddUrlSegment("webId", webId);
+
+                return _client.Execute<ResponseList<AttributeTemplate>>(request).Data;
+            }       
+        #endregion
     }
 }
