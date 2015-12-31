@@ -852,5 +852,48 @@ namespace PIWebSharp
                 return _client.Execute<ResponseList<AFEventFrame>>(request).Data;
             }
         #endregion
+
+        #region "ElementCategory"
+
+            public ElementCategory GetElementCategory(string webID)
+            {
+                var request = new RestRequest("/elementcategories/{webId}");
+                request.AddUrlSegment("webId", WebID);
+
+                return _client.Execute<ElementCategory>(webID).Data;
+            }
+
+            public ElementCategory GetElementCategoryByPath(string path)
+            {
+                var request = new RestRequest("/elementcategories");
+                request.AddParameter("path", path);
+
+                return _client.Execute<ElementCategory>(request).Data;
+            }
+
+            public bool UpdateElementCategory(ElementCategory category)
+            {
+                var request = new RestRequest("/elementcategorie/{webId}");
+                request.AddUrlSegment("webId", category.WebID);
+                request.AddBody(category);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 204);
+            }
+
+            public bool DeleteElementCategory(string webID)
+            {
+                var request = new RestRequest("/elementcategories/{webId}");
+                request.AddUrlSegment("webId", webID);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 204)
+            }
+        #endregion
+
+        #region "ElementTemplate"
+        #endregion
     }
 }
