@@ -392,7 +392,7 @@ namespace PIWebSharp
 
             var statusCode  = _client.Execute(request).StatusCode;
 
-            return ((int)statusCode == 204 ? true : false);
+            return ((int)statusCode == 204);
         }
 
         /// <summary>
@@ -407,7 +407,7 @@ namespace PIWebSharp
 
             var statusCode = _client.Execute(request).StatusCode;
 
-            return ((int)statusCode == 204 ? true : false);
+            return ((int)statusCode == 204);
         }
 
         /// <summary>
@@ -424,7 +424,7 @@ namespace PIWebSharp
 
             var statusCode = _client.Execute(request).StatusCode;
 
-            return ((int)statusCode == 201 ? true : false);
+            return ((int)statusCode == 201);
         }
 
         //TODO: Implement GetAttributes
@@ -461,7 +461,7 @@ namespace PIWebSharp
 
             var statusCode = _client.Execute(request).StatusCode;
 
-            return ((int)statusCode == 204 ? true : false);
+            return ((int)statusCode == 204);
         }
         #endregion
 
@@ -491,7 +491,7 @@ namespace PIWebSharp
 
                 var statusCode = _client.Execute(request).StatusCode;
 
-                return ((int)statusCode == 204 ? true : false);
+                return ((int)statusCode == 204);
             }
 
             public bool DeleteAttributeCategory(AttributeCategory attrCat)
@@ -501,7 +501,7 @@ namespace PIWebSharp
 
                 var statusCode = _client.Execute(attrCat).StatusCode;
 
-                return ((int)statusCode == 204 ? true : false);
+                return ((int)statusCode == 204);
             }
         #endregion
 
@@ -531,7 +531,7 @@ namespace PIWebSharp
 
                 var statusCode = _client.Execute(request).StatusCode;
 
-                return ((int)statusCode == 204 ? true : false);
+                return ((int)statusCode == 204);
             }
 
             public bool DeleteAttributeTemplate(AttributeTemplate attrTemp)
@@ -541,7 +541,7 @@ namespace PIWebSharp
 
                 var statusCode = _client.Execute(request).StatusCode;
 
-                return ((int)statusCode == 204 ? true : false);
+                return ((int)statusCode == 204);
             }
 
             //This really creates a childe attributetemplate
@@ -552,7 +552,7 @@ namespace PIWebSharp
                 request.AddBody(attrTemp);
 
                 var statusCode = _client.Execute(request).StatusCode;
-                return ((int)statusCode == 201 ? true : false);
+                return ((int)statusCode == 201);
             }
 
             public ResponseList<AttributeTemplate> GetChildAttributeTemplates(string webId)
@@ -641,7 +641,7 @@ namespace PIWebSharp
 
                 var statusCode = _client.Execute(request).StatusCode;
 
-                return ((int)statusCode == 202 ? true : false);
+                return ((int)statusCode == 202);
 
             }
 
@@ -652,7 +652,7 @@ namespace PIWebSharp
 
                 var statusCode = _client.Execute(request).StatusCode;
 
-                return ((int)statusCode == 202 ? true : false);
+                return ((int)statusCode == 202);
             }
         #endregion
 
@@ -689,18 +689,18 @@ namespace PIWebSharp
 
                 var statusCode = _client.Execute(request).StatusCode;
 
-                return ((int)statusCode == 201 ? true : false);
+                return ((int)statusCode == 201);
             }
 
             public bool CreatePoint(string dataServerWID, DataPoint point)
             {
-                var request = new RestRequest("/dataservers/{webId}/points");
+                var request = new RestRequest("/dataservers/{webId}/points", Method.POST);
                 request.AddUrlSegment("webId", dataServerWID);
                 request.AddBody(point);
 
                 var statusCode = _client.Execute(request).StatusCode;
 
-                return ((int)statusCode == 201 ? true : false);
+                return ((int)statusCode == 201);
             }   
 
             public DataServer GetDataServerByName(string name)
@@ -728,12 +728,129 @@ namespace PIWebSharp
                 request.AddParameter("maxCount", maxCount);
 
                 return _client.Execute<ResponseList<DataPoint>>(request).Data;
-
             }            
         #endregion
 
         #region "Element"
-        
+            public AFElement GetAFElement(string elementWID)
+            {
+                var request = new RestRequest("/elements/{webId}");
+                request.AddUrlSegment("webId", elementWID);
+
+                return _client.Execute<AFElement>(request).Data;
+            }
+
+            public AFElement GetAFElementByPath(string path)
+            {
+                var request = new RestRequest("/elements");
+                request.AddParameter("path", path);
+
+                return _client.Execute<AFElement>(request).Data;
+            }
+
+            public bool UpdateAFElement(AFElement element)
+            {
+                var request = new RestRequest("/elements/{webId}", Method.PATCH);
+                request.AddUrlSegment("webId", element.WebID);
+                request.AddBody(element);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 204);
+            }
+
+            public bool DeleteAFElement(string elementWID)
+            {
+                var request = new RestRequest("/elements/{webId}", Method.DELETE);
+                request.AddUrlSegment("webId", elementWID);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 204);
+            }
+
+            public bool CreateAFAttribute(string parentWID, AFAttribute attr)
+            {
+                var request = new RestRequest("/elements/{webId}/attributes", Method.POST);
+                request.AddUrlSegment("webId", parentWID);
+                request.AddBody(attr);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 201)
+            }
+
+            public bool CreateAFElement(string parentWID, AFELement element)
+            {
+                var request = new RestRequest("/elements/{webId}/elements", Method.POST);
+                request.AddUrlSegment("webId", parentWID);
+                request.AddBody(element);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 201)
+            }
+
+            public ResponseList<AFAttribute> GetAttributes(string parentWID, string nameFilter, string categoryName, string templateName, string valueType, bool searchFullHierarchy, string SortField, string sortOrder, int startIndex, bool showExcluded, bool showHidden, int maxCount)
+            {
+                var request = new RestRequest("/elements/{webId}/attributes");
+                request.AddUrlSegment("webId", parentWID);
+                request.AddParameter("nameFilter", nameFilter);
+                request.AddParameter("categoryName", categoryName);
+                request.AddParameter("templateName", templateName);
+                request.AddParameter("valueType", valueType);
+                request.AddParameter("searchFullHierarchy", searchFullHierarchy);
+                request.AddParameter("sortField", sortField);
+                request.AddParameter("sortOrder", sortOrder);
+                request.AddParameter("startIndex", startIndex);
+                request.AddParameter("showExcluded", showExcluded);
+                request.AddParameter("showHidden", showHidden);
+                request.AddParameter("maxCount", maxCount);
+
+                return _client.Execute<ResponseList<AFAttribute>>(request).Data;
+            }
+
+            public ResponseList<ElementCategory> GetElementCategories(string elementWID)
+            {
+                var request = new RestRequest("/elements/{webId}/categories");
+                request.AddUrlSegment("webId", parentWID);
+
+                return _client.Execute<ResponseList<ElementCategory>>(request).Data;
+            }
+
+            public ResponseList<AFElement> GetElements(string rootWID, string nameFilter, string categoryName, string tempalateName, ElementType elementType, bool searchFullHierarchy, string sortField, string sortOrder, int startIndex, int maxCount)
+            {
+                var request = new RestRequest("/elements/{webId}/elements");
+                request.AddUrlSegment("webId", rootWID);
+                request.AddParameter("nameFilter", nameFilter);
+                request.AddParameter("templateName", templateName);
+                request.AddParameter("elementType", elementType);
+                request.AddParameter("searchFullHierarchy", searchFullHierarchy);
+                request.AddParameter("sortField", sortField);
+                request.AddParameter("sortOrder", sortOrder);
+                request.AddParameter("startIndex", startIndex);
+                request.AddParameter("maxCount", maxCount);
+
+                return _clien.Execute<ResponseList<AFElement>>(request).Data;
+            }
+
+            public ResponseList<AFEventFrame> GetEventFrames(string elementWID, SearchMode searchMode, DateTime startTime, DateTime endTime, string nameFilter, string categoryName, string templateName, string sortField, string sortOrder, int startIndex, int maxCount)
+            {
+                var request = new RestRequest("/elements/{webId}/eventframes");
+                request.AddUrlSegment("webId" elementWID);
+                request.AddParameter("searchMode", searchMode);
+                request.AddParameter("startTime", startTime);
+                request.AddParameter("endTime", endTime);
+                request.AddParameter("nameFilter", nameFilter);
+                request.AddParameter("categoryName", categoryName);
+                request.AddParameter("templateName", templateName);
+                request.AddParameter("sortField", sortField);
+                request.AddParameter("sortOrder", sortOrder);
+                request.AddParameter("startIndex", startIndex);
+                request.AddParameter("maxCount", maxCount);
+
+                return _client.Execute<ResponseList<AFEventFrame>>(request).Data;
+            }
         #endregion
     }
 }
