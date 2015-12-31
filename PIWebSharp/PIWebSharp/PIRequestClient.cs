@@ -873,10 +873,9 @@ namespace PIWebSharp
 
             public bool UpdateElementCategory(ElementCategory category)
             {
-                var request = new RestRequest("/elementcategorie/{webId}");
+                var request = new RestRequest("/elementcategorie/{webId}", Method.PATCH);
                 request.AddUrlSegment("webId", category.WebID);
                 request.AddBody(category);
-
                 var statusCode = _client.Execute(request).StatusCode;
 
                 return ((int)statusCode == 204);
@@ -884,9 +883,8 @@ namespace PIWebSharp
 
             public bool DeleteElementCategory(string webID)
             {
-                var request = new RestRequest("/elementcategories/{webId}");
+                var request = new RestRequest("/elementcategories/{webId}", Method.DELETE);
                 request.AddUrlSegment("webId", webID);
-
                 var statusCode = _client.Execute(request).StatusCode;
 
                 return ((int)statusCode == 204)
@@ -894,6 +892,64 @@ namespace PIWebSharp
         #endregion
 
         #region "ElementTemplate"
+
+            public ElementTemplate GetElementTemplate(string templateWID)
+            {
+                var request = new RestRequest("/elementtemplates/{webId}");
+                request.AddUrlSegment("webId", templateWID);
+
+                return _client.Execute<ElementTemplate>(request).Data;
+            }
+
+            public ElementTemplate GetElementTemplateByPath(string path)
+            {
+                var request = new RestRequest("/elementtemplates");
+                request.AddParameter("path", path);
+
+                return _client.Execute<ElementTemplate>(request).Data;
+            }
+
+            public bool UpdateElementTemplate(ElementTemplate template)
+            {
+                var request = new RestRequest("/elementtemplates/{webId}", Method.PATCH);
+                request.AddUrlSegment("webId", template.WebID);
+                request.AddBody(template);
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 204);
+            }
+
+            public bool DeleteElementTemplate(string templateWID)
+            {
+                var request = new RestRequest("/elementtemplates/{webId}", Method.DELETE);
+                request.AddUrlSegment("webId", templateWID);
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 204);
+            }
+
+
+            public bool CreateElementTemplate(string parentWID, AttributeTemplate template)
+            {
+                var request = new RestRequest("/elementtemplates/{webId}/attributetemplates", Method.POST);
+                request.AddUrlSegment("webId", parentWID);
+                request.AddBody(template);
+
+                var statusCode = _client.Execute(request).StatusCode;
+
+                return ((int)statusCode == 201);
+            }
+
+            public AttributeTemplate GetAttributeTemplate(string templateWID)
+            {
+                var request = new RestRequest("/elementtemplates/{webId}/attributetemplates");
+                request.AddUrlSegment("webId", templateWID);
+
+                return _client.Execute<AttributeTemplate>(request).Data;
+            }
+        #endregion
+
+        #region "EnumerationSet"
         #endregion
     }
 }
