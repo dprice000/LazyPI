@@ -7,7 +7,7 @@ using RestSharp;
 using RestSharp.Serializers;
 using RestSharp.Extensions;
 
-namespace PIWebSharp
+namespace PIWebSharp.WebAPI
 {
     public class PIRequestClient
     {
@@ -507,15 +507,15 @@ namespace PIWebSharp
 
         #region "AttributeTemplate"
 
-            public AttributeTemplate GetAttributeTemplate(string webID)
+            public AFAttributeTemplate GetAttributeTemplate(string webID)
             {
                 var request = new RestRequest("/attributetemplates/{webId}");
                 request.AddUrlSegment("webId", webId);
 
-                return _client.Execute<AttributeTemplate>(request).Data;
+                return _client.Execute<AFAttributeTemplate>(request).Data;
             }
 
-            public AttributeTemplate GetAttributeTemplateByPath(string path)
+            public AFAttributeTemplate GetAttributeTemplateByPath(string path)
             {
                 var request = new RestRequest("/attributetemplates");
                 request.AddParameter("path", path);
@@ -523,7 +523,7 @@ namespace PIWebSharp
                 return _client.Execute<AttributeTemplate>(request).Data;
             }
 
-            public bool UpdateAttributeTemplate(AttributeTemplate attrTemp)
+            public bool UpdateAttributeTemplate(AFAttributeTemplate attrTemp)
             {
                 var request = new RestRequest("/attributetemplates/{webId}", Method.PATCH);
                 request.AddUrlSegment("webId", webId);
@@ -534,10 +534,10 @@ namespace PIWebSharp
                 return ((int)statusCode == 204);
             }
 
-            public bool DeleteAttributeTemplate(AttributeTemplate attrTemp)
+            public bool DeleteAttributeTemplate(AFAttributeTemplate attrTemp)
             {
                 var request = new RestRequest("/attributetemplates/{webId}");
-                request.AddParameter("webId", webId);
+                request.AddParameter("webId", attrTemp.WebID);
 
                 var statusCode = _client.Execute(request).StatusCode;
 
@@ -545,7 +545,7 @@ namespace PIWebSharp
             }
 
             //This really creates a childe attributetemplate
-            public bool CreateAttributeTemplate(AttributeTemplate attrTemp)
+            public bool CreateAttributeTemplate(AFAttributeTemplate attrTemp)
             {
                 var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
                 request.AddUrlSegment("webId", attrTemp.WebID);
@@ -555,12 +555,12 @@ namespace PIWebSharp
                 return ((int)statusCode == 201);
             }
 
-            public ResponseList<AttributeTemplate> GetChildAttributeTemplates(string webId)
+            public ResponseList<AFAttributeTemplate> GetChildAttributeTemplates(string webId)
             {
                 var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
                 request.AddUrlSegment("webId", webId);
 
-                return _client.Execute<ResponseList<AttributeTemplate>>(request).Data;
+                return _client.Execute<ResponseList<AFAttributeTemplate>>(request).Data;
             }       
         #endregion
 
@@ -769,63 +769,6 @@ namespace PIWebSharp
             }
         #endregion
 
-        #region "ElementTemplate"
-
-            public ElementTemplate GetElementTemplate(string templateWID)
-            {
-                var request = new RestRequest("/elementtemplates/{webId}");
-                request.AddUrlSegment("webId", templateWID);
-
-                return _client.Execute<ElementTemplate>(request).Data;
-            }
-
-            public ElementTemplate GetElementTemplateByPath(string path)
-            {
-                var request = new RestRequest("/elementtemplates");
-                request.AddParameter("path", path);
-
-                return _client.Execute<ElementTemplate>(request).Data;
-            }
-
-            public bool UpdateElementTemplate(ElementTemplate template)
-            {
-                var request = new RestRequest("/elementtemplates/{webId}", Method.PATCH);
-                request.AddUrlSegment("webId", template.WebID);
-                request.AddBody(template);
-                var statusCode = _client.Execute(request).StatusCode;
-
-                return ((int)statusCode == 204);
-            }
-
-            public bool DeleteElementTemplate(string templateWID)
-            {
-                var request = new RestRequest("/elementtemplates/{webId}", Method.DELETE);
-                request.AddUrlSegment("webId", templateWID);
-                var statusCode = _client.Execute(request).StatusCode;
-
-                return ((int)statusCode == 204);
-            }
-
-
-            public bool CreateElementTemplate(string parentWID, AttributeTemplate template)
-            {
-                var request = new RestRequest("/elementtemplates/{webId}/attributetemplates", Method.POST);
-                request.AddUrlSegment("webId", parentWID);
-                request.AddBody(template);
-
-                var statusCode = _client.Execute(request).StatusCode;
-
-                return ((int)statusCode == 201);
-            }
-
-            public AttributeTemplate GetAttributeTemplate(string templateWID)
-            {
-                var request = new RestRequest("/elementtemplates/{webId}/attributetemplates");
-                request.AddUrlSegment("webId", templateWID);
-
-                return _client.Execute<AttributeTemplate>(request).Data;
-            }
-        #endregion
 
         #region "EnumerationSet"
 

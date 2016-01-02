@@ -163,7 +163,20 @@ namespace PIWebSharp.WebAPI
         public List<string> CategoryNames { get; set; }
     }
 
-    public class AFAtrribute : BaseResponse
+    public class AFAttributeTemplate : BaseResponse
+    {
+        public string Type { get; set; }
+        public string TypeQualifier { get; set; }
+        public string DefaultUnitsName { get; set; }
+        public string DataReferencePlugIn { get; set; }
+        public string ConfigString { get; set; }
+        public bool IsConfigurationItem { get; set; }
+        public bool IsExcluded { get; set; }
+        public bool IsHidden { get; set; }
+        public List<string> CategoryNames { get; set; }
+    }
+
+    public class AFAttribute : BaseResponse
     {
         public string Type { get; set; }
         public string TypeQualifier { get; set; }

@@ -10,11 +10,11 @@ namespace PIWebSharp.LazyObjects
 	public class AFElement
 	{
 		private PIWebSharp.WebAPI.AFElement _Element;
-		private AFElementTemplate _Template;
-		private AFElement _Parent;
-		private IEnumerable<AFElement> _Children;
-		private IEnumerable<Attributes> _Attributes;
-		private IAFElementLoader _ElementLoader;
+		private Lazy<AFElementTemplate> _Template;
+		private Lazy<AFElement> _Parent;
+		private Lazy<List<AFElement>> _Children;
+		private Lazy<List<AFAttribute>> _Attributes;
+		private IAFElementLoader _Loader;
 
 		#region "Properties"
 
@@ -54,23 +54,16 @@ namespace PIWebSharp.LazyObjects
 			{
 				get
 				{
-
+					return _Template.Value;
 				}
-				set
-				{
 
-				}
 			}
 
 			public AFElement Parent
 			{
 				get
 				{
-
-				}
-				set
-				{
-
+					return _Parent.Value;
 				}
 			}
 
@@ -78,50 +71,63 @@ namespace PIWebSharp.LazyObjects
 			{
 				get
 				{
-
-				}
-				set
-				{
-
+					return _Children.Value; 
 				}
 			}
 
-			public List<Attributes> Attributes
+			public List<AFAttribute> Attributes
 			{
 				get
 				{
-
-				}
-				set
-				{
-
+					return _Attributes.Value;
 				}
 			}
 		#endregion
 
 
 		#region "Constructors"
+			public AFElement()
+			{
+
+			}
+
+			public AFElement(PIWebSharp.WebAPI.AFElement rawElement)
+			{
+				_Element = rawElement;
+			}
 
 			public AFElement(string webID)
 			{
-				_ElementLoader.Find(webID);
+				_Element = _Loader.Find(webID);
 
-				BuildReferences();
+
+
+
 			}
 
-			// Initialized all basic references
-			private BuildReferences()
+			private void InitializeLoaders()
 			{
-				//Strips element name from path to get parent path
-				string parentPath = Path.SubString(0, Path.LastIndexOf('\\');
-				_Parent = _ElementLoader.FindByPath(parentPath);
+				string parentPath = Path.Substring(0, Path.LastIndexOf('\\'));
+
+				//Load Parent
+				_Parent = new Lazy<AFElement>(() =>
+				{
+					var ele = _Loader.FindByPath(parentPath);
+					AFElement element = new AFElement(ele);
+					return element;
+				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+
+
 			}
+			// Initialized all basic references
+			//Strips element name from path to get parent path
+
 		#endregion
 
 		#region "Interactions"
 			public void CheckIn()
 			{
-				AFElements.Update(this)
+				_Loader.Update(this);
 			}
 
 		#endregion

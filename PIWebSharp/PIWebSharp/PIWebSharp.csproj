@@ -44,6 +44,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AFAttribute.cs" />
+    <Compile Include="AFAttributeLoader.cs" />
+    <Compile Include="AFAttributeTemplate\AFAttributeTemplateLoader.cs" />
+    <Compile Include="AFAttributeTemplate\IAttributeTemplateLoader.cs" />
+    <Compile Include="AFElementTemplate\AFElementTemplateLoader.cs" />
+    <Compile Include="AFElementTemplate\AFElementTemplates.cs" />
+    <Compile Include="AFElementTemplate\IAFElementTemplateLoader.cs" />
+    <Compile Include="AFElement\AFElement.cs" />
+    <Compile Include="AFElement\AFElementLoader.cs" />
+    <Compile Include="AFElementTemplate\AFElementTemplate.cs" />
+    <Compile Include="AFAttributeTemplate\AFAttributeTemplate.cs" />
+    <Compile Include="AFElement\IAFElementLoader.cs" />
+    <Compile Include="IAFAttributeLoader.cs" />
     <Compile Include="PIRequestClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseModels.cs" />
