@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PIWebSharp.AFAttributeTemplate
+namespace PIWebSharp.WebAPI
 {
-    interface IAttributeTemplateLoader
+    public class AFAttributeTemplate : PIWebSharp.AFAttributeTemplate
     {
+
     }
 }

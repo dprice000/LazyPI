@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace PIWebSharp
 {
-    public class AFAttribute
+    interface IAttributeTemplateLoader
     {
-
     }
 }

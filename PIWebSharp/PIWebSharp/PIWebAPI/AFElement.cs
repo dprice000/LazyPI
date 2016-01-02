@@ -7,7 +7,7 @@ using RestSharp;
 
 namespace PIWebSharp.LazyObjects
 {
-	public class AFElement
+	public class AFElement : PIWebSharp.AFElement
 	{
 		private PIWebSharp.WebAPI.AFElement _Element;
 		private Lazy<AFElementTemplate> _Template;

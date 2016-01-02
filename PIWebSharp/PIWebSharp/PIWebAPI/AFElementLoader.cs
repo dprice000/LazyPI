@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
 
-namespace PIWebSharp.LazyObjects
+namespace PIWebSharp.WebAPI
 {
 	public class AFElementLoader : IAFElementLoader
 	{
