@@ -44,23 +44,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PIWebAPI\AFAttribute.cs" />
-    <Compile Include="PIWebAPI\AFAttributeLoader.cs" />
-    <Compile Include="PIWebAPI\AFAttributeTemplateLoader.cs" />
+    <Compile Include="WebAPI\AFAttribute.cs" />
+    <Compile Include="WebAPI\AFAttributeLoader.cs" />
+    <Compile Include="WebAPI\AFAttributeTemplateLoader.cs" />
     <Compile Include="Common\IAttributeTemplateLoader.cs" />
-    <Compile Include="PIWebAPI\AFElementTemplateLoader.cs" />
-    <Compile Include="PIWebAPI\AFElementTemplates.cs" />
+    <Compile Include="WebAPI\AFElementTemplateLoader.cs" />
+    <Compile Include="WebAPI\AFElementTemplates.cs" />
     <Compile Include="Common\IAFElementTemplateLoader.cs" />
-    <Compile Include="PIWebAPI\AFElement.cs" />
-    <Compile Include="PIWebAPI\AFElementLoader.cs" />
-    <Compile Include="PIWebAPI\AFElementTemplate.cs" />
-    <Compile Include="PIWebAPI\AFAttributeTemplate.cs" />
+    <Compile Include="WebAPI\AFElement.cs" />
+    <Compile Include="WebAPI\AFElementLoader.cs" />
+    <Compile Include="WebAPI\AFElementTemplate.cs" />
+    <Compile Include="WebAPI\AFAttributeTemplate.cs" />
     <Compile Include="Common\IAFElementLoader.cs" />
     <Compile Include="Common\BaseObjects.cs" />
     <Compile Include="Common\IAFAttributeLoader.cs" />
     <Compile Include="PIRequestClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PIWebAPI\ResponseModels.cs" />
+    <Compile Include="WebAPI\ResponseModels\ResponseModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

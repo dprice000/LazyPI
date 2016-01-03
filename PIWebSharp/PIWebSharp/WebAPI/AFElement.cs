@@ -5,16 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
 
-namespace PIWebSharp.LazyObjects
+namespace PIWebSharp.WebAPI
 {
 	public class AFElement : PIWebSharp.AFElement
 	{
-		private PIWebSharp.WebAPI.AFElement _Element;
 		private Lazy<AFElementTemplate> _Template;
 		private Lazy<AFElement> _Parent;
 		private Lazy<List<AFElement>> _Children;
 		private Lazy<List<AFAttribute>> _Attributes;
-		private IAFElementLoader _Loader;
+		private IAFElementLoader _ElementLoader;
 
 		#region "Properties"
 
@@ -22,11 +21,11 @@ namespace PIWebSharp.LazyObjects
 			{
 				get
 				{
-					return _Element.Name;
+					return this._Name;
 				}
 				set
 				{
-					_Element.Name = value;
+					this._Name = value;
 				}
 			}
 
@@ -34,11 +33,11 @@ namespace PIWebSharp.LazyObjects
 			{
 				get
 				{
-					return _Element.Description;
+					return this._Description;
 				}
 				set
 				{
-					_Element.Description = value;
+					this._Description = value;
 				}
 			}
 
@@ -46,7 +45,7 @@ namespace PIWebSharp.LazyObjects
 			{
 				get
 				{
-					return _Element.Path;
+					return this._Path;
 				}
 			}
 
@@ -86,38 +85,39 @@ namespace PIWebSharp.LazyObjects
 
 
 		#region "Constructors"
-			public AFElement()
-			{
 
+			private AFElement(PIWebSharp.WebAPI.AFElement rawElement)
+			{
+				this._Name = rawElement.Name;
+				this._Description = rawElement.Description;
+				this._ID = rawElement.ID;
+
+				Initialize();
 			}
 
-			public AFElement(PIWebSharp.WebAPI.AFElement rawElement)
-			{
-				_Element = rawElement;
-			}
-
-			public AFElement(string webID)
-			{
-				_Element = _Loader.Find(webID);
-
-
-
-
-			}
-
-			private void InitializeLoaders()
+			private void Initialize()
 			{
 				string parentPath = Path.Substring(0, Path.LastIndexOf('\\'));
 
 				//Load Parent
 				_Parent = new Lazy<AFElement>(() =>
 				{
-					var ele = _Loader.FindByPath(parentPath);
-					AFElement element = new AFElement(ele);
-					return element;
+					var ele = (PIWebSharp.WebAPI.AFElement)_ElementLoader.FindByPath(parentPath);
+					return ele;
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
+				_Attributes = new Lazy<List<AFAttribute>>(() => 
+				{
+					List<PIWebSharp.WebAPI.AFAttribute> attributeList = _ElementLoader.GetAttributes(this.ID);
+					
+					return attributeList;
 
+				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+
+				_Children = new Lazy<List<AFElement>>(() =>
+				{
+
+				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 			}
 			// Initialized all basic references
 			//Strips element name from path to get parent path
@@ -127,7 +127,7 @@ namespace PIWebSharp.LazyObjects
 		#region "Interactions"
 			public void CheckIn()
 			{
-				_Loader.Update(this);
+				_ElementLoader.Update(this);
 			}
 
 		#endregion

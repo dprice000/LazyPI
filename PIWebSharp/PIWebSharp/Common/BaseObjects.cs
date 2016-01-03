@@ -6,60 +6,90 @@ using System.Threading.Tasks;
 
 namespace PIWebSharp
 {
-    abstract class AFDB
+    abstract class BaseObject
+    {
+        protected string _ID;
+        protected string _Name;
+        protected string _Path;
+        protected string _Description;
+
+        public abstract string ID
+        {
+            get;
+        }
+
+        public abstract string Name
+        {
+            get;
+            set;
+        }
+
+        public abstract string Path
+        {
+            get;
+        }
+
+        public abstract string Description
+        {
+            get;
+            set;
+        }
+    }
+
+    abstract class AFDB : BaseObject
     {
     }
 
-    abstract class AFServer
+    abstract class AFServer : BaseObject
     {
     }
 
-    abstract class AFAttribute
+    abstract class AFAttribute : BaseObject
     {
     }
 
-    abstract class AFElement
+    abstract class AFElement : BaseObject
     {
     }
 
 
-    abstract class AFEventFrame
+    abstract class AFEventFrame : BaseObject
     {
     }
 
-    abstract class AFAttributeTemplate
+    abstract class AFAttributeTemplate : BaseObject
     {
     }
 
-    abstract class AFElementTemplate
+    abstract class AFElementTemplate : BaseObject
     {
     }
 
-    abstract class AttributeCategory
+    abstract class AttributeCategory : BaseObject
     {
     }
 
-    abstract class ElementCategory
+    abstract class ElementCategory : BaseObject
     {
     }
 
-    abstract class AFValue
+    abstract class AFValue : BaseObject
     {
     }
 
-    abstract class DataPoint
+    abstract class DataPoint : BaseObject
     {
     }
 
-    abstract class AFEnumerationSet
+    abstract class AFEnumerationSet : BaseObject
     {
     }
 
-    abstract class AFTable
+    abstract class AFTable : BaseObject
     {
     }
 
-    abstract class AFTableCategory
+    abstract class AFTableCategory : BaseObject
     {
     }
 }
