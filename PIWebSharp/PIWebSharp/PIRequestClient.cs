@@ -7,7 +7,7 @@ using RestSharp;
 using RestSharp.Serializers;
 using RestSharp.Extensions;
 
-namespace PIWebSharp.WebAPI
+namespace LazyPI.WebAPI
 {
     public class PIRequestClient
     {
@@ -353,10 +353,6 @@ namespace PIWebSharp.WebAPI
         }
         #endregion
 
-        #region "Attribute"
-
-        #endregion
-
         #region "AttributeCategory"
 
             public AttributeCategory GetAttributeCategory(string webID)
@@ -395,65 +391,6 @@ namespace PIWebSharp.WebAPI
 
                 return ((int)statusCode == 204);
             }
-        #endregion
-
-        #region "AttributeTemplate"
-
-            public AFAttributeTemplate GetAttributeTemplate(string webID)
-            {
-                var request = new RestRequest("/attributetemplates/{webId}");
-                request.AddUrlSegment("webId", webId);
-
-                return _client.Execute<AFAttributeTemplate>(request).Data;
-            }
-
-            public AFAttributeTemplate GetAttributeTemplateByPath(string path)
-            {
-                var request = new RestRequest("/attributetemplates");
-                request.AddParameter("path", path);
-
-                return _client.Execute<AttributeTemplate>(request).Data;
-            }
-
-            public bool UpdateAttributeTemplate(AFAttributeTemplate attrTemp)
-            {
-                var request = new RestRequest("/attributetemplates/{webId}", Method.PATCH);
-                request.AddUrlSegment("webId", webId);
-                request.AddBody(attrTemp);
-
-                var statusCode = _client.Execute(request).StatusCode;
-
-                return ((int)statusCode == 204);
-            }
-
-            public bool DeleteAttributeTemplate(AFAttributeTemplate attrTemp)
-            {
-                var request = new RestRequest("/attributetemplates/{webId}");
-                request.AddParameter("webId", attrTemp.WebID);
-
-                var statusCode = _client.Execute(request).StatusCode;
-
-                return ((int)statusCode == 204);
-            }
-
-            //This really creates a childe attributetemplate
-            public bool CreateAttributeTemplate(AFAttributeTemplate attrTemp)
-            {
-                var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
-                request.AddUrlSegment("webId", attrTemp.WebID);
-                request.AddBody(attrTemp);
-
-                var statusCode = _client.Execute(request).StatusCode;
-                return ((int)statusCode == 201);
-            }
-
-            public ResponseList<AFAttributeTemplate> GetChildAttributeTemplates(string webId)
-            {
-                var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
-                request.AddUrlSegment("webId", webId);
-
-                return _client.Execute<ResponseList<AFAttributeTemplate>>(request).Data;
-            }       
         #endregion
 
         #region "Calculation"
@@ -660,7 +597,6 @@ namespace PIWebSharp.WebAPI
                 return ((int)statusCode == 204)
             }
         #endregion
-
 
         #region "EnumerationSet"
 

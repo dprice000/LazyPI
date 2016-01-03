@@ -4,8 +4,91 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PIWebSharp
+namespace LazyPI
 {
+    /// <summary>
+    /// Values to indicate which summary type calculation(s) should be performed. 
+    /// </summary>
+    public enum SummaryType
+    {
+        None,
+        Total,
+        Average,
+        Minimum,
+        Maximum,
+        Range,
+        StdDev,
+        PopulationStdDev,
+        Count,
+        PercentGood,
+        All,
+        AllForNonNumeric
+    }
+
+    /// <summary>
+    /// Defines the timestamp returned for a value when a summary calculation is done. 
+    /// </summary>
+    public enum TimeType
+    {
+        Auto,
+        EarliestTime,
+        MostRecentTime
+    }
+
+    /// <summary>
+    /// Defines the evaluation of an expression over a time range.
+    /// </summary>
+    public enum SampleType
+    {
+        ExpressionRecordedValues,
+        Interval
+    }
+
+    /// <summary>
+    /// Defines the possible calculation options when performing summary calculations over time-series data.
+    /// </summary>
+    public enum CalculationBasis
+    {
+        TimeWeighted,
+        EventWeighted,
+        TimeWeightedContinuous,
+        TimeWeightedDiscrete,
+        EventWeightedExcludeMostRecentEvent,
+        EventWeightedExcludeEarliestEvent,
+        EventWeightedIncludeBothEnds
+    }
+
+    /// <summary>
+    /// The possible values for the type of an element
+    /// </summary>
+    public enum ElementType
+    {
+        None,
+        Other,
+        Node,
+        Measurement,
+        Flow,
+        Transfer,
+        Boundry,
+        PIPoint,
+        Any
+    }
+
+    public enum SearchMode
+    {
+        None,
+        StartInclusive,
+        EndInclusive,
+        Inclusive,
+        Overlapped,
+        InProgress,
+        BackwardFromStartTime,
+        ForwardFromStartTime,
+        BackwardFromEndTime,
+        ForwardFromEndTime,
+        ForwardInProgress
+    }
+
     abstract class BaseObject
     {
         protected string _ID;
@@ -13,83 +96,50 @@ namespace PIWebSharp
         protected string _Path;
         protected string _Description;
 
-        public abstract string ID
+        #region "Properties"
+        public string ID
         {
-            get;
+            get
+            {
+                return _ID;
+            }
+            set
+            {
+                _ID = value;
+            }
         }
 
-        public abstract string Name
+        public string Name
         {
-            get;
-            set;
+            get
+            {
+                return this._Name;
+            }
+            set
+            {
+                this._Name = value;
+            }
         }
 
-        public abstract string Path
+        public string Description
         {
-            get;
+            get
+            {
+                return this._Description;
+            }
+            set
+            {
+                this._Description = value;
+            }
         }
 
-        public abstract string Description
+        public string Path
         {
-            get;
-            set;
+            get
+            {
+                return this._Path;
+            }
         }
-    }
-
-    abstract class AFDB : BaseObject
-    {
-    }
-
-    abstract class AFServer : BaseObject
-    {
-    }
-
-    abstract class AFAttribute : BaseObject
-    {
-    }
-
-    abstract class AFElement : BaseObject
-    {
-    }
-
-
-    abstract class AFEventFrame : BaseObject
-    {
-    }
-
-    abstract class AFAttributeTemplate : BaseObject
-    {
-    }
-
-    abstract class AFElementTemplate : BaseObject
-    {
-    }
-
-    abstract class AttributeCategory : BaseObject
-    {
-    }
-
-    abstract class ElementCategory : BaseObject
-    {
-    }
-
-    abstract class AFValue : BaseObject
-    {
-    }
-
-    abstract class DataPoint : BaseObject
-    {
-    }
-
-    abstract class AFEnumerationSet : BaseObject
-    {
-    }
-
-    abstract class AFTable : BaseObject
-    {
-    }
-
-    abstract class AFTableCategory : BaseObject
-    {
+        #endregion
     }
 }

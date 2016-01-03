@@ -1,23 +1,33 @@
-﻿using RestSharp;
+﻿using LazyPI.LazyObjects;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PIWebSharp.WebAPI
+namespace LazyPI.WebAPI
 {
     class AFAttributeLoader : IAFAttributeLoader
     {
+        private string _serverAddress;
+        private RestClient _client;
+
+        public AFAttributeLoader()
+        {
+            _serverAddress = "https://localhost/webapi";
+            _client = new RestClient(_serverAddress);
+        }
+
         /// <summary>
         /// Returns the AF Attribute specified by the WebID.
         /// </summary>
         /// <param name="webID">The unique ID of the AF attribute</param>
         /// <returns></returns>
-        public AFAttribute Find(string webID)
+        public AFAttribute Find(string ID)
         {
             var request = new RestRequest("/attributes/{webId}");
-            request.AddUrlSegment("webId", webID);
+            request.AddUrlSegment("webId", ID);
             return _client.Execute<AFAttribute>(request).Data;
         }
 
@@ -42,7 +52,7 @@ namespace PIWebSharp.WebAPI
         public bool Update(AFAttribute attr)
         {
             var request = new RestRequest("/attributes/{webId}", Method.PATCH);
-            request.AddUrlSegment("webId", attr.WebID);
+            request.AddUrlSegment("webId", attr.ID);
             request.AddBody(attr);
 
             var statusCode = _client.Execute(request).StatusCode;
@@ -55,10 +65,10 @@ namespace PIWebSharp.WebAPI
         /// </summary>
         /// <param name="webID">The WebID of the AFAttribute to be deleted</param>
         /// <returns>Returns true if delete completed.</returns>
-        public bool Delete(string webID)
+        public bool Delete(string ID)
         {
             var request = new RestRequest("/attributes/{webId}", Method.DELETE);
-            request.AddUrlSegment("webId", webID);
+            request.AddUrlSegment("webId", ID);
 
             var statusCode = _client.Execute(request).StatusCode;
 
@@ -74,7 +84,7 @@ namespace PIWebSharp.WebAPI
         public bool Create(string parentWID, AFAttribute attr)
         {
             var request = new RestRequest("/attributes/{webId}", Method.POST);
-            request.AddUrlSegment("webId", attr.WebID);
+            request.AddUrlSegment("webId", attr.ID);
             request.AddBody(attr);
 
             var statusCode = _client.Execute(request).StatusCode;
@@ -91,13 +101,13 @@ namespace PIWebSharp.WebAPI
         /// </summary>
         /// <param name="attrWID">The WebID of the AF Attribute to be read.</param>
         /// <returns></returns>
-        public AFValue GetValue(string attrWID)
+        public AFValue GetValue(string attrID)
         {
             var request = new RestRequest("/attributes/{webId}/value");
 
-            request.AddUrlSegment("webId", attrWID);
+            request.AddUrlSegment("webId", attrID);
 
-            return _client.Execute<AFValue>(request).Data;
+            var response = _client.Execute<AFValue>(request).Data;
         }
 
         /// <summary>

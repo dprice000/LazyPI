@@ -1,11 +1,12 @@
-﻿using RestSharp;
+﻿using LazyPI.LazyObjects;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PIWebSharp.WebAPI
+namespace LazyPI.WebAPI
 {
 	public class AFElementTemplateLoader : IAFElementTemplateLoader
 	{
@@ -18,14 +19,14 @@ namespace PIWebSharp.WebAPI
 		   _client  = new RestClient(_serverAddress);
 		}
 
-		public AFElementTemplate Find(string templateWID)
+		public AFElementTemplate Find(string templateID)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}");
-			request.AddUrlSegment("webId", templateWID);
+			request.AddUrlSegment("webId", templateID);
 
-		   PIWebSharp.WebAPI.AFElementTemplate template = _client.Execute<PIWebSharp.WebAPI.AFElementTemplate>(request).Data
+			var result = _client.Execute<LazyPI.WebAPI.ResponseModels.AFElementTemplate>(request).Data;
 
-			return ;
+			//return ;
 		}
 
 		public AFElementTemplate FindByPath(string path)
@@ -33,25 +34,25 @@ namespace PIWebSharp.WebAPI
 			var request = new RestRequest("/elementtemplates");
 			request.AddParameter("path", path);
 
-			PIWebSharp.WebAPI.AFElementTemplate template = _client.Execute<PIWebSharp.WebAPI.AFElementTemplate>(request).Data;
+			var result = _client.Execute<LazyPI.WebAPI.ResponseModels.AFElementTemplate>(request).Data;
 
-			return;
+			//return;
 		}
 
 		public bool Update(AFElementTemplate template)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}", Method.PATCH);
-			request.AddUrlSegment("webId", template.WebID);
+			request.AddUrlSegment("webId", template.ID);
 			request.AddBody(template);
 			var statusCode = _client.Execute(request).StatusCode;
 
 			return ((int)statusCode == 204);
 		}
 
-		public bool Delete(string templateWID)
+		public bool Delete(string templateID)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}", Method.DELETE);
-			request.AddUrlSegment("webId", templateWID);
+			request.AddUrlSegment("webId", templateID);
 			var statusCode = _client.Execute(request).StatusCode;
 
 			return ((int)statusCode == 204);
@@ -74,7 +75,7 @@ namespace PIWebSharp.WebAPI
 			var request = new RestRequest("/elementtemplates/{webId}/attributetemplates");
 			request.AddUrlSegment("webId", elementID);
 
-			return _client.Execute<IEnumerable<AttributeTemplate>>(request).Data;
+			var result = _client.Execute<LazyPI.WebAPI.ResponseModels.ResponseList<LazyPI.WebAPI.ResponseModels.AFAttributeTemplate>>(request).Data;
 		}
 	}
 }

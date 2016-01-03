@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PIWebSharp.WebAPI
+namespace LazyPI.LazyObjects
 {
-    public class AFAttributeTemplate : PIWebSharp.AFAttributeTemplate
+    public class AFElementTemplate : BaseObject
     {
 
     }

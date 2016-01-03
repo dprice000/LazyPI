@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
 
-namespace PIWebSharp.WebAPI
+namespace LazyPI.WebAPI
 {
 	public class AFElementLoader : IAFElementLoader
 	{
-		string _serverAddress;
-		RestClient _client;
+		private string _serverAddress;
+		private RestClient _client;
 
 		public AFElementLoader()
 		{
@@ -20,23 +20,23 @@ namespace PIWebSharp.WebAPI
 
 		// These functions have direct references to WebAPI calls
 		#region "Public Methods"
-			public PIWebSharp.AFElement Find(string elementWID)
+			public LazyPI.AFElement Find(string elementWID)
 			{
 				var request = new RestRequest("/elements/{webId}");
 				request.AddUrlSegment("webId", elementWID);
 
-				var result = _client.Execute<PIWebSharp.WebAPI.ResponseModels.AFElement>(request).Data;
+				var result = _client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
 			}
 
-			public PIWebSharp.AFElement FindByPath(string path)
+			public LazyPI.AFElement FindByPath(string path)
 			{
 				var request = new RestRequest("/elements");
 				request.AddParameter("path", path);
 
-				var result = _client.Execute<PIWebSharp.WebAPI.ResponseModels.AFElement>(request).Data;
+				var result = _client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
 			}
 
-			public bool Update(PIWebSharp.AFElement element)
+			public bool Update(LazyPI.AFElement element)
 			{
 				var request = new RestRequest("/elements/{webId}", Method.PATCH);
 				request.AddUrlSegment("webId", element.ID);
@@ -81,7 +81,7 @@ namespace PIWebSharp.WebAPI
 				return ((int)statusCode == 201);
 			}
 
-			public IEnumerable<PIWebSharp.AFAttribute> GetAttributes(string parentWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", string valueType = "*", bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000)
+			public IEnumerable<LazyPI.AFAttribute> GetAttributes(string parentWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", string valueType = "*", bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000)
 			{
 				var request = new RestRequest("/elements/{webId}/attributes");
 				request.AddUrlSegment("webId", parentWID);
@@ -97,18 +97,18 @@ namespace PIWebSharp.WebAPI
 				request.AddParameter("showHidden", showHidden);
 				request.AddParameter("maxCount", maxCount);
 
-				var results = _client.Execute<PIWebSharp.WebAPI.ResponseModels.ResponseList<AFAttribute>>(request).Data;
+				var results = _client.Execute<LazyPI.WebAPI.ResponseModels.ResponseList<AFAttribute>>(request).Data;
 			}
 
-			public IEnumerable<PIWebSharp.ElementCategory> GetElementCategories(string elementWID)
+			public IEnumerable<LazyPI.ElementCategory> GetElementCategories(string elementWID)
 			{
 				var request = new RestRequest("/elements/{webId}/categories");
 				request.AddUrlSegment("webId", elementWID);
 
-				var results = _client.Execute<PIWebSharp.WebAPI.ResponseModels.ResponseList<PIWebSharp.WebAPI.ResponseModels.ElementCategory>>(request).Data;
+				var results = _client.Execute<LazyPI.WebAPI.ResponseModels.ResponseList<LazyPI.WebAPI.ResponseModels.ElementCategory>>(request).Data;
 			}
 
-			public IEnumerable<PIWebSharp.AFElement> GetElements(string rootWID, string nameFilter, string categoryName, string templateName, ElementType elementType, bool searchFullHierarchy, string sortField, string sortOrder, int startIndex, int maxCount)
+			IEnumerable<AFElement> GetElements(string rootWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", ElementType elementType = ElementType.Any, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
 			{
 				var request = new RestRequest("/elements/{webId}/elements");
 				request.AddUrlSegment("webId", rootWID);
@@ -121,10 +121,10 @@ namespace PIWebSharp.WebAPI
 				request.AddParameter("startIndex", startIndex);
 				request.AddParameter("maxCount", maxCount);
 
-				var results = _client.Execute<PIWebSharp.WebAPI.ResponseModels.ResponseList<PIWebSharp.WebAPI.ResponseModels.AFElement>>(request).Data;
+				var results = _client.Execute<LazyPI.WebAPI.ResponseModels.ResponseList<LazyPI.WebAPI.ResponseModels.AFElement>>(request).Data;
 			}
 
-			public IEnumerable<PIWebSharp.AFEventFrame> GetEventFrames(string elementWID, PIWebSharp.WebAPI.SearchMode searchMode, DateTime startTime, DateTime endTime, string nameFilter, string categoryName, string templateName, string sortField, string sortOrder, int startIndex, int maxCount)
+			public IEnumerable<LazyPI.AFEventFrame> GetEventFrames(string elementWID, LazyPI.WebAPI.SearchMode searchMode, DateTime startTime, DateTime endTime, string nameFilter, string categoryName, string templateName, string sortField, string sortOrder, int startIndex, int maxCount)
 			{
 				var request = new RestRequest("/elements/{webId}/eventframes");
 				request.AddUrlSegment("webId", elementWID);
@@ -139,7 +139,7 @@ namespace PIWebSharp.WebAPI
 				request.AddParameter("startIndex", startIndex);
 				request.AddParameter("maxCount", maxCount);
 
-				var results = _client.Execute<PIWebSharp.WebAPI.ResponseModels.ResponseList<PIWebSharp.WebAPI.ResponseModels.AFEventFrame>>(request).Data;
+				var results = _client.Execute<LazyPI.WebAPI.ResponseModels.ResponseList<LazyPI.WebAPI.ResponseModels.AFEventFrame>>(request).Data;
 			}
 		#endregion
 	}
