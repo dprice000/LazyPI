@@ -1,5 +1,6 @@
-# PIWebSharp
-A client side library for interfacing with the OSIsoft PI WebAPI 
+# LazyPI
+A client side library for interfacing with the OSIsoft PI WebAPI. This project originally started out as a tool for deserializing PI WebAPI requests. 
+In the future the goal of this project will be to provide a library of Lazy objects. This will allow developers to work with the WebAPI in a more object oriented way. 
 
 This library is built against PI WebAPI version 1.3.0 based on the documentation at the OSIsoft website(https://techsupport.osisoft.com/Documentation/PI-Web-API/help/changelog.html). 
 

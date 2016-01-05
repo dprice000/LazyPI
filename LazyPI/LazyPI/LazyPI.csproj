@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="LazyObjects\AFAttribute.cs" />
     <Compile Include="LazyObjects\AFEventFrame.cs" />
+    <Compile Include="LazyObjects\AFValue.cs" />
     <Compile Include="WebAPI\AFAttributeLoader.cs" />
     <Compile Include="WebAPI\AFAttributeTemplateLoader.cs" />
     <Compile Include="LazyObjects\IAFAttributeTemplateLoader.cs" />
@@ -66,7 +67,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WCF\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

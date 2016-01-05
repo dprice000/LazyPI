@@ -10,7 +10,10 @@ namespace LazyPI.LazyObjects
     {
         private DateTimeOffset _StartTime;
         private DateTimeOffset _EndTime;
-
+        //TODO: Should handle event frame template
+        private Lazy<IEnumerable<AFEventFrame>> _EventFrames;
+        private Lazy<IEnumerable<AFAttribute>> _Attributes;
+        private IEnumerable<string> _CategoryNames;
 
         #region "Properties"
 
@@ -38,6 +41,17 @@ namespace LazyPI.LazyObjects
             }
         }
 
+        public IEnumerable<string> CategoryNames
+        {
+            get
+            {
+                return _CategoryNames;
+            }
+            set
+            {
+                _CategoryNames = value;
+            }
+        }
         #endregion
     }
 }

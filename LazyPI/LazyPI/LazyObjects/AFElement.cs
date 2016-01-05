@@ -23,7 +23,6 @@ namespace LazyPI.LazyObjects
 				{
 					return _Template;
 				}
-
 			}
 
 			public AFElement Parent

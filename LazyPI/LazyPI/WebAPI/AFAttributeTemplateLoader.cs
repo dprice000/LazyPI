@@ -46,10 +46,10 @@ namespace LazyPI.WebAPI
 			return ((int)statusCode == 204);
 		}
 
-		public bool Delete(AFAttributeTemplate attrTemp)
+		public bool Delete(string attrTempID)
 		{
 			var request = new RestRequest("/attributetemplates/{webId}");
-			request.AddParameter("webId", attrTemp.ID);
+			request.AddParameter("webId", attrTempID);
 
 			var statusCode = _client.Execute(request).StatusCode;
 

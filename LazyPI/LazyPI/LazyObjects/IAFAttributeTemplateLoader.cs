@@ -11,7 +11,7 @@ namespace LazyPI.LazyObjects
         public AFAttributeTemplate Find(string ID);
         public AFAttributeTemplate FindByPath(string path);
         public bool Update(AFAttributeTemplate attrTemp);
-        public bool Delete(AFAttributeTemplate attrTemp);
+        public bool Delete(string ID);
         public bool Create(AFAttributeTemplate attrTemp);
         public IEnumerable<AFAttributeTemplate> GetChildAttributeTemplates(string ID);
     }
