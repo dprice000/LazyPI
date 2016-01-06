@@ -1,4 +1,5 @@
-﻿using LazyPI.LazyObjects;
+﻿using LazyObjects = LazyPI.LazyObjects;
+using Response = LazyPI.WebAPI.ResponseModels;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-    class AFAttributeLoader : IAFAttribute
+    class AFAttributeLoader : LazyObjects.IAFAttribute
     {
         private string _serverAddress;
         private RestClient _client;
@@ -24,11 +25,11 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="webID">The unique ID of the AF attribute</param>
         /// <returns></returns>
-        public AFAttribute Find(string ID)
+        public LazyObjects.AFAttribute Find(string ID)
         {
             var request = new RestRequest("/attributes/{webId}");
             request.AddUrlSegment("webId", ID);
-            return _client.Execute<AFAttribute>(request).Data;
+            var attr = _client.Execute<Response.AFAttribute>(request).Data;
         }
 
         /// <summary>
@@ -37,11 +38,11 @@ namespace LazyPI.WebAPI
         /// <param name="path">The path provided by the WebAPI.</param>
         /// <returns>A specific AF Attribute.</returns>
         /// <remarks>It is recommended to use Get By ID over path.</remarks>
-        public AFAttribute FindByPath(string path)
+        public LazyObjects.AFAttribute FindByPath(string path)
         {
             var request = new RestRequest("/attributes");
             request.AddParameter("path", path);
-            return _client.Execute<AFAttribute>(request).Data;
+            var Attr = _client.Execute<Response.AFAttribute>(request).Data;
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="attr">A partial attribute that contains the WebID and any properties to be updated.</param>
         /// <returns>Returns true if update completed.</returns>
-        public bool Update(AFAttribute attr)
+        public bool Update(LazyObjects.AFAttribute attr)
         {
             var request = new RestRequest("/attributes/{webId}", Method.PATCH);
             request.AddUrlSegment("webId", attr.ID);
@@ -81,11 +82,19 @@ namespace LazyPI.WebAPI
         /// <param name="parentWID"></param>
         /// <param name="attr">The definition of the new attribute.</param>
         /// <returns>Returns true if create completed.</returns>
-        public bool Create(string parentWID, AFAttribute attr)
+        public bool Create(string parentWID, LazyObjects.AFAttribute attr)
         {
             var request = new RestRequest("/attributes/{webId}", Method.POST);
             request.AddUrlSegment("webId", attr.ID);
-            request.AddBody(attr);
+
+            //Copy to api object
+            Response.AFAttribute clientAttr = new Response.AFAttribute();
+            clientAttr.Name = attr.Name;
+            clientAttr.Description = attr.Description;
+            
+
+
+            request.AddBody(clientAttr);
 
             var statusCode = _client.Execute(request).StatusCode;
 
@@ -101,7 +110,7 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="attrWID">The WebID of the AF Attribute to be read.</param>
         /// <returns></returns>
-        public AFValue GetValue(string attrID)
+        public LazyObjects.AFValue GetValue(string attrID)
         {
             var request = new RestRequest("/attributes/{webId}/value");
 
@@ -117,7 +126,7 @@ namespace LazyPI.WebAPI
         /// <param name="value">The AFValue to be applied to the Attribute.</param>
         /// <returns>Returns true if the value update completes.</returns>
         /// <remarks>Users must be aware of the value type that the attribute takes before changing the value. If a value entered by the user does not match the value type expressed in the attribute, it will not work or it will return an error.</remarks>
-        public bool SetValue(string attrWID, AFValue value)
+        public bool SetValue(string attrWID, LazyObjects.AFValue value)
         {
             var request = new RestRequest("/attributes/{webId}/value", Method.PUT);
 

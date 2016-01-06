@@ -45,8 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LazyObjects\AFAttribute.cs" />
+    <Compile Include="LazyObjects\AFAttributeCategory.cs" />
+    <Compile Include="LazyObjects\AFElements.cs" />
     <Compile Include="LazyObjects\AFEventFrame.cs" />
     <Compile Include="LazyObjects\AFValue.cs" />
+    <Compile Include="LazyObjects\IAFValue.cs" />
+    <Compile Include="LazyObjects\IAFAttributeCategory.cs" />
     <Compile Include="WebAPI\AFAttributeLoader.cs" />
     <Compile Include="WebAPI\AFAttributeTemplateLoader.cs" />
     <Compile Include="LazyObjects\IAFAttributeTemplate.cs" />

@@ -8,6 +8,14 @@ namespace LazyPI.LazyObjects
 {
     public class AFElementTemplate : BaseObject
     {
+        private IEnumerable<string> _Categories;
 
+        public IEnumerable<string> Categories
+        {
+            get
+            {
+                return _Categories;
+            }
+        }
     }
 }

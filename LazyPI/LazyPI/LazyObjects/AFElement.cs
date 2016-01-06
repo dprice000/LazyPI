@@ -52,28 +52,17 @@ namespace LazyPI.LazyObjects
 
 
 		#region "Constructors"
-
-			private AFElement(LazyPI.WebAPI.ResponseModels.AFElement responseEle)
+			private AFElement()
 			{
-
-				Initialize(responseEle.TemplateName);
+				Initialize();
 			}
 
-			//private AFElement(PIWebSharp.WebAPI.AFElement rawElement)
-			//{
-			//    this._Name = rawElement.Name;
-			//    this._Description = rawElement.Description;
-			//    this._ID = rawElement.ID;
-
-			//    Initialize(rawElement.Template.Name);
-			//}   
-
-			private void Initialize(string templateName)
+			/// <summary>
+			/// Builds loader object and sets all callbacks for lazy loading 
+			/// </summary>
+			private void Initialize()
 			{
-				string parentPath = Path.Substring(0, Path.LastIndexOf('\\'));
-
-				//Load Template 
-				
+				string parentPath = Path.Substring(0, Path.LastIndexOf('\\')); 
 
 				//Load Parent
 				_Parent = new Lazy<AFElement>(() =>
@@ -82,11 +71,13 @@ namespace LazyPI.LazyObjects
 					return ele;
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
+				//Load Attributes
 				_Attributes = new Lazy<IEnumerable<AFAttribute>>(() => 
 				{
 					return _ElementLoader.GetAttributes(this.ID).Cast<AFAttribute>().ToList();
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
+				//Load Children
 				_Children = new Lazy<IEnumerable<AFElement>>(() =>
 				{
 					return _ElementLoader.GetElements(this.ID);
