@@ -8,7 +8,7 @@ using RestSharp;
 
 namespace LazyPI.WebAPI
 {
-	public class AFAttributeTemplateLoader : LazyPI.LazyObjects.IAFAttributeTemplateLoader
+	public class AFAttributeTemplateLoader : LazyPI.LazyObjects.IAFAttributeTemplate
 	{
 		private string _serverAddress;
 		private RestClient _client;

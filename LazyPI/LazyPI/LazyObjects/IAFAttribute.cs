@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
-    public interface IAFAttributeLoader
+    public interface IAFAttribute
     {
         public AFAttribute Find(string ID);
         public AFAttribute FindByPath(string path);

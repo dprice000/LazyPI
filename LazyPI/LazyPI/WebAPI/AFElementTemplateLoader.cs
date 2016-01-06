@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-	public class AFElementTemplateLoader : IAFElementTemplateLoader
+	public class AFElementTemplateLoader : IAFElementTemplate
 	{
 		string _serverAddress;
 		RestClient _client;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-    class AFAttributeLoader : IAFAttributeLoader
+    class AFAttributeLoader : IAFAttribute
     {
         private string _serverAddress;
         private RestClient _client;

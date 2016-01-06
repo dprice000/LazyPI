@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
-    public interface IAFElementTemplateLoader
+    public interface IAFElementTemplate
     {
         public AFElementTemplate Find(string templateID);
         public AFElementTemplate FindByPath(string path);

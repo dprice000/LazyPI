@@ -13,7 +13,7 @@ namespace LazyPI.LazyObjects
 		private Lazy<AFElement> _Parent;
 		private Lazy<IEnumerable<AFElement>> _Children;
 		private Lazy<IEnumerable<AFAttribute>> _Attributes;
-		private IAFElementLoader _ElementLoader;
+		private IAFElement _ElementLoader;
 
 		#region "Properties"
 

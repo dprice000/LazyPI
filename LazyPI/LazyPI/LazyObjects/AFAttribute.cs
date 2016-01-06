@@ -8,7 +8,7 @@ namespace LazyPI.LazyObjects
 {
     public class AFAttribute : BaseObject
     {
-        private IAFAttributeLoader _AttrLoader;
+        private IAFAttribute _AttrLoader;
 
         #region "Properties"
         public AFValue Value
