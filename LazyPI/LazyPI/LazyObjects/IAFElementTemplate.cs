@@ -8,11 +8,11 @@ namespace LazyPI.LazyObjects
 {
     public interface IAFElementTemplate
     {
-        public AFElementTemplate Find(string templateID);
-        public AFElementTemplate FindByPath(string path);
-        public bool Update(AFElementTemplate template);
-        public bool Delete(string templateID);
-        public bool CreateElementTemplate(string parentID, AFElementTemplate template);
-        public IEnumerable<AFAttributeTemplate> GetAttributeTemplates(string elementID);
+        AFElementTemplate Find(string templateID);
+        AFElementTemplate FindByPath(string path);
+        bool Update(AFElementTemplate template);
+        bool Delete(string templateID);
+        bool CreateElementTemplate(string parentID, AFElementTemplate template);
+        IEnumerable<AFAttributeTemplate> GetAttributeTemplates(string elementID);
     }
 }

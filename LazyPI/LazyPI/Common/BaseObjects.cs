@@ -89,7 +89,7 @@ namespace LazyPI
         ForwardInProgress
     }
 
-    abstract class BaseObject
+    public class BaseObject
     {
         protected string _ID;
         protected string _Name;
@@ -139,6 +139,20 @@ namespace LazyPI
             {
                 return this._Path;
             }
+        }
+        #endregion
+
+        #region "Constructors"
+        public BaseObject()
+        { 
+        }
+
+        public BaseObject(string id, string name, string description, string path)
+        {
+            this._ID = id;
+            this._Name = name;
+            this._Description = description;
+            this._Path = path;
         }
         #endregion
     }

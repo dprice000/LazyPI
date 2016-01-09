@@ -1,5 +1,5 @@
 ﻿using LazyObjects = LazyPI.LazyObjects;
-using Response = LazyPI.WebAPI.ResponseModels;
+using ResponseModels = LazyPI.WebAPI.ResponseModels;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -25,11 +25,11 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="webID">The unique ID of the AF attribute</param>
         /// <returns></returns>
-        public LazyObjects.AFAttribute Find(string ID)
+        public BaseObject Find(string ID)
         {
             var request = new RestRequest("/attributes/{webId}");
             request.AddUrlSegment("webId", ID);
-            var attr = _client.Execute<Response.AFAttribute>(request).Data;
+            var attr = _client.Execute<ResponseModels.AFAttribute>(request).Data;
         }
 
         /// <summary>
@@ -38,11 +38,11 @@ namespace LazyPI.WebAPI
         /// <param name="path">The path provided by the WebAPI.</param>
         /// <returns>A specific AF Attribute.</returns>
         /// <remarks>It is recommended to use Get By ID over path.</remarks>
-        public LazyObjects.AFAttribute FindByPath(string path)
+        public BaseObject FindByPath(string path)
         {
             var request = new RestRequest("/attributes");
             request.AddParameter("path", path);
-            var Attr = _client.Execute<Response.AFAttribute>(request).Data;
+            var Attr = _client.Execute<ResponseModels.AFAttribute>(request).Data;
         }
 
         /// <summary>
@@ -88,11 +88,9 @@ namespace LazyPI.WebAPI
             request.AddUrlSegment("webId", attr.ID);
 
             //Copy to api object
-            Response.AFAttribute clientAttr = new Response.AFAttribute();
+            ResponseModels.AFAttribute clientAttr = new ResponseModels.AFAttribute();
             clientAttr.Name = attr.Name;
             clientAttr.Description = attr.Description;
-            
-
 
             request.AddBody(clientAttr);
 
@@ -116,7 +114,7 @@ namespace LazyPI.WebAPI
 
             request.AddUrlSegment("webId", attrID);
 
-            var response = _client.Execute<AFValue>(request).Data;
+            var response = _client.Execute<ResponseModels.AFValue>(request).Data;
         }
 
         /// <summary>

@@ -13,10 +13,9 @@ namespace LazyPI.LazyObjects
 		private Lazy<AFElement> _Parent;
 		private Lazy<IEnumerable<AFElement>> _Children;
 		private Lazy<IEnumerable<AFAttribute>> _Attributes;
-		private IAFElement _ElementLoader;
+		private static IAFElement _ElementLoader;
 
 		#region "Properties"
-
 			public AFElementTemplate Template
 			{
 				get
@@ -52,8 +51,24 @@ namespace LazyPI.LazyObjects
 
 
 		#region "Constructors"
-			private AFElement()
+			private AFElement(string id, string name, string description, string path)
 			{
+				this._ID = id;
+				this._Name = name;
+				this._Description = description;
+				this._Path = path;
+
+				Initialize();
+			}
+
+			public AFElement(string ID)
+			{
+				BaseObject baseObj = _ElementLoader.Find(ID);
+				this._ID = baseObj.ID;
+				this._Name = baseObj.Name;
+				this._Description = baseObj.Description;
+				this._Path = baseObj.Path;
+
 				Initialize();
 			}
 
@@ -95,5 +110,62 @@ namespace LazyPI.LazyObjects
 			}
 
 		#endregion
+
+		#region "Static Methods"
+		/// <summary>
+		/// Returns element requested
+		/// </summary>
+		/// <param name="ID"></param>
+		/// <returns></returns>
+		public static AFElement Find(string ID)
+		{
+			return ElementFactory.CreateInstance(_ElementLoader.Find(ID));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="Path"></param>
+		/// <returns></returns>
+		public static AFElement FindByPath(string Path)
+		{
+			return ElementFactory.CreateInstance(_ElementLoader.FindByPath(Path));
+		}
+
+		/// <summary>
+		/// Removes specific element from AF Database
+		/// </summary>
+		/// <param name="ElementID">The ID of the element to be deleted</param>
+		/// <returns></returns>
+		public static bool Delete(string ElementID)
+		{
+			return _ElementLoader.Delete(ElementID);
+		}
+
+		//TODO: Implement Find Element By Category
+		public static IEnumerable<AFElement> FindByCategory(string CategoryName)
+		{
+			throw new NotImplementedException();
+		}
+
+		//TODO: Implement Find Element By Template
+		public static IEnumerable<AFElement> FindByTemplate(string TemplateName)
+		{
+			throw new NotImplementedException();
+		}
+		#endregion
+
+		public class ElementFactory
+		{
+			public static AFElement CreateInstance(BaseObject bObj)
+			{
+				return new AFElement(bObj.ID, bObj.Name, bObj.Description, bObj.Path);
+			}
+
+			public static AFElement CreateInstance(string ID, string Name, string Description, string Path)
+			{
+				return new AFElement(ID, Name, Description, Path);
+			}
+		}
 	}
 }

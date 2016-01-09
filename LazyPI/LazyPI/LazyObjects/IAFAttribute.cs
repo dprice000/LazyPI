@@ -8,12 +8,12 @@ namespace LazyPI.LazyObjects
 {
     public interface IAFAttribute
     {
-        public AFAttribute Find(string ID);
-        public AFAttribute FindByPath(string path);
-        public bool Update(AFAttribute attr);
-        public bool Delete(string webID);
-        public bool Create(string parentID, AFAttribute attr);
-        public AFValue GetValue(string attrID);
-        public bool SetValue(string attrID, AFValue value);
+        AFAttribute Find(string ID);
+        AFAttribute FindByPath(string path);
+        bool Update(AFAttribute attr);
+        bool Delete(string webID);
+        bool Create(string parentID, AFAttribute attr);
+        AFValue GetValue(string attrID);
+        bool SetValue(string attrID, AFValue value);
     }
 }

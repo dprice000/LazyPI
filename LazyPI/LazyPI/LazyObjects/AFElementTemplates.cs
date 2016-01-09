@@ -4,37 +4,33 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LazyPI.WebAPI
+namespace LazyPI.LazyObjects
 {
     public static class AFElementTemplates
     {
-        private IAFElementTemplateLoader _loader;
+        private static IAFElementTemplate _loader;
 
-        public AFElementTemplates()
-        {
-        }
-
-        public AFElementTemplate Find(string ID)
+        public static AFElementTemplate Find(string ID)
         {
             return _loader.Find(ID);
         }
 
-        public AFElementTemplate FindByPath(string path)
+        public static AFElementTemplate FindByPath(string path)
         {
             return _loader.FindByPath(path);
         }
 
-        public bool Delete(string ID)
+        public static bool Delete(string ID)
         {
             return _loader.Delete(ID);
         }
 
-        public bool CreateElementTemplate(string parentID, AFElementTemplate template)
+        public static bool CreateElementTemplate(string parentID, AFElementTemplate template)
         {
             return _loader.CreateElementTemplate(parentID, template);
         }
 
-        public IEnumerable<AFAttributeTemplate> GetAttributesTemplates(string elementID)
+        public static IEnumerable<AFAttributeTemplate> GetAttributesTemplates(string elementID)
         {
             return _loader.GetAttributeTemplates(elementID);
         }

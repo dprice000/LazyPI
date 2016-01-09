@@ -44,9 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ObjectMapper.cs" />
     <Compile Include="LazyObjects\AFAttribute.cs" />
     <Compile Include="LazyObjects\AFAttributeCategory.cs" />
-    <Compile Include="LazyObjects\AFElements.cs" />
     <Compile Include="LazyObjects\AFEventFrame.cs" />
     <Compile Include="LazyObjects\AFValue.cs" />
     <Compile Include="LazyObjects\IAFValue.cs" />
@@ -55,7 +55,7 @@
     <Compile Include="WebAPI\AFAttributeTemplateLoader.cs" />
     <Compile Include="LazyObjects\IAFAttributeTemplate.cs" />
     <Compile Include="WebAPI\AFElementTemplateLoader.cs" />
-    <Compile Include="WebAPI\AFElementTemplates.cs" />
+    <Compile Include="LazyObjects\AFElementTemplates.cs" />
     <Compile Include="LazyObjects\IAFElementTemplate.cs" />
     <Compile Include="LazyObjects\AFElement.cs" />
     <Compile Include="WebAPI\AFElementLoader.cs" />

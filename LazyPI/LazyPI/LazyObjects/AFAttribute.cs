@@ -74,9 +74,52 @@ namespace LazyPI.LazyObjects
         }
         #endregion
 
+        #region "Constructors"
+
+        private AFAttribute(string ID, string Name, string Description, string Path)
+        {
+            this._ID = ID;
+            this._Name = Name;
+            this._Description = Description;
+            this._Path = Path;
+        }
+
+        public AFAttribute(string ID)
+        {
+            BaseObject baseObj = _AttrLoader.Find(ID);
+            this._ID = baseObj.ID;
+            this._Name = baseObj.Name;
+            this._Description = baseObj.Description;
+            this._Path = baseObj.Path;
+
+        }
+
+        /// <summary>
+        /// Initialize all lazy loaded objects
+        /// </summary>
+        public void Initialize()
+        {
+
+        }
+        #endregion
+
         public void CheckIn()
         {
             _AttrLoader.Update(this);
+        }
+
+
+        public class AttributeFactory
+        {
+            public static AFAttribute CreateInstance(BaseObject bObj)
+            {
+                return new AFAttribute(bObj.ID, bObj.Name, bObj.Description, bObj.Path);
+            }
+
+            public static AFAttribute CreateInstance(string ID, string Name, string Description, string Path)
+            {
+                return new AFAttribute(ID, Name, Description, Path);
+            }
         }
     }
 }
