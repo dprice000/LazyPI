@@ -8,9 +8,9 @@ namespace LazyPI.LazyObjects
 {
     public interface IAFUnit
     {
-        public BaseObject Find(string ID);
-        public BaseObject FindByPath(string ID);
-        public bool Update(AFUnit unit);
-        public bool Delete(string ID);
+        BaseObject Find(string ID);
+        BaseObject FindByPath(string ID);
+        bool Update(AFUnit unit);
+        bool Delete(string ID);
     }
 }

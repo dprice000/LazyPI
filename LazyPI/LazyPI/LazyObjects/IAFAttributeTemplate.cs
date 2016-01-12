@@ -8,8 +8,8 @@ namespace LazyPI.LazyObjects
 {
     interface IAFAttributeTemplate
     {
-        AFAttributeTemplate Find(string ID);
-        AFAttributeTemplate FindByPath(string path);
+        BaseObject Find(string ID);
+        BaseObject FindByPath(string path);
         bool Update(AFAttributeTemplate attrTemp);
         bool Delete(string ID);
         bool Create(AFAttributeTemplate attrTemp);

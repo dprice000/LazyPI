@@ -85,6 +85,15 @@ namespace LazyPI.WebAPI
 				return ((int)statusCode == 201);
 			}
 
+			public string GetElementTemplate(string elementID)
+			{
+				var request = new RestRequest("/elements/{webId}");
+				request.AddUrlSegment("webId", elementID);
+
+				var result = _client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
+				return result.TemplateName;
+			}
+
 			public IEnumerable<LazyObjects.AFAttribute> GetAttributes(string parentWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", string valueType = "*", bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000)
 			{
 				var request = new RestRequest("/elements/{webId}/attributes");

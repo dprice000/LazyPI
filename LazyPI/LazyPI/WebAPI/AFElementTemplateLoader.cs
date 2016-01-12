@@ -70,6 +70,16 @@ namespace LazyPI.WebAPI
 			return ((int)statusCode == 201);
 		}
 
+		public bool IsExtendible(string templateID)
+		{
+			var request = new RestRequest("/elementtemplates/{webId}");
+			request.AddUrlSegment("webId", templateID);
+
+			var result = _client.Execute<ResponseModels.AFElementTemplate>(request).Data;
+
+			return result.AllowElementToExtend;
+		}
+
 		public IEnumerable<LazyObjects.AFAttributeTemplate> GetAttributeTemplates(string elementID)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}/attributetemplates");

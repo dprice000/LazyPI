@@ -13,6 +13,8 @@ namespace LazyPI.LazyObjects
         bool Update(AFElementTemplate template);
         bool Delete(string templateID);
         bool CreateElementTemplate(string parentID, AFElementTemplate template);
+        bool IsExtendible(string templateID);
+        IEnumerable<AFElementCategory> GetCategories(string templateID);
         IEnumerable<AFAttributeTemplate> GetAttributeTemplates(string elementID);
     }
 }

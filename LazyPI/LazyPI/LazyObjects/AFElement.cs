@@ -10,7 +10,7 @@ namespace LazyPI.LazyObjects
 {
 	public class AFElement : LazyPI.BaseObject
 	{
-		private AFElementTemplate _Template;
+		private Lazy<AFElementTemplate> _Template;
 		private Lazy<AFElement> _Parent;
 		private Lazy<ObservableCollection<AFElement>> _Children;
 		private Lazy<ObservableCollection<AFAttribute>> _Attributes;
@@ -21,7 +21,7 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-					return _Template;
+					return _Template.Value;
 				}
 			}
 
@@ -50,7 +50,6 @@ namespace LazyPI.LazyObjects
 			}
 		#endregion
 
-
 		#region "Constructors"
 			private AFElement(string ID, string Name, string Description, string Path) : base(ID, Name, Description, Path)
 			{
@@ -60,6 +59,7 @@ namespace LazyPI.LazyObjects
 			public AFElement(string ID)
 			{
 				BaseObject baseObj = _ElementLoader.Find(ID);
+
 				this._ID = baseObj.ID;
 				this._Name = baseObj.Name;
 				this._Description = baseObj.Description;
@@ -73,9 +73,17 @@ namespace LazyPI.LazyObjects
 			/// </summary>
 			private void Initialize()
 			{
-				string parentPath = Path.Substring(0, Path.LastIndexOf('\\')); 
+				//Load Template
+				_Template = new Lazy<AFElementTemplate>(() =>
+				{
+					string templateName = _ElementLoader.GetElementTemplate(this._ID);
+					return new AFElementTemplate(templateName);
+				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+
 
 				//Load Parent
+				string parentPath = Path.Substring(0, Path.LastIndexOf('\\')); 
+				
 				_Parent = new Lazy<AFElement>(() =>
 				{
 					return ElementFactory.CreateInstance(_ElementLoader.FindByPath(parentPath));
@@ -112,14 +120,14 @@ namespace LazyPI.LazyObjects
 
 			private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 			{
-
+				//TODO: Implement
 			}
 
 			/// <summary>
 			/// Notifies when developer makes changes to list. This method makes call back to insure PI is up to date.
 			/// </summary>
-			/// <param name="sender"></param>
-			/// <param name="e"></param>
+			/// <param name="sender">Object that triggered the change.</param>
+			/// <param name="e">Arguments that define the event.</param>
 			private void ChildrenChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 			{
 				if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
@@ -182,6 +190,9 @@ namespace LazyPI.LazyObjects
 		}
 		#endregion
 
+		/// <summary>
+		/// Uses the hidden constructor to create full instances of AFElement.
+		/// </summary>
 		public class ElementFactory
 		{
 			public static AFElement CreateInstance(BaseObject bObj)
