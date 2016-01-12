@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using RestSharp;
 
@@ -11,8 +12,8 @@ namespace LazyPI.LazyObjects
 	{
 		private AFElementTemplate _Template;
 		private Lazy<AFElement> _Parent;
-		private Lazy<IEnumerable<AFElement>> _Children;
-		private Lazy<IEnumerable<AFAttribute>> _Attributes;
+		private Lazy<ObservableCollection<AFElement>> _Children;
+		private Lazy<ObservableCollection<AFAttribute>> _Attributes;
 		private static IAFElement _ElementLoader;
 
 		#region "Properties"
@@ -32,7 +33,7 @@ namespace LazyPI.LazyObjects
 				}
 			}
 
-			public IEnumerable<AFElement> Children
+			public ObservableCollection<AFElement> Children
 			{
 				get
 				{
@@ -40,7 +41,7 @@ namespace LazyPI.LazyObjects
 				}
 			}
 
-			public IEnumerable<AFAttribute> Attributes
+			public ObservableCollection<AFAttribute> Attributes
 			{
 				get
 				{
@@ -51,13 +52,8 @@ namespace LazyPI.LazyObjects
 
 
 		#region "Constructors"
-			private AFElement(string id, string name, string description, string path)
+			private AFElement(string ID, string Name, string Description, string Path) : base(ID, Name, Description, Path)
 			{
-				this._ID = id;
-				this._Name = name;
-				this._Description = description;
-				this._Path = path;
-
 				Initialize();
 			}
 
@@ -82,20 +78,25 @@ namespace LazyPI.LazyObjects
 				//Load Parent
 				_Parent = new Lazy<AFElement>(() =>
 				{
-					AFElement ele = _ElementLoader.FindByPath(parentPath);
-					return ele;
+					return ElementFactory.CreateInstance(_ElementLoader.FindByPath(parentPath));
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Load Attributes
-				_Attributes = new Lazy<IEnumerable<AFAttribute>>(() => 
+				_Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => 
 				{
-					return _ElementLoader.GetAttributes(this.ID).Cast<AFAttribute>().ToList();
+					List<AFAttribute> resultList = ElementFactory.CreateList(_ElementLoader.GetAttributes(this.ID));
+					ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>(resultList);
+					obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(AttributesChanged);
+					return obsList;
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Load Children
-				_Children = new Lazy<IEnumerable<AFElement>>(() =>
+				_Children = new Lazy<ObservableCollection<AFElement>>(() =>
 				{
-					return _ElementLoader.GetElements(this.ID);
+					List<AFElement> resultList = ElementFactory.CreateList(_ElementLoader.GetElements(this.ID));
+					ObservableCollection<AFElement> obsList = new ObservableCollection<AFElement>(resultList);
+					obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
+					return obsList;
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 			}
 			// Initialized all basic references
@@ -109,6 +110,32 @@ namespace LazyPI.LazyObjects
 				_ElementLoader.Update(this);
 			}
 
+			private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+			{
+
+			}
+
+			/// <summary>
+			/// Notifies when developer makes changes to list. This method makes call back to insure PI is up to date.
+			/// </summary>
+			/// <param name="sender"></param>
+			/// <param name="e"></param>
+			private void ChildrenChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+			{
+				if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+				{
+					_ElementLoader.CreateChildElement(this._ID, (AFElement)sender);
+				}
+				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+				{
+					AFElement element = (AFElement)sender;
+					Delete(element._ID);
+				}
+				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+				{
+					throw new NotImplementedException("Replace is not supported by LazyPI.");
+				}
+			}
 		#endregion
 
 		#region "Static Methods"
@@ -165,6 +192,18 @@ namespace LazyPI.LazyObjects
 			public static AFElement CreateInstance(string ID, string Name, string Description, string Path)
 			{
 				return new AFElement(ID, Name, Description, Path);
+			}
+
+			public static List<AFElement> CreateList(IEnumerable<BaseObject> Elements)
+			{
+				List<AFElement> elementList = new List<AFElement>();
+
+				foreach(AFElement element in Elements)
+				{
+					elementList.Add(new AFElement(element.ID, element.Name, element.Description, element.Path));
+				}
+
+				return elementList;
 			}
 		}
 	}

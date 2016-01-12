@@ -48,7 +48,9 @@
     <Compile Include="LazyObjects\AFAttribute.cs" />
     <Compile Include="LazyObjects\AFAttributeCategory.cs" />
     <Compile Include="LazyObjects\AFEventFrame.cs" />
+    <Compile Include="LazyObjects\AFUnit.cs" />
     <Compile Include="LazyObjects\AFValue.cs" />
+    <Compile Include="LazyObjects\IAFUnit.cs" />
     <Compile Include="LazyObjects\IAFValue.cs" />
     <Compile Include="LazyObjects\IAFAttributeCategory.cs" />
     <Compile Include="WebAPI\AFAttributeLoader.cs" />
