@@ -91,7 +91,6 @@ namespace LazyPI.LazyObjects
             this._Name = baseObj.Name;
             this._Description = baseObj.Description;
             this._Path = baseObj.Path;
-
         }
 
         /// <summary>

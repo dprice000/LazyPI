@@ -107,16 +107,6 @@ namespace LazyPI.LazyObjects
 					return obsList;
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 			}
-			// Initialized all basic references
-			//Strips element name from path to get parent path
-
-		#endregion
-
-		#region "Interactions"
-			public void CheckIn()
-			{
-				_ElementLoader.Update(this);
-			}
 
 			private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 			{
@@ -143,6 +133,14 @@ namespace LazyPI.LazyObjects
 				{
 					throw new NotImplementedException("Replace is not supported by LazyPI.");
 				}
+			}
+
+		#endregion
+
+		#region "Interactions"
+			public void CheckIn()
+			{
+				_ElementLoader.Update(this);
 			}
 		#endregion
 

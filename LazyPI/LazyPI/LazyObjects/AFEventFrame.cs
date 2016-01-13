@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,13 +11,13 @@ namespace LazyPI.LazyObjects
     {
         private DateTimeOffset _StartTime;
         private DateTimeOffset _EndTime;
-        //TODO: Should handle event frame template
-        private Lazy<IEnumerable<AFEventFrame>> _EventFrames;
-        private Lazy<IEnumerable<AFAttribute>> _Attributes;
-        private IEnumerable<string> _CategoryNames;
+        private Lazy<AFElementTemplate> _Template;
+        private Lazy<ObservableCollection<AFEventFrame>> _EventFrames;
+        private Lazy<ObservableCollection<AFAttribute>> _Attributes;
+        private ObservableCollection<string> _CategoryNames;
+        private static IAFEventFrame _EventFrameLoader;
 
         #region "Properties"
-
         public DateTimeOffset StartTime
         {
             get
@@ -41,6 +42,14 @@ namespace LazyPI.LazyObjects
             }
         }
 
+        public AFElementTemplate Template
+        {
+            get
+            {
+                return _Template.Value;
+            }
+        }
+
         public IEnumerable<string> CategoryNames
         {
             get
@@ -53,5 +62,40 @@ namespace LazyPI.LazyObjects
             }
         }
         #endregion
+
+        #region "Constructors"
+            private AFEventFrame(string ID, string Name, string Description, string Path) 
+                : base(ID, Name, Description, Path)
+            {
+                Initialize();
+            }
+
+            private void Initialize()
+            {
+                //_Template = new Lazy<AFElementTemplate>(() => { 
+
+                //}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+            }
+        #endregion
+
+        public class EventFrameFactory
+        {
+            public static AFEventFrame CreateInstance(string ID, string Name, string Description, string Path)
+            {
+                return new AFEventFrame(ID, Name, Description, Path);
+            }
+
+            public static List<AFEventFrame> CreateInstanceList(List<BaseObject> frames)
+            {
+                List<AFEventFrame> results = new List<AFEventFrame>(); 
+
+                foreach (var baseFrame in frames)
+                {
+                    results.Add(new AFEventFrame(baseFrame.ID, baseFrame.Name, baseFrame.Description, baseFrame.Path));
+                }
+
+                return results;
+            }
+        }
     }
 }

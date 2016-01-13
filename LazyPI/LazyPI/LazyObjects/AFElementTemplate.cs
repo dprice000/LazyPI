@@ -97,7 +97,7 @@ namespace LazyPI.LazyObjects
                 return _templateLoader.CreateElementTemplate(parentID, template);
             }
 
-            public static IEnumerable<AFAttributeTemplate> GetAttributesTemplates(string elementID)
+            public static IEnumerable<AFAttributeTemplate> GetAttributeTemplates(string elementID)
             {
                 return _templateLoader.GetAttributeTemplates(elementID);
             }

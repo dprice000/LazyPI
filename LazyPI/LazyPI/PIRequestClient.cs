@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using RestSharp.Serializers;
 using RestSharp.Extensions;
+using LazyPI.WebAPI.ResponseModels;
 
 namespace LazyPI.WebAPI
 {
