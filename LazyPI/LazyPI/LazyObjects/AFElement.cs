@@ -175,16 +175,30 @@ namespace LazyPI.LazyObjects
 			return _ElementLoader.Delete(ElementID);
 		}
 
-		//TODO: Implement Find Element By Category
-		public static IEnumerable<AFElement> FindByCategory(string CategoryName)
+		/// <summary>
+		/// Find all of the child elements with a specific category.
+		/// </summary>
+		/// <param name="CategoryName">Name of the category to be searched for.</param>
+		/// <param name="MaxCount">Max number of elements that should be searched for.</param>
+		/// <returns>A list of elements that have a specific category.</returns>
+		public IEnumerable<AFElement> FindByCategory(string CategoryName, int MaxCount = 1000)
 		{
-			throw new NotImplementedException();
+			var baseList = _ElementLoader.GetElements(this._ID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
+
+			return ElementFactory.CreateList(baseList);
 		}
 
-		//TODO: Implement Find Element By Template
-		public static IEnumerable<AFElement> FindByTemplate(string TemplateName)
+		/// <summary>
+		/// Find all of the child elements with a specific template.
+		/// </summary>
+		/// <param name="TemplateName">Name of the template to be searched for.</param>
+		/// <param name="MaxCount">Max number of elements that should be searched for.</param>
+		/// <returns>A list of elements that have a specific template.</returns>
+		public IEnumerable<AFElement> FindByTemplate(string TemplateName, int MaxCount = 1000)
 		{
-			throw new NotImplementedException();
+			var baseList = _ElementLoader.GetElements(this._ID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
+
+			return ElementFactory.CreateList(baseList);
 		}
 		#endregion
 
