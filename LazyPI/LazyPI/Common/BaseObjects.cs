@@ -103,10 +103,6 @@ namespace LazyPI
             {
                 return _ID;
             }
-            set
-            {
-                _ID = value;
-            }
         }
 
         public string Name

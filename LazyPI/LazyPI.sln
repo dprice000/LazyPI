@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyPI", "LazyPI\LazyPI.csproj", "{9FE127E8-C2D2-4C03-949B-655C2C0A523E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyPI_Test", "LazyPI_Test\LazyPI_Test.csproj", "{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9FE127E8-C2D2-4C03-949B-655C2C0A523E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FE127E8-C2D2-4C03-949B-655C2C0A523E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FE127E8-C2D2-4C03-949B-655C2C0A523E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,6 +8,5 @@ namespace LazyPI.LazyObjects
 {
     public class AFElementCategory : BaseObject
     {
-
     }
 }

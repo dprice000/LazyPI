@@ -15,9 +15,9 @@ namespace LazyPI.LazyObjects
         bool CaptureValues(string ID);
         bool CreateAttribute(string EventFrameID, AFEventFrame EventFrame);
         bool CreateEventFrame(string ParentID, AFEventFrame EventFrame);
-        bool GetAttributes(string ID, string NameFilter, string CategoryName, string TemplateName, string ValueType, bool SearchFullHierarchy, string SortField, string SortOrder, int StartIndex, bool ShowExcluded, bool ShowHidden, int MaxCount);
-        IEnumerable<AFElementCategory> GetCategories(string ID);
-        IEnumerable<AFElement> GetReferencedElements(string ID);
-        IEnumerable<AFEventFrame> GetChildFrames(string ID, SearchMode SearchMode, string StartTime, string EndTime, string NameFilter, string ReferencedElementNameFilter, string CategoryName, string TemplateName, string ReferencedElementTemplateFilter, bool SearchFullHierarchy, string SortField, string SortOrder, int StartIndex, int MaxCount);
+        IEnumerable<BaseObject> GetAttributes(string ID, string NameFilter, string CategoryName, string TemplateName, string ValueType, bool SearchFullHierarchy, string SortField, string SortOrder, int StartIndex, bool ShowExcluded, bool ShowHidden, int MaxCount);
+        IEnumerable<BaseObject> GetCategories(string ID);
+        IEnumerable<BaseObject> GetReferencedElements(string ID);
+        IEnumerable<BaseObject> GetChildFrames(string ID, SearchMode SearchMode, string StartTime, string EndTime, string NameFilter, string ReferencedElementNameFilter, string CategoryName, string TemplateName, string ReferencedElementTemplateFilter, bool SearchFullHierarchy, string SortField, string SortOrder, int StartIndex, int MaxCount);
     }
 }

@@ -107,7 +107,9 @@ namespace LazyPI.LazyObjects
 					return obsList;
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 			}
+		#endregion
 
+		#region"Delegate Functions"
 			private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 			{
 				//TODO: Implement
@@ -134,7 +136,6 @@ namespace LazyPI.LazyObjects
 					throw new NotImplementedException("Replace is not supported by LazyPI.");
 				}
 			}
-
 		#endregion
 
 		#region "Interactions"

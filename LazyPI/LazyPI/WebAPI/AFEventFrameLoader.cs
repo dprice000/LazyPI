@@ -114,7 +114,9 @@ namespace LazyPI.WebAPI
             request.AddParameter("showHidden", showHidden);
             request.AddParameter("maxCount", maxCount);
 
-            return _client.Execute<List<LazyObjects.AFAttribute>>(request).Data;
+            var list = _client.Execute<List<ResponseModels.AFAttribute>>(request).Data;
+
+            return 
         }
 
         public IEnumerable<LazyObjects.AFElementCategory> GetCategories(string webID)
@@ -122,18 +124,18 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/eventframes/{webId}/categories");
             request.AddUrlSegment("webId", webID);
 
-            return _client.Execute<List<LazyObjects.AFElementCategory>>(request).Data;
+            return _client.Execute<List<ResponseModels.ElementCategory>>(request).Data;
         }
 
-        public IEnumerable<LazyObjects.AFElement> GetReferencedElements(string webID)
+        public IEnumerable<BaseObject> GetReferencedElements(string webID)
         {
             var request = new RestRequest("/eventframes/{webId}/referencedelements");
             request.AddUrlSegment("webId", webID);
 
-            return _client.Execute<List<LazyObjects.AFElement>>(request).Data;
+            return _client.Execute<List<ResponseModels.AFElement>>(request).Data;
         }
 
-        public IEnumerable<LazyObjects.AFEventFrame> GetEventFrames(string webID, SearchMode searchMode = SearchMode.Overlapped, string startTime = "-8h", string endTime = "*", string nameFilter = "*", string referencedElementNameFilter = "*", string categoryName = null, string templateName = null, string referencedElementTemplateName = null, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
+        public IEnumerable<BaseObject> GetEventFrames(string webID, SearchMode searchMode = SearchMode.Overlapped, string startTime = "-8h", string endTime = "*", string nameFilter = "*", string referencedElementNameFilter = "*", string categoryName = null, string templateName = null, string referencedElementTemplateName = null, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
         {
             var request = new RestRequest("/eventframes/{webId}/eventframes");
             request.AddUrlSegment("webId", webID);

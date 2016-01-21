@@ -13,5 +13,27 @@ namespace LazyPI.LazyObjects
         private void Initialize()
         { 
         }
+
+        public override string Name
+        {
+            get
+            {
+                return this._Name;
+            }
+            set
+            {
+                this._Name = value;
+
+            }
+        }
+
+        public override string Description
+        {
+        }
+
+        public void CheckIn()
+        {
+            _CategoryLoader.Update(this);
+        }
     }
 }

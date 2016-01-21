@@ -94,7 +94,7 @@ namespace LazyPI.WebAPI
 				return result.TemplateName;
 			}
 
-			public IEnumerable<LazyObjects.AFAttribute> GetAttributes(string parentWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", string valueType = "*", bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000)
+			public IEnumerable<BaseObject> GetAttributes(string parentWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", string valueType = "*", bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000)
 			{
 				var request = new RestRequest("/elements/{webId}/attributes");
 				request.AddUrlSegment("webId", parentWID);
@@ -111,17 +111,21 @@ namespace LazyPI.WebAPI
 				request.AddParameter("maxCount", maxCount);
 
 				var results = _client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttribute>>(request).Data;
+
+				return results.Items.Cast<BaseObject>();
 			}
 
-			public IEnumerable<LazyObjects.AFElementCategory> GetElementCategories(string elementWID)
+			public IEnumerable<BaseObject> GetElementCategories(string elementWID)
 			{
 				var request = new RestRequest("/elements/{webId}/categories");
 				request.AddUrlSegment("webId", elementWID);
 
 				var results = _client.Execute<ResponseModels.ResponseList<ResponseModels.ElementCategory>>(request).Data;
+
+				//return results.Items.Cast<BaseObject>();
 			}
 
-			IEnumerable<LazyObjects.AFElement> GetElements(string rootWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", ElementType elementType = ElementType.Any, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
+			IEnumerable<BaseObject> GetElements(string rootWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", ElementType elementType = ElementType.Any, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
 			{
 				var request = new RestRequest("/elements/{webId}/elements");
 				request.AddUrlSegment("webId", rootWID);
@@ -135,9 +139,11 @@ namespace LazyPI.WebAPI
 				request.AddParameter("maxCount", maxCount);
 
 				var results = _client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request).Data;
+
+				//return results.Items.Cast<BaseObject>();
 			}
 
-			public IEnumerable<LazyObjects.AFEventFrame> GetEventFrames(string elementWID, LazyPI.SearchMode searchMode, DateTime startTime, DateTime endTime, string nameFilter, string categoryName, string templateName, string sortField, string sortOrder, int startIndex, int maxCount)
+			public IEnumerable<BaseObject> GetEventFrames(string elementWID, LazyPI.SearchMode searchMode, DateTime startTime, DateTime endTime, string nameFilter, string categoryName, string templateName, string sortField, string sortOrder, int startIndex, int maxCount)
 			{
 				var request = new RestRequest("/elements/{webId}/eventframes");
 				request.AddUrlSegment("webId", elementWID);
@@ -153,6 +159,8 @@ namespace LazyPI.WebAPI
 				request.AddParameter("maxCount", maxCount);
 
 				var results = _client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request).Data;
+
+				//return results.Items.Cast<BaseObject>();
 			}
 		#endregion
 	}
