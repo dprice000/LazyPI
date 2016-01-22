@@ -14,7 +14,6 @@ namespace LazyPI.LazyObjects
         private bool _Good;
         private bool _Questionable;
         private bool _Substituted;
-        private IAFValue _ValueLoader;
 
         #region "Properties"
         public DateTimeOffset Timestamp

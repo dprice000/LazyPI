@@ -12,11 +12,22 @@ namespace LazyPI.LazyObjects
 	{
 		private Lazy<AFElementTemplate> _Template;
 		private Lazy<AFElement> _Parent;
+		private IEnumerable<string> _CategoryNames;
+		private Lazy<ObservableCollection<AFElementCategory>> _Categories;
 		private Lazy<ObservableCollection<AFElement>> _Children;
 		private Lazy<ObservableCollection<AFAttribute>> _Attributes;
 		private static IAFElement _ElementLoader;
 
 		#region "Properties"
+			//TODO: To  be removed when category resolution code is written.
+			public IEnumerable<string> CategoryNames
+			{
+				get
+				{
+					return _CategoryNames;
+				}
+			}
+
 			public AFElementTemplate Template
 			{
 				get
@@ -73,15 +84,17 @@ namespace LazyPI.LazyObjects
 			/// </summary>
 			private void Initialize()
 			{
-				//Load Template
+				//Initialize Category List
+				_CategoryNames = _ElementLoader.GetCategories(_ID);
+
+				//Initialize Template Loader
 				_Template = new Lazy<AFElementTemplate>(() =>
 				{
 					string templateName = _ElementLoader.GetElementTemplate(this._ID);
 					return new AFElementTemplate(templateName);
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
-
-				//Load Parent
+				//Initialize Parent Loader
 				string parentPath = Path.Substring(0, Path.LastIndexOf('\\')); 
 				
 				_Parent = new Lazy<AFElement>(() =>
@@ -89,16 +102,22 @@ namespace LazyPI.LazyObjects
 					return ElementFactory.CreateInstance(_ElementLoader.FindByPath(parentPath));
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
-				//Load Attributes
+				//Initialize Attributes Loader
 				_Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => 
 				{
-					List<AFAttribute> resultList = ElementFactory.CreateList(_ElementLoader.GetAttributes(this.ID));
-					ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>(resultList);
+					List<BaseObject> resultList = _ElementLoader.GetAttributes(this.ID).ToList();
+					ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>();
+
+					foreach (var attr in resultList)
+					{
+						obsList.Add(AFAttribute.Find(attr.ID));
+					}
+					
 					obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(AttributesChanged);
 					return obsList;
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
-				//Load Children
+				//Initialize Children Loader
 				_Children = new Lazy<ObservableCollection<AFElement>>(() =>
 				{
 					List<AFElement> resultList = ElementFactory.CreateList(_ElementLoader.GetElements(this.ID));
