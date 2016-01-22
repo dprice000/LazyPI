@@ -128,10 +128,30 @@ namespace LazyPI.LazyObjects
 			}
 		#endregion
 
-		#region"Delegate Functions"
+		#region"Callbacks"
 			private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 			{
-				//TODO: Implement
+				if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+				{
+					AFAttribute.Create(this._ID, (AFAttribute)sender);
+				}
+				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+				{
+					AFAttribute obj = (AFAttribute)sender;
+					AFAttribute.Delete(obj.ID);
+				}
+				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+				{
+					throw new NotImplementedException("Replace is not supported by LazyPI.");
+				}
+				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+				{
+					throw new NotImplementedException("Reset is not supported by LazyPI.");
+				}
+				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+				{
+					throw new NotImplementedException("Move is not supported by LazyPI.");
+				}
 			}
 
 			/// <summary>
@@ -153,6 +173,14 @@ namespace LazyPI.LazyObjects
 				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
 				{
 					throw new NotImplementedException("Replace is not supported by LazyPI.");
+				}
+				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+				{
+					throw new NotImplementedException("Reset is not supported by LazyPI.");
+				}
+				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+				{
+					throw new NotImplementedException("Move is not supported by LazyPI.");
 				}
 			}
 		#endregion

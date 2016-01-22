@@ -79,6 +79,7 @@ namespace LazyPI.LazyObjects
 
                     ObservableCollection<AFEventFrame> obsList = new ObservableCollection<AFEventFrame>(EventFrameFactory.CreateInstanceList(frames));
                     obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
+                    
                     return obsList;
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
@@ -91,15 +92,64 @@ namespace LazyPI.LazyObjects
                         obsList.Add(AFAttribute.Find(attribute.ID));
                     }
 
+                    obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(AttributesChanged);
+
                     return obsList;
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
             }
         #endregion
 
+        #region "Callbacks"
+        private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                AFAttribute.Create(this._ID, (AFAttribute)sender);
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                AFAttribute obj = (AFAttribute)sender;
+                AFAttribute.Delete(obj.ID);
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            {
+                throw new NotImplementedException("Replace is not supported by LazyPI.");
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+            {
+                throw new NotImplementedException("Reset is not supported by LazyPI.");
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                throw new NotImplementedException("Move is not supported by LazyPI.");
+            }
+        }
+
         private void ChildrenChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            //TODO: Implement
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                _EventFrameLoader.CreateEventFrame(this._ID, (AFEventFrame)sender);
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                AFEventFrame obj = (AFEventFrame)sender;
+                _EventFrameLoader.Delete(obj._ID);
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            {
+                throw new NotImplementedException("Replace is not supported by LazyPI.");
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+            {
+                throw new NotImplementedException("Reset is not supported by LazyPI.");
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                throw new NotImplementedException("Move is not supported by LazyPI.");
+            }
         }
+        #endregion
 
         public class EventFrameFactory
         {
