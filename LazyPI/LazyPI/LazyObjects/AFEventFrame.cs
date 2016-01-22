@@ -56,10 +56,6 @@ namespace LazyPI.LazyObjects
             {
                 return _CategoryNames;
             }
-            set
-            {
-                _CategoryNames = value;
-            }
         }
         #endregion
 
@@ -72,9 +68,11 @@ namespace LazyPI.LazyObjects
 
             private void Initialize()
             {
-                //_Template = new Lazy<AFElementTemplate>(() => { 
-
-                //}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+                _Template = new Lazy<AFElementTemplate>(() =>
+                {
+                   var templateName = _EventFrameLoader.GetEventFrameTemplate(this._ID);
+                   return AFElementTemplate.FindByName(templateName);
+                }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
                 _EventFrames = new Lazy<ObservableCollection<AFEventFrame>>(() => {
                     var frames = _EventFrameLoader.GetChildFrames(_ID, SearchMode.None, "*-8d", "*", "*", "*", "*", "*", "*", false, "Name", "Ascending", 0, 1000);
@@ -85,7 +83,6 @@ namespace LazyPI.LazyObjects
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
                 _Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => { 
-                    //TODO: Investigate what could be done better with search properties
                     var attrs = _EventFrameLoader.GetAttributes(this._ID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
                     ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>();
 

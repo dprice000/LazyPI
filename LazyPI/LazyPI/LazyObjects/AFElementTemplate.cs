@@ -9,10 +9,10 @@ namespace LazyPI.LazyObjects
 {
     public class AFElementTemplate : BaseObject
     {
-        private static IAFElementTemplate _templateLoader;
         private IEnumerable<string> _CategoryList;
         private Lazy<ObservableCollection<AFElementCategory>> _Categories;
         private bool _IsExtendable;
+        private static IAFElementTemplate _templateLoader;
 
         #region "Properties"
             public ObservableCollection<AFElementCategory> Categories
@@ -36,17 +36,6 @@ namespace LazyPI.LazyObjects
             private AFElementTemplate(string ID, string Name, string Description, string Path)
                 : base(ID, Name, Description, Path)
             {
-                Initialize();
-            }
-
-            public AFElementTemplate(string ID)
-            {
-                BaseObject result = _templateLoader.Find(ID);
-                this._ID = result.ID;
-                this._Name = result.Name;
-                this._Description = result.Description;
-                this._Path = result.Path;
-
                 Initialize();
             }
 
@@ -82,9 +71,14 @@ namespace LazyPI.LazyObjects
                 return _templateLoader.Find(ID);
             }
 
-            public static AFElementTemplate FindByPath(string path)
+            public static AFElementTemplate FindByName(string Name)
             {
-                return _templateLoader.FindByPath(path);
+                throw new NotImplementedException("Needs to be Implemented");
+            }
+
+            public static AFElementTemplate FindByPath(string Path)
+            {
+                return _templateLoader.FindByPath(Path);
             }
 
             public static bool Delete(string ID)

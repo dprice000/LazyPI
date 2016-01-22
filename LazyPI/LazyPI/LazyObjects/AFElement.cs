@@ -91,7 +91,7 @@ namespace LazyPI.LazyObjects
 				_Template = new Lazy<AFElementTemplate>(() =>
 				{
 					string templateName = _ElementLoader.GetElementTemplate(this._ID);
-					return new AFElementTemplate(templateName);
+					return AFElementTemplate.Find(templateName);
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Initialize Parent Loader
