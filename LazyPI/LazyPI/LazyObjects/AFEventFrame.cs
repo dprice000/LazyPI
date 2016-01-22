@@ -87,7 +87,14 @@ namespace LazyPI.LazyObjects
                 _Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => { 
                     //TODO: Investigate what could be done better with search properties
                     var attrs = _EventFrameLoader.GetAttributes(this._ID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
-                    ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>(attr);
+                    ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>();
+
+                    foreach (var attribute in attrs)
+                    {
+                        obsList.Add(AFAttribute.Find(attribute.ID));
+                    }
+
+                    return obsList;
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
             }
         #endregion
