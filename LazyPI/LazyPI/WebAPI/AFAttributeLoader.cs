@@ -85,7 +85,7 @@ namespace LazyPI.WebAPI
         public bool Create(string parentWID, LazyObjects.AFAttribute attr)
         {
             var request = new RestRequest("/attributes/{webId}", Method.POST);
-            request.AddUrlSegment("webId", attr.ID);
+            request.AddUrlSegment("webId", parentWID);
 
             //Copy to api object
             ResponseModels.AFAttribute clientAttr = new ResponseModels.AFAttribute();
