@@ -85,10 +85,38 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Static Methods"
+
+        public AFUnit Find(string ID)
+        {
+            BaseObject baseObj = _UnitLoader.Find(ID);
+            return new AFUnit(baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
+        }
+
+        public AFUnit FindByPath(string Path)
+        {
+            BaseObject baseObj = _UnitLoader.FindByPath(Path);
+            return new AFUnit(baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
+        }
+
         public static bool Delete(string ID)
         {
            return _UnitLoader.Delete(ID);
         }
         #endregion
+
+        #region "Interactions"
+            public bool CheckIn()
+            {
+                return _UnitLoader.Update(this);
+            }
+        #endregion
+
+        public class UnitFactory
+        {
+            public static AFUnit CreateInstance(string ID, string Name, string Description, string Path)
+            {
+                return new AFUnit(ID, Name, Description, Path);
+            }
+        }
     }
 }
