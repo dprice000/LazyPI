@@ -226,12 +226,13 @@ namespace LazyPI.LazyObjects
 		/// <summary>
 		/// Find all of the child elements with a specific category.
 		/// </summary>
+        /// <param name="RootID">The parent or root for the search.</param>
 		/// <param name="CategoryName">Name of the category to be searched for.</param>
 		/// <param name="MaxCount">Max number of elements that should be searched for.</param>
 		/// <returns>A list of elements that have a specific category.</returns>
-		public IEnumerable<AFElement> FindByCategory(string CategoryName, int MaxCount = 1000)
+		public static IEnumerable<AFElement> FindByCategory(string RootID,string CategoryName, int MaxCount = 1000)
 		{
-			var baseList = _ElementLoader.GetElements(this._ID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
+			var baseList = _ElementLoader.GetElements(RootID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 
 			return ElementFactory.CreateList(baseList);
 		}
@@ -239,12 +240,13 @@ namespace LazyPI.LazyObjects
 		/// <summary>
 		/// Find all of the child elements with a specific template.
 		/// </summary>
+        /// <param name="RootID">The parent or root for the search</param>
 		/// <param name="TemplateName">Name of the template to be searched for.</param>
 		/// <param name="MaxCount">Max number of elements that should be searched for.</param>
 		/// <returns>A list of elements that have a specific template.</returns>
-		public IEnumerable<AFElement> FindByTemplate(string TemplateName, int MaxCount = 1000)
+		public static IEnumerable<AFElement> FindByTemplate(string RootID,string TemplateName, int MaxCount = 1000)
 		{
-			var baseList = _ElementLoader.GetElements(this._ID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
+			var baseList = _ElementLoader.GetElements(RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 
 			return ElementFactory.CreateList(baseList);
 		}
