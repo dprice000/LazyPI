@@ -11,13 +11,8 @@ namespace LazyPI.WebAPI
 {
     class AFAttributeLoader : LazyObjects.IAFAttribute
     {
-        private string _serverAddress;
-        private RestClient _client;
-
         public AFAttributeLoader()
         {
-            _serverAddress = "https://localhost/webapi";
-            _client = new RestClient(_serverAddress);
         }
 
         /// <summary>
@@ -25,11 +20,11 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="webID">The unique ID of the AF attribute</param>
         /// <returns></returns>
-        public BaseObject Find(string ID)
+        public BaseObject Find(WebAPIConnection Connection, string ID)
         {
             var request = new RestRequest("/attributes/{webId}");
             request.AddUrlSegment("webId", ID);
-            var attr = _client.Execute<ResponseModels.AFAttribute>(request).Data;
+            var attr = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
         }
 
         /// <summary>
@@ -38,11 +33,11 @@ namespace LazyPI.WebAPI
         /// <param name="path">The path provided by the WebAPI.</param>
         /// <returns>A specific AF Attribute.</returns>
         /// <remarks>It is recommended to use Get By ID over path.</remarks>
-        public BaseObject FindByPath(string path)
+        public BaseObject FindByPath(WebAPIConnection Connection,  string path)
         {
             var request = new RestRequest("/attributes");
             request.AddParameter("path", path);
-            var Attr = _client.Execute<ResponseModels.AFAttribute>(request).Data;
+            var Attr = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
         }
 
         /// <summary>
@@ -50,13 +45,13 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="attr">A partial attribute that contains the WebID and any properties to be updated.</param>
         /// <returns>Returns true if update completed.</returns>
-        public bool Update(LazyObjects.AFAttribute attr)
+        public bool Update(WebAPIConnection Connection, LazyObjects.AFAttribute attr)
         {
             var request = new RestRequest("/attributes/{webId}", Method.PATCH);
             request.AddUrlSegment("webId", attr.ID);
             request.AddBody(attr);
 
-            var statusCode = _client.Execute(request).StatusCode;
+            var statusCode = Connection.Client.Execute(request).StatusCode;
 
             return ((int)statusCode == 204);
         }
@@ -66,12 +61,12 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="webID">The WebID of the AFAttribute to be deleted</param>
         /// <returns>Returns true if delete completed.</returns>
-        public bool Delete(string ID)
+        public bool Delete(WebAPIConnection Connection,  string ID)
         {
             var request = new RestRequest("/attributes/{webId}", Method.DELETE);
             request.AddUrlSegment("webId", ID);
 
-            var statusCode = _client.Execute(request).StatusCode;
+            var statusCode = Connection.Client.Execute(request).StatusCode;
 
             return ((int)statusCode == 204);
         }
@@ -108,13 +103,13 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="attrWID">The WebID of the AF Attribute to be read.</param>
         /// <returns></returns>
-        public LazyObjects.AFValue GetValue(string attrID)
+        public LazyObjects.AFValue GetValue(WebAPIConnection Connection, string attrID)
         {
             var request = new RestRequest("/attributes/{webId}/value");
 
             request.AddUrlSegment("webId", attrID);
 
-            var response = _client.Execute<ResponseModels.AFValue>(request).Data;
+            var response = Connection.Client.Execute<ResponseModels.AFValue>(request).Data;
         }
 
         /// <summary>
@@ -124,14 +119,14 @@ namespace LazyPI.WebAPI
         /// <param name="value">The AFValue to be applied to the Attribute.</param>
         /// <returns>Returns true if the value update completes.</returns>
         /// <remarks>Users must be aware of the value type that the attribute takes before changing the value. If a value entered by the user does not match the value type expressed in the attribute, it will not work or it will return an error.</remarks>
-        public bool SetValue(string attrWID, LazyObjects.AFValue value)
+        public bool SetValue(WebAPIConnection Connection, string attrWID, LazyObjects.AFValue value)
         {
             var request = new RestRequest("/attributes/{webId}/value", Method.PUT);
 
             request.AddUrlSegment("webId", attrWID);
             request.AddBody(value);
 
-            var statusCode = _client.Execute(request).StatusCode;
+            var statusCode = Connection.Client.Execute(request).StatusCode;
 
             return ((int)statusCode == 204);
         }

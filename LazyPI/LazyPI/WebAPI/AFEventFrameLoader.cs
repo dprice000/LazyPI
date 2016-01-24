@@ -11,87 +11,82 @@ namespace LazyPI.WebAPI
 {
     public class AFEventFrameLoader : LazyObjects.IAFEventFrame
     {
-        string _serverAddress;
-        RestClient _client;
-
         public AFEventFrameLoader()
         {
-            _serverAddress = "https://localhost/webapi";
-            _client = new RestClient(_serverAddress);
         }
 
-        public BaseObject Find(string ID)
+        public BaseObject Find(WebAPIConnection Connection, string ID)
         {
             var request = new RestRequest("/eventframes/{webId}");
             request.AddUrlSegment("webId", ID);
 
-            var result = _client.Execute<ResponseModels.AFEventFrame>(request).Data;
+            var result = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
             return new BaseObject(result.ID, result.Name, result.Description, result.Path);
         }
 
-        public BaseObject FindByPath(string Path)
+        public BaseObject FindByPath(WebAPIConnection Connection, string Path)
         {
             var request = new RestRequest("/eventframes");
             request.AddParameter("path", Path);
 
-            var result = _client.Execute<ResponseModels.AFEventFrame>(request).Data;
+            var result = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
             return new BaseObject(result.ID, result.Name, result.Description, result.Path);
         }
 
-        public bool Update(LazyObjects.AFEventFrame eventframe)
+        public bool Update(WebAPIConnection Connection, LazyObjects.AFEventFrame Eventframe)
         {
             var request = new RestRequest("/eventframes/{webId}", Method.PATCH);
-            request.AddUrlSegment("webId", eventframe.ID);
-            request.AddBody(eventframe);
+            request.AddUrlSegment("webId", Eventframe.ID);
+            request.AddBody(Eventframe);
 
-            var statusCode = _client.Execute(request).StatusCode;
+            var statusCode = Connection.Client.Execute(request).StatusCode;
 
             return ((int)statusCode == 204 ? true : false);
         }
 
-        public bool Delete(string ID)
+        public bool Delete(WebAPIConnection Connection, string ID)
         {
             var request = new RestRequest("/eventframes/{webId}", Method.DELETE);
             request.AddUrlSegment("webId", ID);
 
-            var statusCode = _client.Execute(request).StatusCode;
+            var statusCode = Connection.Client.Execute(request).StatusCode;
 
             return ((int)statusCode == 204 ? true : false);
         }
 
-        public bool CaptureValues(string ID)
+        public bool CaptureValues(WebAPIConnection Connection, string ID)
         {
             var request = new RestRequest("/eventframes/{webId}/attributes/capture", Method.POST);
             request.AddUrlSegment("webId", ID);
 
-            var statusCode = _client.Execute(request).StatusCode;
+            var statusCode = Connection.Client.Execute(request).StatusCode;
 
             return ((int)statusCode == 204 ? true : false);
         }
 
-        public bool CreateAttribute(string ID, LazyObjects.AFAttribute attribute)
+        public bool CreateAttribute(WebAPIConnection Connection, string ID, LazyObjects.AFAttribute attribute)
         {
             var request = new RestRequest("/eventframes/{webId}/attributes", Method.POST);
             request.AddUrlSegment("webId", ID);
             request.AddBody(attribute);
 
-            var statusCode = _client.Execute(request).StatusCode;
+            var statusCode = Connection.Client.Execute(request).StatusCode;
 
             return ((int)statusCode == 201 ? true : false);
         }
 
-        public bool CreateEventFrame(string ID, LazyObjects.AFEventFrame eventframe)
+        public bool CreateEventFrame(WebAPIConnection Connection, string ID, LazyObjects.AFEventFrame eventframe)
         {
             var request = new RestRequest("/eventframes/{webId}/eventframes", Method.POST);
             request.AddUrlSegment("webId", ID);
             request.AddBody(eventframe);
 
-            var statusCode = _client.Execute(request).StatusCode;
+            var statusCode = Connection.Client.Execute(request).StatusCode;
 
             return ((int)statusCode == 201 ? true : false);
         }
 
-        public IEnumerable<LazyObjects.AFAttribute> GetAttributes(string webID, string nameFilter = "*", string categoryName = null, string templateName = null, string valueType = null, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000)
+        public IEnumerable<LazyObjects.AFAttribute> GetAttributes(WebAPIConnection Connection, string webID, string nameFilter = "*", string categoryName = null, string templateName = null, string valueType = null, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000)
         {
             var request = new RestRequest("/eventframes/{webId}/attributes");
             request.AddUrlSegment("webId", webID);
@@ -114,28 +109,27 @@ namespace LazyPI.WebAPI
             request.AddParameter("showHidden", showHidden);
             request.AddParameter("maxCount", maxCount);
 
-            var list = _client.Execute<List<ResponseModels.AFAttribute>>(request).Data;
+            var list = Connection.Client.Execute<List<ResponseModels.AFAttribute>>(request).Data;
 
-            return 
         }
 
-        public IEnumerable<LazyObjects.AFElementCategory> GetCategories(string webID)
+        public IEnumerable<LazyObjects.AFElementCategory> GetCategories(WebAPIConnection Connection, string webID)
         {
             var request = new RestRequest("/eventframes/{webId}/categories");
             request.AddUrlSegment("webId", webID);
 
-            return _client.Execute<List<ResponseModels.ElementCategory>>(request).Data;
+            var result = Connection.Client.Execute<List<ResponseModels.ElementCategory>>(request).Data;
         }
 
-        public IEnumerable<BaseObject> GetReferencedElements(string webID)
+        public IEnumerable<BaseObject> GetReferencedElements(WebAPIConnection Connection, string webID)
         {
             var request = new RestRequest("/eventframes/{webId}/referencedelements");
             request.AddUrlSegment("webId", webID);
 
-            return _client.Execute<List<ResponseModels.AFElement>>(request).Data;
+            var result = Connection.Client.Execute<List<ResponseModels.AFElement>>(request).Data;
         }
 
-        public IEnumerable<BaseObject> GetEventFrames(string webID, SearchMode searchMode = SearchMode.Overlapped, string startTime = "-8h", string endTime = "*", string nameFilter = "*", string referencedElementNameFilter = "*", string categoryName = null, string templateName = null, string referencedElementTemplateName = null, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
+        public IEnumerable<BaseObject> GetEventFrames(WebAPIConnection Connection, string webID, SearchMode searchMode = SearchMode.Overlapped, string startTime = "-8h", string endTime = "*", string nameFilter = "*", string referencedElementNameFilter = "*", string categoryName = null, string templateName = null, string referencedElementTemplateName = null, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
         {
             var request = new RestRequest("/eventframes/{webId}/eventframes");
             request.AddUrlSegment("webId", webID);
@@ -159,7 +153,7 @@ namespace LazyPI.WebAPI
             request.AddParameter("startIndex", startIndex);
             request.AddParameter("maxCount", maxCount);
 
-            return _client.Execute<List<LazyObjects.AFEventFrame>>(request).Data;
+            return Connection.Client.Execute<List<LazyObjects.AFEventFrame>>(request).Data;
         }
     }
 }
