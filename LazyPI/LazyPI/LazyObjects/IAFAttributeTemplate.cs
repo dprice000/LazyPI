@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LazyPI.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,11 @@ namespace LazyPI.LazyObjects
 {
     interface IAFAttributeTemplate
     {
-        BaseObject Find(string ID);
-        BaseObject FindByPath(string path);
-        bool Update(AFAttributeTemplate attrTemp);
-        bool Delete(string ID);
-        bool Create(AFAttributeTemplate attrTemp);
-        IEnumerable<AFAttributeTemplate> GetChildAttributeTemplates(string ID);
+        BaseObject Find(Connection Connection, string ID);
+        BaseObject FindByPath(Connection Connection, string path);
+        bool Update(Connection Connection, AFAttributeTemplate attrTemp);
+        bool Delete(Connection Connection, string ID);
+        bool Create(Connection Connection, AFAttributeTemplate attrTemp);
+        IEnumerable<AFAttributeTemplate> GetChildAttributeTemplates(Connection Connection, string ID);
     }
 }
