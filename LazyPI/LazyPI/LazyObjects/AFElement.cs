@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using RestSharp;
+using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
@@ -62,20 +63,9 @@ namespace LazyPI.LazyObjects
 		#endregion
 
 		#region "Constructors"
-			private AFElement(string ID, string Name, string Description, string Path) : base(ID, Name, Description, Path)
+			private AFElement(Connection Connection, string ID, string Name, string Description, string Path)
+				: base(Connection, ID, Name, Description, Path)
 			{
-				Initialize();
-			}
-
-			public AFElement(string ID)
-			{
-				BaseObject baseObj = _ElementLoader.Find(ID);
-
-				this._ID = baseObj.ID;
-				this._Name = baseObj.Name;
-				this._Description = baseObj.Description;
-				this._Path = baseObj.Path;
-
 				Initialize();
 			}
 
@@ -85,12 +75,12 @@ namespace LazyPI.LazyObjects
 			private void Initialize()
 			{
 				//Initialize Category List
-				_CategoryNames = _ElementLoader.GetCategories(_ID);
+				_CategoryNames = _ElementLoader.GetCategories(_Connection, _ID);
 
 				//Initialize Template Loader
 				_Template = new Lazy<AFElementTemplate>(() =>
 				{
-					string templateName = _ElementLoader.GetElementTemplate(this._ID);
+					string templateName = _ElementLoader.GetElementTemplate(_Connection, this._ID);
 					return AFElementTemplate.Find(templateName);
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
@@ -99,13 +89,13 @@ namespace LazyPI.LazyObjects
 				
 				_Parent = new Lazy<AFElement>(() =>
 				{
-					return ElementFactory.CreateInstance(_ElementLoader.FindByPath(parentPath));
+					return ElementFactory.CreateInstance(_Connection, _ElementLoader.FindByPath(_Connection, parentPath));
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Initialize Attributes Loader
 				_Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => 
 				{
-					List<BaseObject> resultList = _ElementLoader.GetAttributes(this.ID).ToList();
+					List<BaseObject> resultList = _ElementLoader.GetAttributes(_Connection, this.ID).ToList();
 					ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>();
 
 					foreach (var attr in resultList)
@@ -120,7 +110,7 @@ namespace LazyPI.LazyObjects
 				//Initialize Children Loader
 				_Children = new Lazy<ObservableCollection<AFElement>>(() =>
 				{
-					List<AFElement> resultList = ElementFactory.CreateList(_ElementLoader.GetElements(this.ID));
+					List<AFElement> resultList = ElementFactory.CreateList(_Connection, _ElementLoader.GetElements(_Connection, this.ID));
 					ObservableCollection<AFElement> obsList = new ObservableCollection<AFElement>(resultList);
 					obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
 					return obsList;
@@ -198,9 +188,9 @@ namespace LazyPI.LazyObjects
 		/// </summary>
 		/// <param name="ID"></param>
 		/// <returns></returns>
-		public static AFElement Find(string ID)
+		public static AFElement Find(Connection Connection, string ID)
 		{
-			return ElementFactory.CreateInstance(_ElementLoader.Find(ID));
+			return ElementFactory.CreateInstance(Connection, _ElementLoader.Find(Connection, ID));
 		}
 
 		/// <summary>
@@ -208,9 +198,9 @@ namespace LazyPI.LazyObjects
 		/// </summary>
 		/// <param name="Path"></param>
 		/// <returns></returns>
-		public static AFElement FindByPath(string Path)
+		public static AFElement FindByPath(Connection Connection, string Path)
 		{
-			return ElementFactory.CreateInstance(_ElementLoader.FindByPath(Path));
+			return ElementFactory.CreateInstance(Connection, _ElementLoader.FindByPath(Connection, Path));
 		}
 
 		/// <summary>
@@ -218,9 +208,9 @@ namespace LazyPI.LazyObjects
 		/// </summary>
 		/// <param name="ElementID">The ID of the element to be deleted</param>
 		/// <returns></returns>
-		public static bool Delete(string ElementID)
+		public static bool Delete(Connection Connection, string ElementID)
 		{
-			return _ElementLoader.Delete(ElementID);
+			return _ElementLoader.Delete(Connection, ElementID);
 		}
 
 		/// <summary>
@@ -230,9 +220,9 @@ namespace LazyPI.LazyObjects
 		/// <param name="CategoryName">Name of the category to be searched for.</param>
 		/// <param name="MaxCount">Max number of elements that should be searched for.</param>
 		/// <returns>A list of elements that have a specific category.</returns>
-		public static IEnumerable<AFElement> FindByCategory(string RootID,string CategoryName, int MaxCount = 1000)
+        public static IEnumerable<AFElement> FindByCategory(Connection Connection, string RootID, string CategoryName, int MaxCount = 1000)
 		{
-			var baseList = _ElementLoader.GetElements(RootID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
+			var baseList = _ElementLoader.GetElements(Connection, RootID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 
 			return ElementFactory.CreateList(baseList);
 		}
@@ -244,9 +234,9 @@ namespace LazyPI.LazyObjects
 		/// <param name="TemplateName">Name of the template to be searched for.</param>
 		/// <param name="MaxCount">Max number of elements that should be searched for.</param>
 		/// <returns>A list of elements that have a specific template.</returns>
-		public static IEnumerable<AFElement> FindByTemplate(string RootID,string TemplateName, int MaxCount = 1000)
+        public static IEnumerable<AFElement> FindByTemplate(Connection Connection, string RootID, string TemplateName, int MaxCount = 1000)
 		{
-			var baseList = _ElementLoader.GetElements(RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
+			var baseList = _ElementLoader.GetElements(Connection, RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 
 			return ElementFactory.CreateList(baseList);
 		}
@@ -257,23 +247,23 @@ namespace LazyPI.LazyObjects
 		/// </summary>
 		public class ElementFactory
 		{
-			public static AFElement CreateInstance(BaseObject bObj)
+			public static AFElement CreateInstance(Connection Connection, BaseObject bObj)
 			{
-				return new AFElement(bObj.ID, bObj.Name, bObj.Description, bObj.Path);
+				return new AFElement(Connection, bObj.ID, bObj.Name, bObj.Description, bObj.Path);
 			}
 
-			public static AFElement CreateInstance(string ID, string Name, string Description, string Path)
+			public static AFElement CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
 			{
-				return new AFElement(ID, Name, Description, Path);
+				return new AFElement(Connection, ID, Name, Description, Path);
 			}
 
-			public static List<AFElement> CreateList(IEnumerable<BaseObject> Elements)
+			public static List<AFElement> CreateList(Connection Connection, IEnumerable<BaseObject> Elements)
 			{
 				List<AFElement> elementList = new List<AFElement>();
 
 				foreach(AFElement element in Elements)
 				{
-					elementList.Add(new AFElement(element.ID, element.Name, element.Description, element.Path));
+					elementList.Add(new AFElement(Connection, element.ID, element.Name, element.Description, element.Path));
 				}
 
 				return elementList;

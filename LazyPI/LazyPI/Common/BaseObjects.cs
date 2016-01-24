@@ -91,6 +91,7 @@ namespace LazyPI
 
     public class BaseObject
     {
+        protected LazyPI.Common.Connection _Connection;
         protected string _ID;
         protected string _Name;
         protected string _Path;
@@ -143,8 +144,9 @@ namespace LazyPI
         { 
         }
 
-        public BaseObject(string id, string name, string description, string path)
+        public BaseObject(LazyPI.Common.Connection Connection, string id, string name, string description, string path)
         {
+            this._Connection = Connection;
             this._ID = id;
             this._Name = name;
             this._Description = description;
