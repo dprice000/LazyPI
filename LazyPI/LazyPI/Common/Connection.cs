@@ -6,18 +6,10 @@ using System.Threading.Tasks;
 
 namespace LazyPI.Common
 {
-    public enum AuthenticationType
-    {
-        Anonymous,
-        Basic,
-        Kerberos
-    }
-
     public abstract class Connection
     {
         protected string _Hostname;
         protected string _Username;
-        protected AuthenticationType _AuthType;
         
 
         #region "Properties"
