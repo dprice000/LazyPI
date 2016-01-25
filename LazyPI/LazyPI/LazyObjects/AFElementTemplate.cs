@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LazyPI.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -33,22 +34,17 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-            private AFElementTemplate(string ID, string Name, string Description, string Path)
-                : base(ID, Name, Description, Path)
+            private AFElementTemplate(Connection Connection, string ID, string Name, string Description, string Path)
+                : base(Connection, ID, Name, Description, Path)
             {
                 Initialize();
-            }
-
-            public AFElementTemplate(string Name, string Path)
-            {
-                //TODO: Should do something fancy with Path and Name to find template by path
             }
 
             private void Initialize()
             {
                 // Load Categories
                 _Categories = new Lazy<ObservableCollection<AFElementCategory>>(() => {
-                   ObservableCollection<AFElementCategory> collection = new ObservableCollection<AFElementCategory>(_templateLoader.GetCategories(this._ID));
+                   ObservableCollection<AFElementCategory> collection = new ObservableCollection<AFElementCategory>(_templateLoader.GetCategories(_Connection, this._ID));
                    collection.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(CategoriesChanged);
                    return collection;
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
@@ -66,9 +62,9 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Static Methods"
-            public static AFElementTemplate Find(string ID)
+            public static AFElementTemplate Find(Connection Connection, string ID)
             {
-                return _templateLoader.Find(ID);
+                return _templateLoader.Find(Connection, ID);
             }
 
             public static AFElementTemplate FindByName(string Name)
@@ -76,36 +72,36 @@ namespace LazyPI.LazyObjects
                 throw new NotImplementedException("Needs to be Implemented");
             }
 
-            public static AFElementTemplate FindByPath(string Path)
+            public static AFElementTemplate FindByPath(Connection Connection, string Path)
             {
-                return _templateLoader.FindByPath(Path);
+                return _templateLoader.FindByPath(Connection, Path);
             }
 
-            public static bool Delete(string ID)
+            public static bool Delete(Connection Connection, string ID)
             {
-                return _templateLoader.Delete(ID);
+                return _templateLoader.Delete(Connection, ID);
             }
 
-            public static bool CreateElementTemplate(string parentID, AFElementTemplate template)
+            public static bool CreateElementTemplate(Connection Connection, string ParentID, AFElementTemplate Template)
             {
-                return _templateLoader.CreateElementTemplate(parentID, template);
+                return _templateLoader.CreateElementTemplate(Connection, ParentID, Template);
             }
 
-            public static IEnumerable<AFAttributeTemplate> GetAttributeTemplates(string elementID)
+            public static IEnumerable<AFAttributeTemplate> GetAttributeTemplates(Connection Connection, string ElementID)
             {
-                return _templateLoader.GetAttributeTemplates(elementID);
+                return _templateLoader.GetAttributeTemplates(Connection, ElementID);
             }
 
             public class ElementTemplateFactory
             {
-                public static AFElementTemplate CreateInstance(BaseObject bObj)
+                public static AFElementTemplate CreateInstance(Connection Connection, BaseObject bObj)
                 {
-                    return new AFElementTemplate(bObj.ID, bObj.Name, bObj.Description, bObj.Path);
+                    return new AFElementTemplate(Connection, bObj.ID, bObj.Name, bObj.Description, bObj.Path);
                 }
 
-                public static AFElementTemplate CreateInstance(string ID, string Name, string Description, string Path)
+                public static AFElementTemplate CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
                 {
-                    return new AFElementTemplate(ID, Name, Description, Path);
+                    return new AFElementTemplate(Connection, ID, Name, Description, Path);
                 }
             }
         #endregion

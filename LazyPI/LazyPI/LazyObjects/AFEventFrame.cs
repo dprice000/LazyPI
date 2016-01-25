@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LazyPI.Common;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -60,8 +61,8 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-            private AFEventFrame(string ID, string Name, string Description, string Path) 
-                : base(ID, Name, Description, Path)
+            private AFEventFrame(Connection Connection, string ID, string Name, string Description, string Path) 
+                : base(Connection, ID, Name, Description, Path)
             {
                 Initialize();
             }
@@ -70,12 +71,12 @@ namespace LazyPI.LazyObjects
             {
                 _Template = new Lazy<AFElementTemplate>(() =>
                 {
-                   var templateName = _EventFrameLoader.GetEventFrameTemplate(this._ID);
+                   var templateName = _EventFrameLoader.GetEventFrameTemplate(_Connection, this._ID);
                    return AFElementTemplate.FindByName(templateName);
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
                 _EventFrames = new Lazy<ObservableCollection<AFEventFrame>>(() => {
-                    var frames = _EventFrameLoader.GetChildFrames(_ID, SearchMode.None, "*-8d", "*", "*", "*", "*", "*", "*", false, "Name", "Ascending", 0, 1000);
+                    var frames = _EventFrameLoader.GetChildFrames(_Connection, _ID, SearchMode.None, "*-8d", "*", "*", "*", "*", "*", "*", false, "Name", "Ascending", 0, 1000);
 
                     ObservableCollection<AFEventFrame> obsList = new ObservableCollection<AFEventFrame>(EventFrameFactory.CreateInstanceList(frames));
                     obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
@@ -84,7 +85,7 @@ namespace LazyPI.LazyObjects
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
                 _Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => { 
-                    var attrs = _EventFrameLoader.GetAttributes(this._ID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
+                    var attrs = _EventFrameLoader.GetAttributes(_Connection, this._ID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
                     ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>();
 
                     foreach (var attribute in attrs)
@@ -153,18 +154,18 @@ namespace LazyPI.LazyObjects
 
         public class EventFrameFactory
         {
-            public static AFEventFrame CreateInstance(string ID, string Name, string Description, string Path)
+            public static AFEventFrame CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
             {
-                return new AFEventFrame(ID, Name, Description, Path);
+                return new AFEventFrame(Connection, ID, Name, Description, Path);
             }
 
-            public static List<AFEventFrame> CreateInstanceList(IEnumerable<BaseObject> frames)
+            public static List<AFEventFrame> CreateInstanceList(Connection Connection, IEnumerable<BaseObject> frames)
             {
                 List<AFEventFrame> results = new List<AFEventFrame>(); 
 
                 foreach (var baseFrame in frames)
                 {
-                    results.Add(new AFEventFrame(baseFrame.ID, baseFrame.Name, baseFrame.Description, baseFrame.Path));
+                    results.Add(new AFEventFrame(Connection, baseFrame.ID, baseFrame.Name, baseFrame.Description, baseFrame.Path));
                 }
 
                 return results;

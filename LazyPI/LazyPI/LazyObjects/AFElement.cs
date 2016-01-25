@@ -220,7 +220,7 @@ namespace LazyPI.LazyObjects
 		/// <param name="CategoryName">Name of the category to be searched for.</param>
 		/// <param name="MaxCount">Max number of elements that should be searched for.</param>
 		/// <returns>A list of elements that have a specific category.</returns>
-        public static IEnumerable<AFElement> FindByCategory(Connection Connection, string RootID, string CategoryName, int MaxCount = 1000)
+		public static IEnumerable<AFElement> FindByCategory(Connection Connection, string RootID, string CategoryName, int MaxCount = 1000)
 		{
 			var baseList = _ElementLoader.GetElements(Connection, RootID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 
@@ -234,7 +234,7 @@ namespace LazyPI.LazyObjects
 		/// <param name="TemplateName">Name of the template to be searched for.</param>
 		/// <param name="MaxCount">Max number of elements that should be searched for.</param>
 		/// <returns>A list of elements that have a specific template.</returns>
-        public static IEnumerable<AFElement> FindByTemplate(Connection Connection, string RootID, string TemplateName, int MaxCount = 1000)
+		public static IEnumerable<AFElement> FindByTemplate(Connection Connection, string RootID, string TemplateName, int MaxCount = 1000)
 		{
 			var baseList = _ElementLoader.GetElements(Connection, RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 

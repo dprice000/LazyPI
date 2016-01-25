@@ -41,7 +41,7 @@ namespace LazyPI.LazyObjects
 
         public void CheckIn()
         {
-            _CategoryLoader.Update(this);
+            _CategoryLoader.Update(_Connection, this);
         }
     }
 }

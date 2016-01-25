@@ -8,7 +8,6 @@ namespace LazyPI.LazyObjects
 {
     public class AFAttribute : BaseObject
     {
-        private LazyPI.Common.Connection _Connection;
         private string _UnitsName;
         private string _AttrType;
         private IEnumerable<string> _Categories;
