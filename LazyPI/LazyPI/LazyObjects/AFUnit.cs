@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LazyPI.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,7 +75,7 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-        private AFUnit(string ID, string Name, string Description, string Path) : base(ID, Name, Description, Path)
+        private AFUnit(Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
         {
             Initialize();
         }
@@ -86,36 +87,36 @@ namespace LazyPI.LazyObjects
 
         #region "Static Methods"
 
-        public AFUnit Find(string ID)
+        public AFUnit Find(Connection Connection, string ID)
         {
-            BaseObject baseObj = _UnitLoader.Find(ID);
-            return new AFUnit(baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
+            BaseObject baseObj = _UnitLoader.Find(Connection, ID);
+            return new AFUnit(Connection, baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
         }
 
-        public AFUnit FindByPath(string Path)
+        public AFUnit FindByPath(Connection Connection, string Path)
         {
-            BaseObject baseObj = _UnitLoader.FindByPath(Path);
-            return new AFUnit(baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
+            BaseObject baseObj = _UnitLoader.FindByPath(Connection, Path);
+            return new AFUnit(Connection, baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
         }
 
-        public static bool Delete(string ID)
+        public static bool Delete(Connection Connection, string ID)
         {
-           return _UnitLoader.Delete(ID);
+           return _UnitLoader.Delete(Connection, ID);
         }
         #endregion
 
         #region "Interactions"
             public bool CheckIn()
             {
-                return _UnitLoader.Update(this);
+                return _UnitLoader.Update(_Connection, this);
             }
         #endregion
 
         public class UnitFactory
         {
-            public static AFUnit CreateInstance(string ID, string Name, string Description, string Path)
+            public static AFUnit CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
             {
-                return new AFUnit(ID, Name, Description, Path);
+                return new AFUnit(Connection, ID, Name, Description, Path);
             }
         }
     }

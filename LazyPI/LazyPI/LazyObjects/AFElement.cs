@@ -81,7 +81,7 @@ namespace LazyPI.LazyObjects
 				_Template = new Lazy<AFElementTemplate>(() =>
 				{
 					string templateName = _ElementLoader.GetElementTemplate(_Connection, this._ID);
-					return AFElementTemplate.Find(templateName);
+					return AFElementTemplate.Find(_Connection, templateName);
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Initialize Parent Loader
@@ -153,12 +153,12 @@ namespace LazyPI.LazyObjects
 			{
 				if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
 				{
-					_ElementLoader.CreateChildElement(this._ID, (AFElement)sender);
+					_ElementLoader.CreateChildElement(_Connection, this._ID, (AFElement)sender);
 				}
 				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
 				{
 					AFElement element = (AFElement)sender;
-					Delete(element._ID);
+					Delete(_Connection, element._ID);
 				}
 				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
 				{
@@ -178,7 +178,7 @@ namespace LazyPI.LazyObjects
 		#region "Interactions"
 			public void CheckIn()
 			{
-				_ElementLoader.Update(this);
+				_ElementLoader.Update(_Connection, this);
 			}
 		#endregion
 
@@ -224,7 +224,7 @@ namespace LazyPI.LazyObjects
 		{
 			var baseList = _ElementLoader.GetElements(Connection, RootID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 
-			return ElementFactory.CreateList(baseList);
+			return ElementFactory.CreateList(Connection, baseList);
 		}
 
 		/// <summary>
@@ -238,7 +238,7 @@ namespace LazyPI.LazyObjects
 		{
 			var baseList = _ElementLoader.GetElements(Connection, RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 
-			return ElementFactory.CreateList(baseList);
+			return ElementFactory.CreateList(Connection, baseList);
 		}
 		#endregion
 
