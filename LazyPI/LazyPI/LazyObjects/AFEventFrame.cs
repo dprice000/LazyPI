@@ -78,7 +78,7 @@ namespace LazyPI.LazyObjects
                 _EventFrames = new Lazy<ObservableCollection<AFEventFrame>>(() => {
                     var frames = _EventFrameLoader.GetChildFrames(_Connection, _ID, SearchMode.None, "*-8d", "*", "*", "*", "*", "*", "*", false, "Name", "Ascending", 0, 1000);
 
-                    ObservableCollection<AFEventFrame> obsList = new ObservableCollection<AFEventFrame>(EventFrameFactory.CreateInstanceList(frames));
+                    ObservableCollection<AFEventFrame> obsList = new ObservableCollection<AFEventFrame>(EventFrameFactory.CreateInstanceList(_Connection, frames));
                     obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
                     
                     return obsList;
@@ -90,7 +90,7 @@ namespace LazyPI.LazyObjects
 
                     foreach (var attribute in attrs)
                     {
-                        obsList.Add(AFAttribute.Find(attribute.ID));
+                        obsList.Add(AFAttribute.Find(_Connection, attribute.ID));
                     }
 
                     obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(AttributesChanged);
@@ -105,12 +105,12 @@ namespace LazyPI.LazyObjects
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                AFAttribute.Create(this._ID, (AFAttribute)sender);
+                AFAttribute.Create(_Connection, this._ID, (AFAttribute)sender);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 AFAttribute obj = (AFAttribute)sender;
-                AFAttribute.Delete(obj.ID);
+                AFAttribute.Delete(_Connection, obj.ID);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
             {
@@ -130,12 +130,12 @@ namespace LazyPI.LazyObjects
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                _EventFrameLoader.CreateEventFrame(this._ID, (AFEventFrame)sender);
+                _EventFrameLoader.CreateEventFrame(_Connection, this._ID, (AFEventFrame)sender);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
                 AFEventFrame obj = (AFEventFrame)sender;
-                _EventFrameLoader.Delete(obj._ID);
+                _EventFrameLoader.Delete(_Connection, obj._ID);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
             {
@@ -152,7 +152,7 @@ namespace LazyPI.LazyObjects
         }
         #endregion
 
-        public class EventFrameFactory
+        public class EventFrameFactory : ILazyFactory
         {
             public static AFEventFrame CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
             {

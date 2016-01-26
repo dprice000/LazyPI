@@ -245,7 +245,7 @@ namespace LazyPI.LazyObjects
 		/// <summary>
 		/// Uses the hidden constructor to create full instances of AFElement.
 		/// </summary>
-		public class ElementFactory
+		public class ElementFactory : ILazyFactory
 		{
 			public static AFElement CreateInstance(Connection Connection, BaseObject bObj)
 			{

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LazyPI.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,32 +69,20 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return _AttrLoader.GetValue(this.ID);
+                return _AttrLoader.GetValue(_Connection, this.ID);
             }
             set
             {
-                _AttrLoader.SetValue(this.ID, value);
+                _AttrLoader.SetValue(_Connection, this.ID, value);
             }
         }
         #endregion
 
         #region "Constructors"
 
-        private AFAttribute(string ID, string Name, string Description, string Path)
+        private AFAttribute(LazyPI.Common.Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
         {
-            this._ID = ID;
-            this._Name = Name;
-            this._Description = Description;
-            this._Path = Path;
-        }
-
-        public AFAttribute(string ID)
-        {
-            BaseObject baseObj = _AttrLoader.Find(ID);
-            this._ID = baseObj.ID;
-            this._Name = baseObj.Name;
-            this._Description = baseObj.Description;
-            this._Path = baseObj.Path;
+            Initialize();
         }
 
         /// <summary>
@@ -112,7 +101,7 @@ namespace LazyPI.LazyObjects
         /// </summary>
         public void CheckIn()
         {
-            _AttrLoader.Update(this);
+            _AttrLoader.Update(_Connection, this);
         }
 
         /// <summary>
@@ -121,7 +110,7 @@ namespace LazyPI.LazyObjects
         /// <returns>Returns a complete AFAttribute.</returns>
         public AFValue GetValue()
         {
-            return _AttrLoader.GetValue(this._ID);
+            return _AttrLoader.GetValue(_Connection, this._ID);
         }
 
         /// <summary>
@@ -131,7 +120,7 @@ namespace LazyPI.LazyObjects
         /// <returns>Returns true if no errors occur.</returns>
         public bool SetValue(AFValue Value)
         {
-           return _AttrLoader.SetValue(this._ID, Value);
+           return _AttrLoader.SetValue(_Connection, this._ID, Value);
         }
 
         #endregion
@@ -144,9 +133,9 @@ namespace LazyPI.LazyObjects
             /// <param name="Attr">The partial attribute holding information to create attribute.</param>
             /// <returns>Returns true if creation completes properly.</returns>
             /// <remarks>It is expected that the attribute will not have ID and Path</remarks>
-            public static bool Create(string ElementID, AFAttribute Attr)
+            public static bool Create(LazyPI.Common.Connection Connection, string ElementID, AFAttribute Attr)
             {
-                return _AttrLoader.Create(ElementID, Attr);
+                return _AttrLoader.Create(Connection, ElementID, Attr);
             }
             
             /// <summary>
@@ -154,9 +143,9 @@ namespace LazyPI.LazyObjects
             /// </summary>
             /// <param name="ID">The unique ID of the attribute.</param>
             /// <returns>Returns a complete AFAttribute.</returns>
-            public static AFAttribute Find(string ID)
+            public static AFAttribute Find(Connection Connection,string ID)
             {
-                return AttributeFactory.CreateInstance(_AttrLoader.Find(ID));
+                return AttributeFactory.CreateInstance(Connection, _AttrLoader.Find(Connection, ID));
             }
 
             /// <summary>
@@ -164,9 +153,9 @@ namespace LazyPI.LazyObjects
             /// </summary>
             /// <param name="Path">The full Path to the AFAttribute.</param>
             /// <returns></returns>
-            public static AFAttribute FindByPath(string Path)
+            public static AFAttribute FindByPath(Connection Connection, string Path)
             {
-                return AttributeFactory.CreateInstance(_AttrLoader.FindByPath(Path));
+                return AttributeFactory.CreateInstance(Connection, _AttrLoader.FindByPath(Connection, Path));
             }
 
 
@@ -175,9 +164,9 @@ namespace LazyPI.LazyObjects
             /// </summary>
             /// <param name="ID">The unique ID of the attribute to be deleted.</param>
             /// <returns></returns>
-            public static bool Delete(string ID)
+            public static bool Delete(Connection Connection, string ID)
             {
-                return _AttrLoader.Delete(ID);
+                return _AttrLoader.Delete(Connection, ID);
             }
         #endregion
 
@@ -187,16 +176,16 @@ namespace LazyPI.LazyObjects
         /// <remarks>
         /// This should be the only way to create a complete AFAttribute.
         /// </remarks>
-        public class AttributeFactory
+        public class AttributeFactory : ILazyFactory
         {
-            public static AFAttribute CreateInstance(BaseObject bObj)
+            public static AFAttribute CreateInstance(Connection Connection, BaseObject bObj)
             {
-                return new AFAttribute(bObj.ID, bObj.Name, bObj.Description, bObj.Path);
+                return new AFAttribute(Connection, bObj.ID, bObj.Name, bObj.Description, bObj.Path);
             }
 
-            public static AFAttribute CreateInstance(string ID, string Name, string Description, string Path)
+            public static AFAttribute CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
             {
-                return new AFAttribute(ID, Name, Description, Path);
+                return new AFAttribute(Connection, ID, Name, Description, Path);
             }
         }
     }

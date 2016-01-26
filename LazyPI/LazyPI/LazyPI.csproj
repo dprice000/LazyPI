@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Connection.cs" />
+    <Compile Include="LazyObjects\ILazyFactory.cs" />
     <Compile Include="WebAPI\WebAPIConnection.cs" />
     <Compile Include="LazyObjects\AFAttribute.cs" />
     <Compile Include="LazyObjects\AFAttributeCategory.cs" />
