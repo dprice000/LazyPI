@@ -9,16 +9,16 @@ namespace LazyPI.LazyObjects
 {
     public interface IAFElement
     {
-        BaseObject Find(Connection Connection, string elementID);
-        BaseObject FindByPath(Connection Connection, string path);
-        bool Update(Connection Connection, AFElement element);
-        bool Delete(Connection Connection, string elementID);
-        bool CreateAttribute(Connection Connection, string parentID, AFAttribute attr);
-        bool CreateChildElement(Connection Connection, string parentID, AFElement element);
-        string GetElementTemplate(Connection Connection, string elementID);
-        IEnumerable<string> GetCategories(Connection Connection, string ID);
-        IEnumerable<BaseObject> GetAttributes(Connection Connection, string ID, string nameFilter = "*", string categoryName = "*", string templateName = "*", string valueType = "*", bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000);
-        IEnumerable<BaseObject> GetElements(Connection Connection, string ID, string nameFilter = "*", string categoryName = "*", string templateName = "*", ElementType elementType = ElementType.Any, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000);
-        IEnumerable<BaseObject> GetEventFrames(Connection Connection, string elementID, SearchMode searchMode, DateTime startTime, DateTime endTime, string nameFilter, string categoryName, string templateName, string sortField, string sortOrder, int startIndex, int maxCount);
+        BaseObject Find(Connection Connection, string ElementID);
+        BaseObject FindByPath(Connection Connection, string Path);
+        bool Update(Connection Connection, AFElement Element);
+        bool Delete(Connection Connection, string ElementID);
+        bool CreateAttribute(Connection Connection, string ParentID, AFAttribute Attr);
+        bool CreateChildElement(Connection Connection, string ParentID, AFElement Element);
+        string GetElementTemplate(Connection Connection, string ElementID);
+        IEnumerable<string> GetCategories(Connection Connection, string ElementID);
+        IEnumerable<BaseObject> GetAttributes(Connection Connection, string ElementID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", string ValueType = "*", bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, bool ShowExcluded = false, bool ShowHidden = false, int MaxCount = 1000);
+        IEnumerable<BaseObject> GetElements(Connection Connection, string RootID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", ElementType ElementType = ElementType.Any, bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, int MaxCount = 1000);
+        IEnumerable<BaseObject> GetEventFrames(Connection Connection, string ElementID, SearchMode SearchMode, DateTime StartTime, DateTime EndTime, string NameFilter, string CategoryName, string TemplateName, string SortField, string SortOrder, int StartIndex, int MaxCount);
     }
 }

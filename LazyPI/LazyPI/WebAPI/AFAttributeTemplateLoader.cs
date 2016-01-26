@@ -26,30 +26,30 @@ namespace LazyPI.WebAPI
 			return (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
 		}
 
-		public LazyObjects.AFAttributeTemplate FindByPath(WebAPIConnection Connection, string path)
+		public LazyObjects.AFAttributeTemplate FindByPath(WebAPIConnection Connection, string Path)
 		{
 			var request = new RestRequest("/attributetemplates");
-			request.AddParameter("path", path);
+			request.AddParameter("path", Path);
 
 			var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFAttributeTemplate>(request).Data;
 			return (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
 		}
 
-		public bool Update(WebAPIConnection Connection, LazyObjects.AFAttributeTemplate attrTemp)
+		public bool Update(WebAPIConnection Connection, LazyObjects.AFAttributeTemplate AttrTemp)
 		{
 			var request = new RestRequest("/attributetemplates/{webId}", Method.PATCH);
-			request.AddUrlSegment("webId", attrTemp.ID);
-			request.AddBody(attrTemp);
+			request.AddUrlSegment("webId", AttrTemp.ID);
+			request.AddBody(AttrTemp);
 
 			var statusCode = Connection.Client.Execute(request).StatusCode;
 
 			return ((int)statusCode == 204);
 		}
 
-		public bool Delete(WebAPIConnection Connection, string attrTempID)
+		public bool Delete(WebAPIConnection Connection, string AttrTempID)
 		{
 			var request = new RestRequest("/attributetemplates/{webId}");
-			request.AddParameter("webId", attrTempID);
+			request.AddParameter("webId", AttrTempID);
 
 			var statusCode = Connection.Client.Execute(request).StatusCode;
 
@@ -58,11 +58,11 @@ namespace LazyPI.WebAPI
 
 		//This really creates a childe attributetemplate
 		//TODO: Something is wrong here ID should be a parent ID
-		public bool Create(WebAPIConnection Connection, LazyObjects.AFAttributeTemplate attrTemp)
+		public bool Create(WebAPIConnection Connection, LazyObjects.AFAttributeTemplate AttrTemp)
 		{
 			var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
-			request.AddUrlSegment("webId", attrTemp.ID);
-			request.AddBody(attrTemp);
+			request.AddUrlSegment("webId", AttrTemp.ID);
+			request.AddBody(AttrTemp);
 
 			var statusCode = Connection.Client.Execute(request).StatusCode;
 			return ((int)statusCode == 201);
