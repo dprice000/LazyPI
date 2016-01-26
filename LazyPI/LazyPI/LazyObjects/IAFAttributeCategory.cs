@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
-    public class IAFAttributeCategory
+    public interface IAFAttributeCategory
     {
-        public AFAttributeCategory Find(Connection Connection, string ID);
-        public AFAttributeCategory FindByPath(Connection Connection, string Path);
-        public bool Update(Connection Connection, AFAttributeCategory Category);
-        public bool Delete(Connection Connection, string ID);
+        AFAttributeCategory Find(Connection Connection, string ID);
+        AFAttributeCategory FindByPath(Connection Connection, string Path);
+        bool Update(Connection Connection, AFAttributeCategory Category);
+        bool Delete(Connection Connection, string ID);
     }
 }

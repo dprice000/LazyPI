@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-    class AFAttributeLoader : LazyObjects.IAFAttribute
+    public class AFAttributeLoader : LazyObjects.IAFAttribute
     {
         public AFAttributeLoader()
         {
@@ -24,7 +24,7 @@ namespace LazyPI.WebAPI
         {
             var request = new RestRequest("/attributes/{webId}");
             request.AddUrlSegment("webId", ID);
-            var attr = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
+            return Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
         }
 
         /// <summary>

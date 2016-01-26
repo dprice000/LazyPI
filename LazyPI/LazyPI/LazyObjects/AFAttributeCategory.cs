@@ -14,31 +14,6 @@ namespace LazyPI.LazyObjects
         { 
         }
 
-        public override string Name
-        {
-            get
-            {
-                return this._Name;
-            }
-            set
-            {
-                this._Name = value;
-
-            }
-        }
-
-        public override string Description
-        {
-            get
-            {
-                return _Description;
-            }
-            set
-            {
-                _Description = value;
-            }
-        }
-
         public void CheckIn()
         {
             _CategoryLoader.Update(_Connection, this);

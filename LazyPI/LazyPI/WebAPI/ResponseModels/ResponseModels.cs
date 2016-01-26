@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LazyPI.LazyObjects;
 
 namespace LazyPI.WebAPI.ResponseModels
 {
@@ -18,10 +19,6 @@ namespace LazyPI.WebAPI.ResponseModels
     public abstract class BaseResponse
     {
         public string WebID { get; set; }
-        public string ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Path { get; set; }
         public LinksResponse Links { get; set; }
     }
 
