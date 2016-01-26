@@ -11,8 +11,11 @@ namespace LazyPI.WebAPI
 {
     public class AFAttributeLoader : LazyObjects.IAFAttribute
     {
-        public AFAttributeLoader()
+        private LazyPI.LazyObjects.ILazyFactory _Factory;
+
+        public AFAttributeLoader(LazyPI.LazyObjects.ILazyFactory Factory)
         {
+            _Factory = Factory;
         }
 
         /// <summary>
@@ -20,11 +23,13 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="webID">The unique ID of the AF attribute</param>
         /// <returns></returns>
-        public BaseObject Find(WebAPIConnection Connection, string ID)
+        public LazyObjects.AFAttribute Find(WebAPIConnection Connection, string ID)
         {
             var request = new RestRequest("/attributes/{webId}");
             request.AddUrlSegment("webId", ID);
-            return Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
+            var result = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
+            return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, result.ID, result.Name, result.Description, result.Path);
+
         }
 
         /// <summary>
@@ -33,11 +38,12 @@ namespace LazyPI.WebAPI
         /// <param name="path">The path provided by the WebAPI.</param>
         /// <returns>A specific AF Attribute.</returns>
         /// <remarks>It is recommended to use Get By ID over path.</remarks>
-        public BaseObject FindByPath(WebAPIConnection Connection,  string path)
+        public LazyObjects.AFAttribute FindByPath(WebAPIConnection Connection,  string path)
         {
             var request = new RestRequest("/attributes");
             request.AddParameter("path", path);
             var Attr = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
+            return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, Attr.ID, Attr.Name, Attr.Description, Attr.Path);
         }
 
         /// <summary>
@@ -77,7 +83,7 @@ namespace LazyPI.WebAPI
         /// <param name="parentWID"></param>
         /// <param name="attr">The definition of the new attribute.</param>
         /// <returns>Returns true if create completed.</returns>
-        public bool Create(string parentWID, LazyObjects.AFAttribute attr)
+        public bool Create(WebAPIConnection Connection, string parentWID, LazyObjects.AFAttribute attr)
         {
             var request = new RestRequest("/attributes/{webId}", Method.POST);
             request.AddUrlSegment("webId", parentWID);
@@ -89,7 +95,7 @@ namespace LazyPI.WebAPI
 
             request.AddBody(clientAttr);
 
-            var statusCode = _client.Execute(request).StatusCode;
+            var statusCode = Connection.Client.Execute(request).StatusCode;
 
             return ((int)statusCode == 201);
         }
