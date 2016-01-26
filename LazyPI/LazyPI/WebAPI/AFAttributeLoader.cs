@@ -28,7 +28,7 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/attributes/{webId}");
             request.AddUrlSegment("webId", ID);
             var result = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
-            return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, result.ID, result.Name, result.Description, result.Path);
+            return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
 
         }
 
@@ -43,7 +43,7 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/attributes");
             request.AddParameter("path", path);
             var Attr = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
-            return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, Attr.ID, Attr.Name, Attr.Description, Attr.Path);
+            return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, Attr.WebID, Attr.Name, Attr.Description, Attr.Path);
         }
 
         /// <summary>

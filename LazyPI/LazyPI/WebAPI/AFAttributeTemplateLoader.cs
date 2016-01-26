@@ -23,7 +23,7 @@ namespace LazyPI.WebAPI
 
 			var result = Connection.Client.Execute<ResponseModels.AFAttributeTemplate>(request).Data;
 
-			return (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, result.ID, result.Name, result.Description, result.Path);
+			return (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
 		}
 
 		public LazyObjects.AFAttributeTemplate FindByPath(WebAPIConnection Connection, string path)
@@ -32,7 +32,7 @@ namespace LazyPI.WebAPI
 			request.AddParameter("path", path);
 
 			var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFAttributeTemplate>(request).Data;
-			return (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, result.ID, result.Name, result.Description, result.Path);
+			return (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
 		}
 
 		public bool Update(WebAPIConnection Connection, LazyObjects.AFAttributeTemplate attrTemp)

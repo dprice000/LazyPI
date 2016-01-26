@@ -25,7 +25,7 @@ namespace LazyPI.WebAPI
 				request.AddUrlSegment("webId", elementWID);
 
 				var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
-				return (LazyObjects.AFElement)_Factory.CreateInstance(Connection, result.ID, result.Name, result.Description, result.Path);
+				return (LazyObjects.AFElement)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
 			}
 
 			public LazyObjects.AFElement FindByPath(LazyPI.WebAPI.WebAPIConnection Connection, string path)
@@ -34,7 +34,7 @@ namespace LazyPI.WebAPI
 				request.AddParameter("path", path);
 
 				var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
-				return (LazyObjects.AFElement)_Factory.CreateInstance(Connection, result.ID, result.Name, result.Description, result.Path);
+				return (LazyObjects.AFElement)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
 			}
 
 			public bool Update(LazyPI.WebAPI.WebAPIConnection Connection, LazyObjects.AFElement element)
@@ -113,7 +113,7 @@ namespace LazyPI.WebAPI
 
 				foreach(var result in response.Items)
 				{
-					resultList.Add(LazyObjects.AFAttribute.Find(Connection, result.ID));
+					resultList.Add(LazyObjects.AFAttribute.Find(Connection, result.WebID));
 				}
 
 				return resultList;
@@ -148,7 +148,7 @@ namespace LazyPI.WebAPI
 
 				foreach (var element in response.Items)
 				{
-					results.Add((LazyObjects.AFElement)_Factory.CreateInstance(Connection, element.ID, element.Name, element.Description, element.Path));
+					results.Add((LazyObjects.AFElement)_Factory.CreateInstance(Connection, element.WebID, element.Name, element.Description, element.Path));
 				}
 
 				return results;
