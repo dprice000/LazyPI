@@ -11,28 +11,30 @@ namespace LazyPI.WebAPI
 {
 	public class AFElementLoader : LazyObjects.IAFElement
 	{
+		private LazyPI.LazyObjects.ILazyFactory _Factory;
+
 		public AFElementLoader()
 		{
 		}
 
 		// These functions have direct references to WebAPI calls
 		#region "Public Methods"
-			public BaseObject Find(LazyPI.WebAPI.WebAPIConnection Connection,string elementWID)
+			public LazyObjects.AFElement Find(LazyPI.WebAPI.WebAPIConnection Connection,string elementWID)
 			{
 				var request = new RestRequest("/elements/{webId}");
 				request.AddUrlSegment("webId", elementWID);
 
 				var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
-				return new BaseObject(result.WebID, result.Name, result.Description, result.Path);
+				return (LazyObjects.AFElement)_Factory.CreateInstance(Connection, result.ID, result.Name, result.Description, result.Path);
 			}
 
-			public BaseObject FindByPath(LazyPI.WebAPI.WebAPIConnection Connection, string path)
+			public LazyObjects.AFElement FindByPath(LazyPI.WebAPI.WebAPIConnection Connection, string path)
 			{
 				var request = new RestRequest("/elements");
 				request.AddParameter("path", path);
 
 				var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
-				return new BaseObject(result.WebID, result.Name, result.Description, result.Path);
+				return (LazyObjects.AFElement)_Factory.CreateInstance(Connection, result.ID, result.Name, result.Description, result.Path);
 			}
 
 			public bool Update(LazyPI.WebAPI.WebAPIConnection Connection, LazyObjects.AFElement element)
@@ -89,7 +91,7 @@ namespace LazyPI.WebAPI
 				return result.TemplateName;
 			}
 
-			public IEnumerable<BaseObject> GetAttributes(LazyPI.WebAPI.WebAPIConnection Connection, string parentWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", string valueType = "*", bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000)
+			public IEnumerable<LazyObjects.AFAttribute> GetAttributes(LazyPI.WebAPI.WebAPIConnection Connection, string parentWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", string valueType = "*", bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, bool showExcluded = false, bool showHidden = false, int maxCount = 1000)
 			{
 				var request = new RestRequest("/elements/{webId}/attributes");
 				request.AddUrlSegment("webId", parentWID);
@@ -105,9 +107,16 @@ namespace LazyPI.WebAPI
 				request.AddParameter("showHidden", showHidden);
 				request.AddParameter("maxCount", maxCount);
 
-				var results = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttribute>>(request).Data;
+				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttribute>>(request).Data;
 
-				return results.Items.Cast<BaseObject>();
+				List<LazyObjects.AFAttribute> resultList = new List<LazyObjects.AFAttribute>();
+
+				foreach(var result in response.Items)
+				{
+					resultList.Add(LazyObjects.AFAttribute.Find(Connection, result.ID));
+				}
+
+				return resultList;
 			}
 
 			public IEnumerable<BaseObject> GetElementCategories(LazyPI.WebAPI.WebAPIConnection Connection, string elementWID)
@@ -120,7 +129,7 @@ namespace LazyPI.WebAPI
 				//return results.Items.Cast<BaseObject>();
 			}
 
-			IEnumerable<BaseObject> GetElements(LazyPI.WebAPI.WebAPIConnection Connection, string rootWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", ElementType elementType = ElementType.Any, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
+			IEnumerable<LazyObjects.AFElement> GetElements(LazyPI.WebAPI.WebAPIConnection Connection, string rootWID, string nameFilter = "*", string categoryName = "*", string templateName = "*", ElementType elementType = ElementType.Any, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
 			{
 				var request = new RestRequest("/elements/{webId}/elements");
 				request.AddUrlSegment("webId", rootWID);
@@ -133,12 +142,19 @@ namespace LazyPI.WebAPI
 				request.AddParameter("startIndex", startIndex);
 				request.AddParameter("maxCount", maxCount);
 
-				var results = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request).Data;
+				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request).Data;
 
-				//return results.Items.Cast<BaseObject>();
+				List<LazyObjects.AFElement> results = new List<LazyObjects.AFElement>();
+
+				foreach (var element in response.Items)
+				{
+					results.Add((LazyObjects.AFElement)_Factory.CreateInstance(Connection, element.ID, element.Name, element.Description, element.Path));
+				}
+
+				return results;
 			}
 
-			public IEnumerable<BaseObject> GetEventFrames(LazyPI.WebAPI.WebAPIConnection Connection, string elementWID, LazyPI.SearchMode searchMode, DateTime startTime, DateTime endTime, string nameFilter, string categoryName, string templateName, string sortField, string sortOrder, int startIndex, int maxCount)
+			public IEnumerable<LazyObjects.AFEventFrame> GetEventFrames(LazyPI.WebAPI.WebAPIConnection Connection, string elementWID, LazyPI.SearchMode searchMode, DateTime startTime, DateTime endTime, string nameFilter, string categoryName, string templateName, string sortField, string sortOrder, int startIndex, int maxCount)
 			{
 				var request = new RestRequest("/elements/{webId}/eventframes");
 				request.AddUrlSegment("webId", elementWID);
@@ -153,7 +169,15 @@ namespace LazyPI.WebAPI
 				request.AddParameter("startIndex", startIndex);
 				request.AddParameter("maxCount", maxCount);
 
-				var results = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request).Data;
+				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request).Data;
+
+				List<LazyObjects.AFEventFrame> results = new List<LazyObjects.AFEventFrame>();
+
+				foreach (var frame in response.Items)
+				{
+					//TODO: Need EventFrame Search functions
+					//LazyObjects.AFEventFrame.
+				}
 
 				//return results.Items.Cast<BaseObject>();
 			}
