@@ -11,6 +11,8 @@ namespace LazyPI.WebAPI
 {
 	public class AFElementTemplateLoader : LazyObjects.IAFElementTemplate
 	{
+		private LazyObjects.ILazyFactory _Factory;
+
 		public AFElementTemplateLoader()
 		{
 		}
@@ -20,8 +22,10 @@ namespace LazyPI.WebAPI
 			var request = new RestRequest("/elementtemplates/{webId}");
 			request.AddUrlSegment("webId", templateID);
 
-			var result = Connection.Client.Execute<ResponseModels.AFElementTemplate>(request).Data;
-			//return ;
+			var response = Connection.Client.Execute<ResponseModels.AFElementTemplate>(request).Data;
+
+			return (LazyObjects.AFElementTemplate)_Factory.CreateInstance(Connection, response.WebID, response.Name, response.Description, response.Path);
+
 		}
 
 		public LazyObjects.AFElementTemplate FindByPath(WebAPIConnection Connection, string path)
@@ -29,9 +33,9 @@ namespace LazyPI.WebAPI
 			var request = new RestRequest("/elementtemplates");
 			request.AddParameter("path", path);
 
-			var result = Connection.Client.Execute<ResponseModels.AFElementTemplate>(request).Data;
+			var response = Connection.Client.Execute<ResponseModels.AFElementTemplate>(request).Data;
 
-			//return;
+			return (LazyObjects.AFElementTemplate)_Factory.CreateInstance(Connection, response.WebID, response.Name, response.Description, response.Path);
 		}
 
 		public bool Update(WebAPIConnection Connection, LazyObjects.AFElementTemplate template)
@@ -75,13 +79,22 @@ namespace LazyPI.WebAPI
 			return result.AllowElementToExtend;
 		}
 
-        public IEnumerable<LazyObjects.AFAttributeTemplate> GetAttributeTemplates(WebAPIConnection Connection, string elementID)
+		public IEnumerable<LazyObjects.AFAttributeTemplate> GetAttributeTemplates(WebAPIConnection Connection, string elementID)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}/attributetemplates");
 			request.AddUrlSegment("webId", elementID);
 
-			var result = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttributeTemplate>>(request).Data;
+			var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttributeTemplate>>(request).Data;
 
+			List<LazyObjects.AFAttributeTemplate> results = new List<LazyObjects.AFAttributeTemplate>();
+
+			foreach (var template in response.Items)
+			{
+				LazyObjects.AFAttributeTemplate attr = (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, template.WebID, template.Name, template.Description, template.Path);
+				results.Add(attr);
+			}
+
+			return results;
 		}
 	}
 }
