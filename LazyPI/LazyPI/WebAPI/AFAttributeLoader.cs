@@ -21,7 +21,7 @@ namespace LazyPI.WebAPI
         /// <summary>
         /// Returns the AF Attribute specified by the WebID.
         /// </summary>
-        /// <param name="webID">The unique ID of the AF attribute</param>
+        /// <param name="ID">The unique ID of the AF attribute</param>
         /// <returns></returns>
         public LazyObjects.AFAttribute Find(WebAPIConnection Connection, string ID)
         {
@@ -29,19 +29,18 @@ namespace LazyPI.WebAPI
             request.AddUrlSegment("webId", ID);
             var result = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
             return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
-
         }
 
         /// <summary>
         /// Gets AFattribute specified by the path.
         /// </summary>
-        /// <param name="path">The path provided by the WebAPI.</param>
+        /// <param name="Path">The path provided by the WebAPI.</param>
         /// <returns>A specific AF Attribute.</returns>
         /// <remarks>It is recommended to use Get By ID over path.</remarks>
-        public LazyObjects.AFAttribute FindByPath(WebAPIConnection Connection,  string path)
+        public LazyObjects.AFAttribute FindByPath(WebAPIConnection Connection,  string Path)
         {
             var request = new RestRequest("/attributes");
-            request.AddParameter("path", path);
+            request.AddParameter("path", Path);
             var Attr = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
             return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, Attr.WebID, Attr.Name, Attr.Description, Attr.Path);
         }
@@ -49,13 +48,13 @@ namespace LazyPI.WebAPI
         /// <summary>
         /// Update an attribute by replacing items in its definition.
         /// </summary>
-        /// <param name="attr">A partial attribute that contains the WebID and any properties to be updated.</param>
+        /// <param name="Attr">A partial attribute that contains the WebID and any properties to be updated.</param>
         /// <returns>Returns true if update completed.</returns>
-        public bool Update(WebAPIConnection Connection, LazyObjects.AFAttribute attr)
+        public bool Update(WebAPIConnection Connection, LazyObjects.AFAttribute Attr)
         {
             var request = new RestRequest("/attributes/{webId}", Method.PATCH);
-            request.AddUrlSegment("webId", attr.ID);
-            request.AddBody(attr);
+            request.AddUrlSegment("webId", Attr.ID);
+            request.AddBody(Attr);
 
             var statusCode = Connection.Client.Execute(request).StatusCode;
 
@@ -80,18 +79,18 @@ namespace LazyPI.WebAPI
         /// <summary>
         /// Creates a new AFAttribute in the parent element referenced by parentWID.
         /// </summary>
-        /// <param name="parentWID"></param>
-        /// <param name="attr">The definition of the new attribute.</param>
+        /// <param name="ParentID"></param>
+        /// <param name="Attr">The definition of the new attribute.</param>
         /// <returns>Returns true if create completed.</returns>
-        public bool Create(WebAPIConnection Connection, string parentWID, LazyObjects.AFAttribute attr)
+        public bool Create(WebAPIConnection Connection, string ParentID, LazyObjects.AFAttribute Attr)
         {
             var request = new RestRequest("/attributes/{webId}", Method.POST);
-            request.AddUrlSegment("webId", parentWID);
+            request.AddUrlSegment("webId", ParentID);
 
             //Copy to api object
             ResponseModels.AFAttribute clientAttr = new ResponseModels.AFAttribute();
-            clientAttr.Name = attr.Name;
-            clientAttr.Description = attr.Description;
+            clientAttr.Name = Attr.Name;
+            clientAttr.Description = Attr.Description;
 
             request.AddBody(clientAttr);
 
@@ -109,11 +108,11 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="attrWID">The WebID of the AF Attribute to be read.</param>
         /// <returns></returns>
-        public LazyObjects.AFValue GetValue(WebAPIConnection Connection, string attrID)
+        public LazyObjects.AFValue GetValue(WebAPIConnection Connection, string AttrID)
         {
             var request = new RestRequest("/attributes/{webId}/value");
 
-            request.AddUrlSegment("webId", attrID);
+            request.AddUrlSegment("webId", AttrID);
 
             var response = Connection.Client.Execute<ResponseModels.AFValue>(request).Data;
         }
@@ -121,16 +120,16 @@ namespace LazyPI.WebAPI
         /// <summary>
         /// Set the value of a configuration item attribute. For attributes with a data reference or non-configuration item attributes, consult the documentation for streams.
         /// </summary>
-        /// <param name="attrWID">The WebID of the AF Attribute to be updated.</param>
-        /// <param name="value">The AFValue to be applied to the Attribute.</param>
+        /// <param name="AttrID">The WebID of the AF Attribute to be updated.</param>
+        /// <param name="Value">The AFValue to be applied to the Attribute.</param>
         /// <returns>Returns true if the value update completes.</returns>
         /// <remarks>Users must be aware of the value type that the attribute takes before changing the value. If a value entered by the user does not match the value type expressed in the attribute, it will not work or it will return an error.</remarks>
-        public bool SetValue(WebAPIConnection Connection, string attrWID, LazyObjects.AFValue value)
+        public bool SetValue(WebAPIConnection Connection, string AttrID, LazyObjects.AFValue Value)
         {
             var request = new RestRequest("/attributes/{webId}/value", Method.PUT);
 
-            request.AddUrlSegment("webId", attrWID);
-            request.AddBody(value);
+            request.AddUrlSegment("webId", AttrID);
+            request.AddBody(Value);
 
             var statusCode = Connection.Client.Execute(request).StatusCode;
 
