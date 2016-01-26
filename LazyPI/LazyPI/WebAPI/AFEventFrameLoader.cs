@@ -11,26 +11,30 @@ namespace LazyPI.WebAPI
 {
     public class AFEventFrameLoader : LazyObjects.IAFEventFrame
     {
+        private LazyObjects.ILazyFactory _Factory;
+
         public AFEventFrameLoader()
         {
         }
 
-        public BaseObject Find(WebAPIConnection Connection, string ID)
+        public LazyObjects.AFEventFrame Find(WebAPIConnection Connection, string ID)
         {
             var request = new RestRequest("/eventframes/{webId}");
             request.AddUrlSegment("webId", ID);
 
-            var result = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
-            return new BaseObject(result.ID, result.Name, result.Description, result.Path);
+            var response = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
+
+            return (LazyObjects.AFEventFrame)_Factory.CreateInstance(Connection, response.WebID, response.Name, response.Description, response.Path);
         }
 
-        public BaseObject FindByPath(WebAPIConnection Connection, string Path)
+        public LazyObjects.AFEventFrame FindByPath(WebAPIConnection Connection, string Path)
         {
             var request = new RestRequest("/eventframes");
             request.AddParameter("path", Path);
 
-            var result = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
-            return new BaseObject(result.ID, result.Name, result.Description, result.Path);
+            var response = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
+
+            return (LazyObjects.AFEventFrame)_Factory.CreateInstance(Connection, response.WebID, response.Name, response.Description, response.Path);
         }
 
         public bool Update(WebAPIConnection Connection, LazyObjects.AFEventFrame Eventframe)
@@ -121,15 +125,25 @@ namespace LazyPI.WebAPI
             var result = Connection.Client.Execute<List<ResponseModels.ElementCategory>>(request).Data;
         }
 
-        public IEnumerable<BaseObject> GetReferencedElements(WebAPIConnection Connection, string webID)
+        public IEnumerable<LazyObjects.AFElement> GetReferencedElements(WebAPIConnection Connection, string webID)
         {
             var request = new RestRequest("/eventframes/{webId}/referencedelements");
             request.AddUrlSegment("webId", webID);
 
-            var result = Connection.Client.Execute<List<ResponseModels.AFElement>>(request).Data;
+            var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request).Data;
+
+            List<LazyObjects.AFElement> results = new List<LazyObjects.AFElement>();
+
+            //TODO: Think of a more efficient way to do this.
+            foreach (var element in response.Items)
+            {
+                results.Add(LazyObjects.AFElement.Find(Connection, element.WebID));
+            }
+
+            return results;
         }
 
-        public IEnumerable<BaseObject> GetEventFrames(WebAPIConnection Connection, string webID, SearchMode searchMode = SearchMode.Overlapped, string startTime = "-8h", string endTime = "*", string nameFilter = "*", string referencedElementNameFilter = "*", string categoryName = null, string templateName = null, string referencedElementTemplateName = null, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
+        public IEnumerable<LazyObjects.AFEventFrame> GetEventFrames(WebAPIConnection Connection, string webID, SearchMode searchMode = SearchMode.Overlapped, string startTime = "-8h", string endTime = "*", string nameFilter = "*", string referencedElementNameFilter = "*", string categoryName = null, string templateName = null, string referencedElementTemplateName = null, bool searchFullHierarchy = false, string sortField = "Name", string sortOrder = "Ascending", int startIndex = 0, int maxCount = 1000)
         {
             var request = new RestRequest("/eventframes/{webId}/eventframes");
             request.AddUrlSegment("webId", webID);
@@ -153,7 +167,16 @@ namespace LazyPI.WebAPI
             request.AddParameter("startIndex", startIndex);
             request.AddParameter("maxCount", maxCount);
 
-            return Connection.Client.Execute<List<LazyObjects.AFEventFrame>>(request).Data;
+            var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request).Data;
+
+            List<LazyObjects.AFEventFrame> results = new List<LazyObjects.AFEventFrame>();
+
+            foreach (var frame in response.Items)
+            {
+                results.Add((LazyObjects.AFEventFrame)_Factory.CreateInstance(Connection, frame.WebID, frame.Name, frame.Description, frame.Path));
+            }
+
+            return results;
         }
     }
 }
