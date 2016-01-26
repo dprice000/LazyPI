@@ -17,10 +17,10 @@ namespace LazyPI.WebAPI
 		{
 		}
 
-		public LazyObjects.AFElementTemplate Find(WebAPIConnection Connection, string templateID)
+		public LazyObjects.AFElementTemplate Find(WebAPIConnection Connection, string TemplateID)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}");
-			request.AddUrlSegment("webId", templateID);
+			request.AddUrlSegment("webId", TemplateID);
 
 			var response = Connection.Client.Execute<ResponseModels.AFElementTemplate>(request).Data;
 
@@ -28,10 +28,10 @@ namespace LazyPI.WebAPI
 
 		}
 
-		public LazyObjects.AFElementTemplate FindByPath(WebAPIConnection Connection, string path)
+		public LazyObjects.AFElementTemplate FindByPath(WebAPIConnection Connection, string Path)
 		{
 			var request = new RestRequest("/elementtemplates");
-			request.AddParameter("path", path);
+			request.AddParameter("path", Path);
 
 			var response = Connection.Client.Execute<ResponseModels.AFElementTemplate>(request).Data;
 
@@ -48,41 +48,41 @@ namespace LazyPI.WebAPI
 			return ((int)statusCode == 204);
 		}
 
-		public bool Delete(WebAPIConnection Connection, string templateID)
+		public bool Delete(WebAPIConnection Connection, string TemplateID)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}", Method.DELETE);
-			request.AddUrlSegment("webId", templateID);
+			request.AddUrlSegment("webId", TemplateID);
 			var statusCode = Connection.Client.Execute(request).StatusCode;
 
 			return ((int)statusCode == 204);
 		}
 
 
-		public bool CreateElementTemplate(WebAPIConnection Connection, string parentWID, LazyObjects.AFAttributeTemplate template)
+		public bool CreateElementTemplate(WebAPIConnection Connection, string ParentID, LazyObjects.AFAttributeTemplate Template)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}/attributetemplates", Method.POST);
-			request.AddUrlSegment("webId", parentWID);
-			request.AddBody(template);
+			request.AddUrlSegment("webId", ParentID);
+			request.AddBody(Template);
 
 			var statusCode = Connection.Client.Execute(request).StatusCode;
 
 			return ((int)statusCode == 201);
 		}
 
-		public bool IsExtendible(WebAPIConnection Connection, string templateID)
+		public bool IsExtendible(WebAPIConnection Connection, string TemplateID)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}");
-			request.AddUrlSegment("webId", templateID);
+			request.AddUrlSegment("webId", TemplateID);
 
 			var result = Connection.Client.Execute<ResponseModels.AFElementTemplate>(request).Data;
 
 			return result.AllowElementToExtend;
 		}
 
-		public IEnumerable<LazyObjects.AFAttributeTemplate> GetAttributeTemplates(WebAPIConnection Connection, string elementID)
+		public IEnumerable<LazyObjects.AFAttributeTemplate> GetAttributeTemplates(WebAPIConnection Connection, string ElementID)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}/attributetemplates");
-			request.AddUrlSegment("webId", elementID);
+			request.AddUrlSegment("webId", ElementID);
 
 			var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttributeTemplate>>(request).Data;
 

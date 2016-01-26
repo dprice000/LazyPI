@@ -9,11 +9,11 @@ namespace LazyPI.LazyObjects
 {
     interface IAFAttributeTemplate
     {
-        BaseObject Find(Connection Connection, string ID);
+        BaseObject Find(Connection Connection, string AttrTempID);
         BaseObject FindByPath(Connection Connection, string Path);
         bool Update(Connection Connection, AFAttributeTemplate AttrTemp);
-        bool Delete(Connection Connection, string ID);
+        bool Delete(Connection Connection, string AttrTempID);
         bool Create(Connection Connection, AFAttributeTemplate AttrTemp);
-        IEnumerable<AFAttributeTemplate> GetChildAttributeTemplates(Connection Connection, string ID);
+        IEnumerable<AFAttributeTemplate> GetChildAttributeTemplates(Connection Connection, string AttrTempID);
     }
 }

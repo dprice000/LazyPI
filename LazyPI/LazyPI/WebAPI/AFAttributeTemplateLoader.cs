@@ -16,10 +16,10 @@ namespace LazyPI.WebAPI
 		{
 		}
 
-		public LazyObjects.AFAttributeTemplate Find(WebAPIConnection Connection, string ID)
+		public LazyObjects.AFAttributeTemplate Find(WebAPIConnection Connection, string AttrTempID)
 		{
 			var request = new RestRequest("/attributetemplates/{webId}");
-			request.AddUrlSegment("webId", ID);
+			request.AddUrlSegment("webId", AttrTempID);
 
 			var result = Connection.Client.Execute<ResponseModels.AFAttributeTemplate>(request).Data;
 
@@ -68,10 +68,10 @@ namespace LazyPI.WebAPI
 			return ((int)statusCode == 201);
 		}
 
-		public IEnumerable<LazyObjects.AFAttributeTemplate> GetChildAttributeTemplates(WebAPIConnection Connection, string ID)
+		public IEnumerable<LazyObjects.AFAttributeTemplate> GetChildAttributeTemplates(WebAPIConnection Connection, string AttrTempID)
 		{
 			var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
-			request.AddUrlSegment("webId", ID);
+			request.AddUrlSegment("webId", AttrTempID);
 			
 			var results = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttributeTemplate>>(request).Data;
 			List<LazyObjects.AFAttributeTemplate> templateList = new List<LazyObjects.AFAttributeTemplate>();

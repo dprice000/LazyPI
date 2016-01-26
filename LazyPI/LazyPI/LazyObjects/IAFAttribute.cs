@@ -15,6 +15,6 @@ namespace LazyPI.LazyObjects
         bool Delete(Connection Connection, string ID);
         bool Create(Connection Connection, string ParentID, AFAttribute Attr);
         AFValue GetValue(Connection Connection, string AttrID);
-        bool SetValue(Connection Connection, string attrID, AFValue Value);
+        bool SetValue(Connection Connection, string AttrID, AFValue Value);
     }
 }

@@ -9,13 +9,13 @@ namespace LazyPI.LazyObjects
 {
     public interface IAFElementTemplate
     {
-        AFElementTemplate Find(Connection Connection, string templateID);
-        AFElementTemplate FindByPath(Connection Connection, string path);
-        bool Update(Connection Connection, AFElementTemplate template);
-        bool Delete(Connection Connection, string templateID);
-        bool CreateElementTemplate(Connection Connection, string parentID, AFElementTemplate template);
-        bool IsExtendible(Connection Connection, string templateID);
-        IEnumerable<AFElementCategory> GetCategories(Connection Connection, string templateID);
-        IEnumerable<AFAttributeTemplate> GetAttributeTemplates(Connection Connection, string elementID);
+        AFElementTemplate Find(Connection Connection, string TemplateID);
+        AFElementTemplate FindByPath(Connection Connection, string Path);
+        bool Update(Connection Connection, AFElementTemplate Template);
+        bool Delete(Connection Connection, string TemplateID);
+        bool CreateElementTemplate(Connection Connection, string ParentID, AFElementTemplate Template);
+        bool IsExtendible(Connection Connection, string TemplateID);
+        IEnumerable<AFElementCategory> GetCategories(Connection Connection, string TemplateID);
+        IEnumerable<AFAttributeTemplate> GetAttributeTemplates(Connection Connection, string ElementID);
     }
 }
