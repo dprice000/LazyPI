@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Common\Connection.cs" />
     <Compile Include="LazyObjects\ILazyFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebAPI\WebAPIConnection.cs" />
     <Compile Include="LazyObjects\AFAttribute.cs" />
     <Compile Include="LazyObjects\AFAttributeCategory.cs" />
@@ -68,7 +69,6 @@
     <Compile Include="LazyObjects\IAFElement.cs" />
     <Compile Include="Common\BaseObjects.cs" />
     <Compile Include="LazyObjects\IAFAttribute.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebAPI\AFEventFrameLoader.cs" />
     <Compile Include="WebAPI\ResponseModels\ResponseModels.cs" />
   </ItemGroup>
