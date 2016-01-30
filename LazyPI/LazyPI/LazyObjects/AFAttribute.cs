@@ -92,6 +92,14 @@ namespace LazyPI.LazyObjects
         {
 
         }
+
+        private void CreateLoader(Connection Connection)
+        {
+            if (Connection is WebAPI.WebAPIConnection)
+            {
+                _AttrLoader = new WebAPI.AFAttributeLoader(new AttributeFactory());
+            }
+        }
         #endregion
 
         #region "Interactions"

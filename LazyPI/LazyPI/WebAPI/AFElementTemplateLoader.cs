@@ -13,8 +13,9 @@ namespace LazyPI.WebAPI
 	{
 		private LazyObjects.ILazyFactory _Factory;
 
-		public AFElementTemplateLoader()
+		public AFElementTemplateLoader(LazyObjects.ILazyFactory Factory)
 		{
+			_Factory = Factory;
 		}
 
 		public LazyObjects.AFElementTemplate Find(WebAPIConnection Connection, string TemplateID)

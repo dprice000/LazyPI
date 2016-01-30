@@ -98,6 +98,14 @@ namespace LazyPI.LazyObjects
                     return obsList;
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
             }
+
+            private void CreateLoader(Connection Connection)
+            {
+                if (Connection is WebAPI.WebAPIConnection)
+                {
+                    _EventFrameLoader = new WebAPI.AFEventFrameLoader(new EventFrameFactory());
+                }
+            }
         #endregion
 
         #region "Callbacks"

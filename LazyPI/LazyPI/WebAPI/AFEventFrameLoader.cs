@@ -13,8 +13,9 @@ namespace LazyPI.WebAPI
     {
         private LazyObjects.ILazyFactory _Factory;
 
-        public AFEventFrameLoader()
+        public AFEventFrameLoader(LazyObjects.ILazyFactory Factory)
         {
+            _Factory = Factory;
         }
 
         public LazyObjects.AFEventFrame Find(WebAPIConnection Connection, string FrameID)

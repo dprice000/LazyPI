@@ -100,7 +100,7 @@ namespace LazyPI.LazyObjects
 
 					foreach (var attr in resultList)
 					{
-						obsList.Add(AFAttribute.Find(attr.ID));
+						obsList.Add(AFAttribute.Find(_Connection, attr.ID));
 					}
 					
 					obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(AttributesChanged);
@@ -116,6 +116,14 @@ namespace LazyPI.LazyObjects
 					return obsList;
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 			}
+
+			private void CreateLoader(Connection Connection)
+			{
+				if (Connection is WebAPI.WebAPIConnection)
+				{
+					_ElementLoader = new WebAPI.AFElementLoader(new ElementFactory());
+				}
+			}
 		#endregion
 
 		#region"Callbacks"
@@ -123,12 +131,12 @@ namespace LazyPI.LazyObjects
 			{
 				if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
 				{
-					AFAttribute.Create(this._ID, (AFAttribute)sender);
+					AFAttribute.Create(_Connection, this._ID, (AFAttribute)sender);
 				}
 				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
 				{
 					AFAttribute obj = (AFAttribute)sender;
-					AFAttribute.Delete(obj.ID);
+					AFAttribute.Delete(_Connection, obj.ID);
 				}
 				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
 				{

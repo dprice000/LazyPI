@@ -10,10 +10,11 @@ namespace LazyPI.WebAPI
 {
 	public class AFAttributeTemplateLoader : LazyObjects.IAFAttributeTemplate
 	{
-		private LazyPI.LazyObjects.ILazyFactory _Factory;
+		private LazyObjects.ILazyFactory _Factory;
 
-		public AFAttributeTemplateLoader()
+		public AFAttributeTemplateLoader(LazyObjects.ILazyFactory Factory)
 		{
+			_Factory = Factory;
 		}
 
 		public LazyObjects.AFAttributeTemplate Find(WebAPIConnection Connection, string AttrTempID)

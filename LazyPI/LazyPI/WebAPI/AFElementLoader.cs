@@ -11,10 +11,11 @@ namespace LazyPI.WebAPI
 {
 	public class AFElementLoader : LazyObjects.IAFElement
 	{
-		private LazyPI.LazyObjects.ILazyFactory _Factory;
+		private LazyObjects.ILazyFactory _Factory;
 
-		public AFElementLoader()
+		public AFElementLoader(LazyObjects.ILazyFactory Factory)
 		{
+			_Factory = Factory;
 		}
 
 		// These functions have direct references to WebAPI calls
