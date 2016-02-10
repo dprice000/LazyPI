@@ -80,7 +80,7 @@ namespace LazyPI.LazyObjects
 
         #region "Constructors"
 
-        private AFAttribute(LazyPI.Common.Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
+        public AFAttribute(LazyPI.Common.Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
         {
             Initialize();
         }
@@ -97,7 +97,7 @@ namespace LazyPI.LazyObjects
         {
             if (Connection is WebAPI.WebAPIConnection)
             {
-                _AttrLoader = new WebAPI.AFAttributeLoader(new AttributeFactory());
+                _AttrLoader = new WebAPI.AFAttributeLoader();
             }
         }
         #endregion
@@ -153,7 +153,7 @@ namespace LazyPI.LazyObjects
             /// <returns>Returns a complete AFAttribute.</returns>
             public static AFAttribute Find(Connection Connection,string ID)
             {
-                return AttributeFactory.CreateInstance(Connection, _AttrLoader.Find(Connection, ID));
+                return _AttrLoader.Find(Connection, ID);
             }
 
             /// <summary>
@@ -163,7 +163,7 @@ namespace LazyPI.LazyObjects
             /// <returns></returns>
             public static AFAttribute FindByPath(Connection Connection, string Path)
             {
-                return AttributeFactory.CreateInstance(Connection, _AttrLoader.FindByPath(Connection, Path));
+                return _AttrLoader.FindByPath(Connection, Path);
             }
 
 
@@ -177,24 +177,5 @@ namespace LazyPI.LazyObjects
                 return _AttrLoader.Delete(Connection, ID);
             }
         #endregion
-
-        /// <summary>
-        /// Factory for creating raw AFAttribute objects.
-        /// </summary>
-        /// <remarks>
-        /// This should be the only way to create a complete AFAttribute.
-        /// </remarks>
-        public class AttributeFactory : ILazyFactory
-        {
-            public static AFAttribute CreateInstance(Connection Connection, BaseObject bObj)
-            {
-                return new AFAttribute(Connection, bObj.ID, bObj.Name, bObj.Description, bObj.Path);
-            }
-
-            public static AFAttribute CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
-            {
-                return new AFAttribute(Connection, ID, Name, Description, Path);
-            }
-        }
     }
 }

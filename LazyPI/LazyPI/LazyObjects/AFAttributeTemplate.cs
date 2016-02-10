@@ -8,6 +8,9 @@ namespace LazyPI.LazyObjects
 {
     public class AFAttributeTemplate : BaseObject
     {
-
+        public AFAttributeTemplate(LazyPI.Common.Connection Connection, string ID, string Name, string Description, string Path)
+            : base(Connection, ID, Name, Description, Path)
+        {
+        }
     }
 }

@@ -10,13 +10,6 @@ namespace LazyPI.WebAPI
 {
 	public class AFAttributeTemplateLoader : LazyObjects.IAFAttributeTemplate
 	{
-		private LazyObjects.ILazyFactory _Factory;
-
-		public AFAttributeTemplateLoader(LazyObjects.ILazyFactory Factory)
-		{
-			_Factory = Factory;
-		}
-
 		public LazyObjects.AFAttributeTemplate Find(WebAPIConnection Connection, string AttrTempID)
 		{
 			var request = new RestRequest("/attributetemplates/{webId}");
@@ -24,7 +17,7 @@ namespace LazyPI.WebAPI
 
 			var result = Connection.Client.Execute<ResponseModels.AFAttributeTemplate>(request).Data;
 
-			return (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
+			return new LazyObjects.AFAttributeTemplate(Connection, result.WebID, result.Name, result.Description, result.Path);
 		}
 
 		public LazyObjects.AFAttributeTemplate FindByPath(WebAPIConnection Connection, string Path)
@@ -33,7 +26,7 @@ namespace LazyPI.WebAPI
 			request.AddParameter("path", Path);
 
 			var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFAttributeTemplate>(request).Data;
-			return (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
+			return new LazyObjects.AFAttributeTemplate(Connection, result.WebID, result.Name, result.Description, result.Path);
 		}
 
 		public bool Update(WebAPIConnection Connection, LazyObjects.AFAttributeTemplate AttrTemp)
@@ -79,7 +72,7 @@ namespace LazyPI.WebAPI
 
 			foreach(var template in results.Items)
 			{
-				LazyObjects.AFAttributeTemplate attrTemplate = new Lazyobject.AFAttributeTemplate();
+				LazyObjects.AFAttributeTemplate attrTemplate = new Lazyobject.AFAttributeTemplate(Connection, template.ID, template.Name, template.Description, template.Path);
 				templateList.Add(attrTemplate);
 			}
 

@@ -111,25 +111,5 @@ namespace LazyPI.LazyObjects
                 return _UnitLoader.Update(_Connection, this);
             }
         #endregion
-
-        public class UnitFactory : ILazyFactory
-        {
-            public static AFUnit CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
-            {
-                return new AFUnit(Connection, ID, Name, Description, Path);
-            }
-
-            public static List<AFUnit> CreateList(Connection Connection, List<BaseObject> bObj)
-            {
-                List<AFUnit> results = new List<AFUnit>();
-                
-                foreach(BaseObject obj in bObj)
-                {
-                    results.Add(new AFUnit(Connection, obj.ID, obj.Name, obj.Description, obj.Path));
-                }
-
-                return results;
-            }
-        }
     }
 }

@@ -63,7 +63,7 @@ namespace LazyPI.LazyObjects
 		#endregion
 
 		#region "Constructors"
-			private AFElement(Connection Connection, string ID, string Name, string Description, string Path)
+			public AFElement(Connection Connection, string ID, string Name, string Description, string Path)
 				: base(Connection, ID, Name, Description, Path)
 			{
 				Initialize();
@@ -89,13 +89,13 @@ namespace LazyPI.LazyObjects
 				
 				_Parent = new Lazy<AFElement>(() =>
 				{
-					return ElementFactory.CreateInstance(_Connection, _ElementLoader.FindByPath(_Connection, parentPath));
+					return _ElementLoader.FindByPath(_Connection, parentPath);
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Initialize Attributes Loader
 				_Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => 
 				{
-					List<BaseObject> resultList = _ElementLoader.GetAttributes(_Connection, this.ID).ToList();
+					List<LazyObjects.AFElement> resultList = _ElementLoader.GetAttributes(_Connection, this.ID).ToList();
 					ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>();
 
 					foreach (var attr in resultList)
@@ -110,7 +110,7 @@ namespace LazyPI.LazyObjects
 				//Initialize Children Loader
 				_Children = new Lazy<ObservableCollection<AFElement>>(() =>
 				{
-					List<AFElement> resultList = ElementFactory.CreateList(_Connection, _ElementLoader.GetElements(_Connection, this.ID));
+					List<LazyObjects.AFElement> resultList = _ElementLoader.GetElements(_Connection, this.ID).ToList();
 					ObservableCollection<AFElement> obsList = new ObservableCollection<AFElement>(resultList);
 					obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
 					return obsList;
@@ -121,7 +121,7 @@ namespace LazyPI.LazyObjects
 			{
 				if (Connection is WebAPI.WebAPIConnection)
 				{
-					_ElementLoader = new WebAPI.AFElementLoader(new ElementFactory());
+					_ElementLoader = new WebAPI.AFElementLoader();
 				}
 			}
 		#endregion
@@ -198,7 +198,7 @@ namespace LazyPI.LazyObjects
 		/// <returns></returns>
 		public static AFElement Find(Connection Connection, string ID)
 		{
-			return ElementFactory.CreateInstance(Connection, _ElementLoader.Find(Connection, ID));
+			return _ElementLoader.Find(Connection, ID);
 		}
 
 		/// <summary>
@@ -208,7 +208,7 @@ namespace LazyPI.LazyObjects
 		/// <returns></returns>
 		public static AFElement FindByPath(Connection Connection, string Path)
 		{
-			return ElementFactory.CreateInstance(Connection, _ElementLoader.FindByPath(Connection, Path));
+			return _ElementLoader.FindByPath(Connection, Path);
 		}
 
 		/// <summary>
@@ -230,9 +230,7 @@ namespace LazyPI.LazyObjects
 		/// <returns>A list of elements that have a specific category.</returns>
 		public static IEnumerable<AFElement> FindByCategory(Connection Connection, string RootID, string CategoryName, int MaxCount = 1000)
 		{
-			var baseList = _ElementLoader.GetElements(Connection, RootID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
-
-			return ElementFactory.CreateList(Connection, baseList);
+			return _ElementLoader.GetElements(Connection, RootID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 		}
 
 		/// <summary>
@@ -244,38 +242,9 @@ namespace LazyPI.LazyObjects
 		/// <returns>A list of elements that have a specific template.</returns>
 		public static IEnumerable<AFElement> FindByTemplate(Connection Connection, string RootID, string TemplateName, int MaxCount = 1000)
 		{
-			var baseList = _ElementLoader.GetElements(Connection, RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
-
-			return ElementFactory.CreateList(Connection, baseList);
+			return _ElementLoader.GetElements(Connection, RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 		}
 		#endregion
-
-		/// <summary>
-		/// Uses the hidden constructor to create full instances of AFElement.
-		/// </summary>
-		public class ElementFactory : ILazyFactory
-		{
-			public static AFElement CreateInstance(Connection Connection, BaseObject bObj)
-			{
-				return new AFElement(Connection, bObj.ID, bObj.Name, bObj.Description, bObj.Path);
-			}
-
-			public static AFElement CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
-			{
-				return new AFElement(Connection, ID, Name, Description, Path);
-			}
-
-			public static List<AFElement> CreateList(Connection Connection, IEnumerable<BaseObject> Elements)
-			{
-				List<AFElement> elementList = new List<AFElement>();
-
-				foreach(AFElement element in Elements)
-				{
-					elementList.Add(new AFElement(Connection, element.ID, element.Name, element.Description, element.Path));
-				}
-
-				return elementList;
-			}
-		}
 	}
+
 }

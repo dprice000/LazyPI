@@ -11,13 +11,6 @@ namespace LazyPI.WebAPI
 {
 	public class AFElementLoader : LazyObjects.IAFElement
 	{
-		private LazyObjects.ILazyFactory _Factory;
-
-		public AFElementLoader(LazyObjects.ILazyFactory Factory)
-		{
-			_Factory = Factory;
-		}
-
 		// These functions have direct references to WebAPI calls
 		#region "Public Methods"
 			public LazyObjects.AFElement Find(LazyPI.WebAPI.WebAPIConnection Connection,string ElementID)
@@ -26,7 +19,7 @@ namespace LazyPI.WebAPI
 				request.AddUrlSegment("webId", ElementID);
 
 				var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
-				return (LazyObjects.AFElement)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
+				return new LazyObjects.AFElement(Connection, result.WebID, result.Name, result.Description, result.Path);
 			}
 
 			public LazyObjects.AFElement FindByPath(LazyPI.WebAPI.WebAPIConnection Connection, string Path)
@@ -35,7 +28,7 @@ namespace LazyPI.WebAPI
 				request.AddParameter("path", Path);
 
 				var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
-				return (LazyObjects.AFElement)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
+				return new LazyObjects.AFElement(Connection, result.WebID, result.Name, result.Description, result.Path);
 			}
 
 			public bool Update(LazyPI.WebAPI.WebAPIConnection Connection, LazyObjects.AFElement Element)
@@ -149,7 +142,7 @@ namespace LazyPI.WebAPI
 
 				foreach (var element in response.Items)
 				{
-					results.Add((LazyObjects.AFElement)_Factory.CreateInstance(Connection, element.WebID, element.Name, element.Description, element.Path));
+					results.Add(new LazyObjects.AFElement(Connection, element.WebID, element.Name, element.Description, element.Path));
 				}
 
 				return results;

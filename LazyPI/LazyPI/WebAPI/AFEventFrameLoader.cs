@@ -11,13 +11,6 @@ namespace LazyPI.WebAPI
 {
     public class AFEventFrameLoader : LazyObjects.IAFEventFrame
     {
-        private LazyObjects.ILazyFactory _Factory;
-
-        public AFEventFrameLoader(LazyObjects.ILazyFactory Factory)
-        {
-            _Factory = Factory;
-        }
-
         public LazyObjects.AFEventFrame Find(WebAPIConnection Connection, string FrameID)
         {
             var request = new RestRequest("/eventframes/{webId}");
@@ -25,7 +18,7 @@ namespace LazyPI.WebAPI
 
             var response = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
 
-            return (LazyObjects.AFEventFrame)_Factory.CreateInstance(Connection, response.WebID, response.Name, response.Description, response.Path);
+            return new LazyObjects.AFEventFrame(Connection, response.WebID, response.Name, response.Description, response.Path);
         }
 
         public LazyObjects.AFEventFrame FindByPath(WebAPIConnection Connection, string Path)
@@ -35,7 +28,7 @@ namespace LazyPI.WebAPI
 
             var response = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
 
-            return (LazyObjects.AFEventFrame)_Factory.CreateInstance(Connection, response.WebID, response.Name, response.Description, response.Path);
+            return new LazyObjects.AFEventFrame(Connection, response.WebID, response.Name, response.Description, response.Path);
         }
 
         public bool Update(WebAPIConnection Connection, LazyObjects.AFEventFrame Eventframe)
@@ -174,7 +167,7 @@ namespace LazyPI.WebAPI
 
             foreach (var frame in response.Items)
             {
-                results.Add((LazyObjects.AFEventFrame)_Factory.CreateInstance(Connection, frame.WebID, frame.Name, frame.Description, frame.Path));
+                results.Add(new LazyObjects.AFEventFrame(Connection, frame.WebID, frame.Name, frame.Description, frame.Path));
             }
 
             return results;

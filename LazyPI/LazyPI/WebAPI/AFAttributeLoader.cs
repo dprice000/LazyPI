@@ -11,13 +11,6 @@ namespace LazyPI.WebAPI
 {
     public class AFAttributeLoader : LazyObjects.IAFAttribute
     {
-        private LazyPI.LazyObjects.ILazyFactory _Factory;
-
-        public AFAttributeLoader(LazyPI.LazyObjects.ILazyFactory Factory)
-        {
-            _Factory = Factory;
-        }
-
         /// <summary>
         /// Returns the AF Attribute specified by the WebID.
         /// </summary>
@@ -28,7 +21,7 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/attributes/{webId}");
             request.AddUrlSegment("webId", ID);
             var result = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
-            return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, result.WebID, result.Name, result.Description, result.Path);
+            return new LazyObjects.AFAttribute(Connection, result.WebID, result.Name, result.Description, result.Path);
         }
 
         /// <summary>
@@ -42,7 +35,7 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/attributes");
             request.AddParameter("path", Path);
             var Attr = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
-            return (LazyObjects.AFAttribute)_Factory.CreateInstance(Connection, Attr.WebID, Attr.Name, Attr.Description, Attr.Path);
+            return new LazyObjects.AFAttribute(Connection, Attr.WebID, Attr.Name, Attr.Description, Attr.Path);
         }
 
         /// <summary>

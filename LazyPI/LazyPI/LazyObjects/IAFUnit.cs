@@ -9,8 +9,8 @@ namespace LazyPI.LazyObjects
 {
     public interface IAFUnit
     {
-        BaseObject Find(Connection Connection, string ID);
-        BaseObject FindByPath(Connection Connection, string Path);
+        AFUnit Find(Connection Connection, string ID);
+        AFUnit FindByPath(Connection Connection, string Path);
         bool Update(Connection Connection, AFUnit unit);
         bool Delete(Connection Connection, string ID);
     }

@@ -61,7 +61,7 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-            private AFEventFrame(Connection Connection, string ID, string Name, string Description, string Path) 
+            public AFEventFrame(Connection Connection, string ID, string Name, string Description, string Path) 
                 : base(Connection, ID, Name, Description, Path)
             {
                 Initialize();
@@ -76,9 +76,9 @@ namespace LazyPI.LazyObjects
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
                 _EventFrames = new Lazy<ObservableCollection<AFEventFrame>>(() => {
-                    var frames = _EventFrameLoader.GetChildFrames(_Connection, _ID, SearchMode.None, "*-8d", "*", "*", "*", "*", "*", "*", false, "Name", "Ascending", 0, 1000);
+                    List<AFEventFrame> frames = _EventFrameLoader.GetChildFrames(_Connection, _ID, SearchMode.None, "*-8d", "*", "*", "*", "*", "*", "*", false, "Name", "Ascending", 0, 1000).ToList();
 
-                    ObservableCollection<AFEventFrame> obsList = new ObservableCollection<AFEventFrame>(EventFrameFactory.CreateInstanceList(_Connection, frames));
+                    ObservableCollection<AFEventFrame> obsList = new ObservableCollection<AFEventFrame>(frames);
                     obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
                     
                     return obsList;
@@ -103,7 +103,7 @@ namespace LazyPI.LazyObjects
             {
                 if (Connection is WebAPI.WebAPIConnection)
                 {
-                    _EventFrameLoader = new WebAPI.AFEventFrameLoader(new EventFrameFactory());
+                    _EventFrameLoader = new WebAPI.AFEventFrameLoader();
                 }
             }
         #endregion
@@ -159,25 +159,5 @@ namespace LazyPI.LazyObjects
             }
         }
         #endregion
-
-        public class EventFrameFactory : ILazyFactory
-        {
-            public static AFEventFrame CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
-            {
-                return new AFEventFrame(Connection, ID, Name, Description, Path);
-            }
-
-            public static List<AFEventFrame> CreateInstanceList(Connection Connection, IEnumerable<BaseObject> frames)
-            {
-                List<AFEventFrame> results = new List<AFEventFrame>(); 
-
-                foreach (var baseFrame in frames)
-                {
-                    results.Add(new AFEventFrame(Connection, baseFrame.ID, baseFrame.Name, baseFrame.Description, baseFrame.Path));
-                }
-
-                return results;
-            }
-        }
     }
 }

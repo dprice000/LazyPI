@@ -11,13 +11,6 @@ namespace LazyPI.WebAPI
 {
 	public class AFElementTemplateLoader : LazyObjects.IAFElementTemplate
 	{
-		private LazyObjects.ILazyFactory _Factory;
-
-		public AFElementTemplateLoader(LazyObjects.ILazyFactory Factory)
-		{
-			_Factory = Factory;
-		}
-
 		public LazyObjects.AFElementTemplate Find(WebAPIConnection Connection, string TemplateID)
 		{
 			var request = new RestRequest("/elementtemplates/{webId}");
@@ -25,7 +18,7 @@ namespace LazyPI.WebAPI
 
 			var response = Connection.Client.Execute<ResponseModels.AFElementTemplate>(request).Data;
 
-			return (LazyObjects.AFElementTemplate)_Factory.CreateInstance(Connection, response.WebID, response.Name, response.Description, response.Path);
+			return new LazyObjects.AFElementTemplate(Connection, response.WebID, response.Name, response.Description, response.Path);
 
 		}
 
@@ -36,7 +29,7 @@ namespace LazyPI.WebAPI
 
 			var response = Connection.Client.Execute<ResponseModels.AFElementTemplate>(request).Data;
 
-			return (LazyObjects.AFElementTemplate)_Factory.CreateInstance(Connection, response.WebID, response.Name, response.Description, response.Path);
+			return new LazyObjects.AFElementTemplate(Connection, response.WebID, response.Name, response.Description, response.Path);
 		}
 
 		public bool Update(WebAPIConnection Connection, LazyObjects.AFElementTemplate template)
@@ -91,7 +84,7 @@ namespace LazyPI.WebAPI
 
 			foreach (var template in response.Items)
 			{
-				LazyObjects.AFAttributeTemplate attr = (LazyObjects.AFAttributeTemplate)_Factory.CreateInstance(Connection, template.WebID, template.Name, template.Description, template.Path);
+				LazyObjects.AFAttributeTemplate attr = new LazyObjects.AFAttributeTemplate(Connection, template.WebID, template.Name, template.Description, template.Path);
 				results.Add(attr);
 			}
 

@@ -34,7 +34,7 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-            private AFElementTemplate(Connection Connection, string ID, string Name, string Description, string Path)
+            public AFElementTemplate(Connection Connection, string ID, string Name, string Description, string Path)
                 : base(Connection, ID, Name, Description, Path)
             {
                 Initialize();

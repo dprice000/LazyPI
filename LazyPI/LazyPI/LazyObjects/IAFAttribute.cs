@@ -9,8 +9,8 @@ namespace LazyPI.LazyObjects
 {
     public interface IAFAttribute
     {
-        BaseObject Find(Connection Connection, string ID);
-        BaseObject FindByPath(Connection Connection, string Path);
+        AFAttribute Find(Connection Connection, string ID);
+        AFAttribute FindByPath(Connection Connection, string Path);
         bool Update(Connection Connection, AFAttribute Attr);
         bool Delete(Connection Connection, string ID);
         bool Create(Connection Connection, string ParentID, AFAttribute Attr);
