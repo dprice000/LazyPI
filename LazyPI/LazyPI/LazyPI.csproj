@@ -49,7 +49,6 @@
     <Compile Include="WebAPI\WebAPIConnection.cs" />
     <Compile Include="LazyObjects\AFAttribute.cs" />
     <Compile Include="LazyObjects\AFAttributeCategory.cs" />
-    <Compile Include="LazyObjects\AFElementCategory.cs" />
     <Compile Include="LazyObjects\AFEventFrame.cs" />
     <Compile Include="LazyObjects\AFUnit.cs" />
     <Compile Include="LazyObjects\AFValue.cs" />

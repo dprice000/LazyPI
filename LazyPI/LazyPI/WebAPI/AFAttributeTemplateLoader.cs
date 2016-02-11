@@ -15,9 +15,16 @@ namespace LazyPI.WebAPI
 			var request = new RestRequest("/attributetemplates/{webId}");
 			request.AddUrlSegment("webId", AttrTempID);
 
-			var result = Connection.Client.Execute<ResponseModels.AFAttributeTemplate>(request).Data;
+			var response = Connection.Client.Execute<ResponseModels.AFAttributeTemplate>(request);
 
-			return new LazyObjects.AFAttributeTemplate(Connection, result.WebID, result.Name, result.Description, result.Path);
+			if (response.ErrorException != null)
+			{
+				throw new ApplicationException("Error finding attribute template by ID. (See Inner Details)", response.ErrorException);
+			}
+
+			var data = response.Data;
+
+			return new LazyObjects.AFAttributeTemplate(Connection, data.WebID, data.Name, data.Description, data.Path);
 		}
 
 		public LazyObjects.AFAttributeTemplate FindByPath(WebAPIConnection Connection, string Path)
@@ -25,8 +32,15 @@ namespace LazyPI.WebAPI
 			var request = new RestRequest("/attributetemplates");
 			request.AddParameter("path", Path);
 
-			var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFAttributeTemplate>(request).Data;
-			return new LazyObjects.AFAttributeTemplate(Connection, result.WebID, result.Name, result.Description, result.Path);
+            var response = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFAttributeTemplate>(request);
+
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error finding attribute template by path. (See Inner Details)", response.ErrorException);
+            }
+
+			var data = response.Data;
+			return new LazyObjects.AFAttributeTemplate(Connection, data.WebID, data.Name, data.Description, data.Path);
 		}
 
 		public bool Update(WebAPIConnection Connection, LazyObjects.AFAttributeTemplate AttrTemp)
@@ -67,10 +81,17 @@ namespace LazyPI.WebAPI
 			var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
 			request.AddUrlSegment("webId", AttrTempID);
 			
-			var results = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttributeTemplate>>(request).Data;
+            var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttributeTemplate>>(request);
+
+            if (response.ErrorException != null)
+			{
+				throw new ApplicationException("Error finding attribute template children. (See Inner Details)", response.ErrorException);
+			}
+
+			var data = response.Data;
 			List<LazyObjects.AFAttributeTemplate> templateList = new List<LazyObjects.AFAttributeTemplate>();
 
-			foreach(var template in results.Items)
+			foreach(var template in data.Items)
 			{
 				LazyObjects.AFAttributeTemplate attrTemplate = new Lazyobject.AFAttributeTemplate(Connection, template.ID, template.Name, template.Description, template.Path);
 				templateList.Add(attrTemplate);

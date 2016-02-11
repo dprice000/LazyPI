@@ -20,8 +20,15 @@ namespace LazyPI.WebAPI
         {
             var request = new RestRequest("/attributes/{webId}");
             request.AddUrlSegment("webId", ID);
-            var result = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
-            return new LazyObjects.AFAttribute(Connection, result.WebID, result.Name, result.Description, result.Path);
+            var response = Connection.Client.Execute<ResponseModels.AFAttribute>(request);
+
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error finding attribute by ID. (See Inner Details)", response.ErrorException);
+            }
+
+            var data = response.Data;
+            return new LazyObjects.AFAttribute(Connection, data.WebID, data.Name, data.Description, data.Path);
         }
 
         /// <summary>
@@ -34,8 +41,15 @@ namespace LazyPI.WebAPI
         {
             var request = new RestRequest("/attributes");
             request.AddParameter("path", Path);
-            var Attr = Connection.Client.Execute<ResponseModels.AFAttribute>(request).Data;
-            return new LazyObjects.AFAttribute(Connection, Attr.WebID, Attr.Name, Attr.Description, Attr.Path);
+            var response = Connection.Client.Execute<ResponseModels.AFAttribute>(request);
+
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error finding attribute by path. (See Inner Details)", response.ErrorException);
+            }
+            
+            var data = response.Data;
+            return new LazyObjects.AFAttribute(Connection, data.WebID, data.Name, data.Description, data.Path);
         }
 
         /// <summary>
@@ -104,10 +118,15 @@ namespace LazyPI.WebAPI
         public LazyObjects.AFValue GetValue(WebAPIConnection Connection, string AttrID)
         {
             var request = new RestRequest("/attributes/{webId}/value");
-
             request.AddUrlSegment("webId", AttrID);
+            var response = Connection.Client.Execute<ResponseModels.AFValue>(request);
 
-            var response = Connection.Client.Execute<ResponseModels.AFValue>(request).Data;
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error retrieving value from attribute. (See Inner Details)", response.ErrorException);
+            }
+
+            var data = response.Data;
         }
 
         /// <summary>

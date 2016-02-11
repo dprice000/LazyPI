@@ -16,9 +16,16 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/eventframes/{webId}");
             request.AddUrlSegment("webId", FrameID);
 
-            var response = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
+            var response = Connection.Client.Execute<ResponseModels.AFEventFrame>(request);
 
-            return new LazyObjects.AFEventFrame(Connection, response.WebID, response.Name, response.Description, response.Path);
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error finding event frame by ID. (See Inner Details)", response.ErrorException);
+            }
+
+            var data = response.Data;
+
+            return new LazyObjects.AFEventFrame(Connection, data.WebID, data.Name, data.Description, data.Path);
         }
 
         public LazyObjects.AFEventFrame FindByPath(WebAPIConnection Connection, string Path)
@@ -26,9 +33,16 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/eventframes");
             request.AddParameter("path", Path);
 
-            var response = Connection.Client.Execute<ResponseModels.AFEventFrame>(request).Data;
+            var response = Connection.Client.Execute<ResponseModels.AFEventFrame>(request);
 
-            return new LazyObjects.AFEventFrame(Connection, response.WebID, response.Name, response.Description, response.Path);
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error finding element by path. (See Inner Details)", response.ErrorException);
+            }
+
+            var data = response.Data;
+
+            return new LazyObjects.AFEventFrame(Connection, data.WebID, data.Name, data.Description, data.Path);
         }
 
         public bool Update(WebAPIConnection Connection, LazyObjects.AFEventFrame Eventframe)
@@ -107,7 +121,14 @@ namespace LazyPI.WebAPI
             request.AddParameter("showHidden", ShowHidden);
             request.AddParameter("maxCount", MaxCount);
 
-            var list = Connection.Client.Execute<List<ResponseModels.AFAttribute>>(request).Data;
+            var response = Connection.Client.Execute<List<ResponseModels.AFAttribute>>(request);
+
+            if (response.ErrorException != null)
+			{
+				throw new ApplicationException("Error finding event frame attributes. (See Inner Details)", response.ErrorException);
+			}
+
+            var data = response.Data;
 
         }
 
@@ -116,7 +137,14 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/eventframes/{webId}/categories");
             request.AddUrlSegment("webId", FrameID);
 
-            var result = Connection.Client.Execute<List<ResponseModels.ElementCategory>>(request).Data;
+            var response = Connection.Client.Execute<List<ResponseModels.ElementCategory>>(request);
+
+            if (response.ErrorException != null)
+			{
+				throw new ApplicationException("Error retrieving event frame categories. (See Inner Details)", response.ErrorException);
+			}
+
+            var data = response.Data;
         }
 
         public IEnumerable<LazyObjects.AFElement> GetReferencedElements(WebAPIConnection Connection, string FrameID)
@@ -124,12 +152,19 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/eventframes/{webId}/referencedelements");
             request.AddUrlSegment("webId", FrameID);
 
-            var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request).Data;
+            var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request);
+
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error retrieving elements referenced by event frame. (See Inner Details)", response.ErrorException);
+            }
+
+            var data = response.Data;
 
             List<LazyObjects.AFElement> results = new List<LazyObjects.AFElement>();
 
             //TODO: Think of a more efficient way to do this.
-            foreach (var element in response.Items)
+            foreach (var element in data.Items)
             {
                 results.Add(LazyObjects.AFElement.Find(Connection, element.WebID));
             }
@@ -161,11 +196,18 @@ namespace LazyPI.WebAPI
             request.AddParameter("startIndex", StartIndex);
             request.AddParameter("maxCount", MaxCount);
 
-            var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request).Data;
+            var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request);
+
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error retrieving event frames child event frames. (See Inner Details)", response.ErrorException);
+            }
+
+            var data = response.Data;
 
             List<LazyObjects.AFEventFrame> results = new List<LazyObjects.AFEventFrame>();
 
-            foreach (var frame in response.Items)
+            foreach (var frame in data.Items)
             {
                 results.Add(new LazyObjects.AFEventFrame(Connection, frame.WebID, frame.Name, frame.Description, frame.Path));
             }

@@ -13,19 +13,17 @@ namespace LazyPI.LazyObjects
 	{
 		private Lazy<AFElementTemplate> _Template;
 		private Lazy<AFElement> _Parent;
-		private IEnumerable<string> _CategoryNames;
-		private Lazy<ObservableCollection<AFElementCategory>> _Categories;
+		private Lazy<ObservableCollection<string>> _Categories;
 		private Lazy<ObservableCollection<AFElement>> _Children;
 		private Lazy<ObservableCollection<AFAttribute>> _Attributes;
 		private static IAFElement _ElementLoader;
 
 		#region "Properties"
-			//TODO: To  be removed when category resolution code is written.
-			public IEnumerable<string> CategoryNames
+			public ObservableCollection<string> Categories
 			{
 				get
 				{
-					return _CategoryNames;
+					return _Categories.Value;
 				}
 			}
 
@@ -75,7 +73,10 @@ namespace LazyPI.LazyObjects
 			private void Initialize()
 			{
 				//Initialize Category List
-				_CategoryNames = _ElementLoader.GetCategories(_Connection, _ID);
+
+				_Categories = new Lazy<ObservableCollection<string>>(() => {
+					return new ObservableCollection<string>(_ElementLoader.GetCategories(_Connection, _ID));
+				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Initialize Template Loader
 				_Template = new Lazy<AFElementTemplate>(() =>

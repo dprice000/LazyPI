@@ -18,8 +18,15 @@ namespace LazyPI.WebAPI
 				var request = new RestRequest("/elements/{webId}");
 				request.AddUrlSegment("webId", ElementID);
 
-				var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
-				return new LazyObjects.AFElement(Connection, result.WebID, result.Name, result.Description, result.Path);
+				var response = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
+
+				if (response.ErrorException != null)
+				{
+					throw new ApplicationException("Error finding element by ID. (See Inner Details)", response.ErrorException);
+				}
+
+				ResponseModels.AFElement data = response.Data;
+				return new LazyObjects.AFElement(Connection, data.WebID, data.Name, data.Description, data.Path);
 			}
 
 			public LazyObjects.AFElement FindByPath(LazyPI.WebAPI.WebAPIConnection Connection, string Path)
@@ -27,8 +34,15 @@ namespace LazyPI.WebAPI
 				var request = new RestRequest("/elements");
 				request.AddParameter("path", Path);
 
-				var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
-				return new LazyObjects.AFElement(Connection, result.WebID, result.Name, result.Description, result.Path);
+				var response = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
+				var data = response.Data;
+
+				if (response.ErrorException != null)
+				{
+					throw new ApplicationException("Error finding element by path. (See Inner Details)", response.ErrorException);
+				}
+
+				return new LazyObjects.AFElement(Connection, data.WebID, data.Name, data.Description, data.Path);
 			}
 
 			public bool Update(LazyPI.WebAPI.WebAPIConnection Connection, LazyObjects.AFElement Element)
@@ -80,9 +94,15 @@ namespace LazyPI.WebAPI
 			{
 				var request = new RestRequest("/elements/{webId}");
 				request.AddUrlSegment("webId", ElementID);
+				var response = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
 
-				var result = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request).Data;
-				return result.TemplateName;
+				if (response.ErrorException != null)
+				{
+					throw new ApplicationException("Error searching for element template. (See Inner Details)", response.ErrorException);
+				}
+
+				var data = response.Data;
+				return data.TemplateName;
 			}
 
 			public IEnumerable<LazyObjects.AFAttribute> GetAttributes(LazyPI.WebAPI.WebAPIConnection Connection, string ParentID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", string ValueType = "*", bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, bool ShowExcluded = false, bool ShowHidden = false, int MaxCount = 1000)
@@ -101,11 +121,18 @@ namespace LazyPI.WebAPI
 				request.AddParameter("showHidden", ShowHidden);
 				request.AddParameter("maxCount", MaxCount);
 
-				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttribute>>(request).Data;
+				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttribute>>(request);
+
+				if (response.ErrorException != null)
+				{
+					throw new ApplicationException("Error searching for element attributes. (See Inner Details)", response.ErrorException);
+				}
+				
+				var data = response.Data;
 
 				List<LazyObjects.AFAttribute> resultList = new List<LazyObjects.AFAttribute>();
 
-				foreach(var result in response.Items)
+				foreach(var result in data.Items)
 				{
 					resultList.Add(LazyObjects.AFAttribute.Find(Connection, result.WebID));
 				}
@@ -118,7 +145,14 @@ namespace LazyPI.WebAPI
 				var request = new RestRequest("/elements/{webId}/categories");
 				request.AddUrlSegment("webId", ElementID);
 
-				var results = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.ElementCategory>>(request).Data;
+				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.ElementCategory>>(request);
+
+				if (response.ErrorException != null)
+				{
+					throw new ApplicationException("Error searching for element categories. (See Inner Details)", response.ErrorException);
+				}
+
+				var data = response.Data;
 
 				//return results.Items.Cast<BaseObject>();
 			}
@@ -136,11 +170,18 @@ namespace LazyPI.WebAPI
 				request.AddParameter("startIndex", StartIndex);
 				request.AddParameter("maxCount", MaxCount);
 
-				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request).Data;
+				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request);
+
+				if (response.ErrorException != null)
+				{
+					throw new ApplicationException("Error searching for child elements of and element. (See Inner Details)", response.ErrorException);
+				}
+				
+				var data = response.Data;
 
 				List<LazyObjects.AFElement> results = new List<LazyObjects.AFElement>();
 
-				foreach (var element in response.Items)
+				foreach (var element in data.Items)
 				{
 					results.Add(new LazyObjects.AFElement(Connection, element.WebID, element.Name, element.Description, element.Path));
 				}
@@ -163,11 +204,18 @@ namespace LazyPI.WebAPI
 				request.AddParameter("startIndex", StartIndex);
 				request.AddParameter("maxCount", MaxCount);
 
-				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request).Data;
+				var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request);
+
+				if (response.ErrorException != null)
+				{
+					throw new ApplicationException("Error searching for element template. (See Inner Details)", response.ErrorException);
+				}
+				
+				var data = response.Data;
 
 				List<LazyObjects.AFEventFrame> results = new List<LazyObjects.AFEventFrame>();
 
-				foreach (var frame in response.Items)
+				foreach (var frame in data.Items)
 				{
 					//TODO: Need EventFrame Search functions
 					//LazyObjects.AFEventFrame.
