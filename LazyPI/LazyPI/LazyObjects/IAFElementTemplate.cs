@@ -15,7 +15,7 @@ namespace LazyPI.LazyObjects
         bool Delete(Connection Connection, string TemplateID);
         bool CreateElementTemplate(Connection Connection, string ParentID, AFElementTemplate Template);
         bool IsExtendible(Connection Connection, string TemplateID);
-        IEnumerable<AFElementCategory> GetCategories(Connection Connection, string TemplateID);
+        IEnumerable<string> GetCategories(Connection Connection, string TemplateID);
         IEnumerable<AFAttributeTemplate> GetAttributeTemplates(Connection Connection, string ElementID);
     }
 }

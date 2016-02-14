@@ -11,12 +11,12 @@ namespace LazyPI.LazyObjects
     public class AFElementTemplate : BaseObject
     {
         private IEnumerable<string> _CategoryList;
-        private Lazy<ObservableCollection<AFElementCategory>> _Categories;
+        private Lazy<ObservableCollection<string>> _Categories;
         private bool _IsExtendable;
         private static IAFElementTemplate _templateLoader;
 
         #region "Properties"
-            public ObservableCollection<AFElementCategory> Categories
+            public ObservableCollection<string> Categories
             {
                 get
                 {
@@ -43,8 +43,8 @@ namespace LazyPI.LazyObjects
             private void Initialize()
             {
                 // Load Categories
-                _Categories = new Lazy<ObservableCollection<AFElementCategory>>(() => {
-                   ObservableCollection<AFElementCategory> collection = new ObservableCollection<AFElementCategory>(_templateLoader.GetCategories(_Connection, this._ID));
+                _Categories = new Lazy<ObservableCollection<string>>(() => {
+                   ObservableCollection<string> collection = new ObservableCollection<string>(_templateLoader.GetCategories(_Connection, this._ID));
                    collection.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(CategoriesChanged);
                    return collection;
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);

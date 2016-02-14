@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace LazyPI.LazyObjects
 {
     public class AFValue : BaseObject
     {
-        private DateTimeOffset _Timestamp;
+        private DateTime _Timestamp;
         private string _Value;
         private string _UnitsAbbreviation;
         private bool _Good;
@@ -71,8 +72,14 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-        public AFValue()
-        { 
+        public AFValue(DateTime TimeStamp, string Value, string Units, bool Good, bool Questionable, bool Substituted)
+        {
+            _Timestamp = TimeStamp;
+            _Value = Value;
+            _UnitsAbbreviation = Units;
+            _Good = Good;
+            _Questionable = Questionable;
+            _Substituted = Substituted;
         }
         #endregion
     }

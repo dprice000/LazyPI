@@ -10,12 +10,13 @@ namespace LazyPI.WebAPI
 {
 	public class AFAttributeTemplateLoader : LazyObjects.IAFAttributeTemplate
 	{
-		public LazyObjects.AFAttributeTemplate Find(WebAPIConnection Connection, string AttrTempID)
+		public LazyObjects.AFAttributeTemplate Find(LazyPI.Common.Connection Connection, string AttrTempID)
 		{
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/attributetemplates/{webId}");
 			request.AddUrlSegment("webId", AttrTempID);
 
-			var response = Connection.Client.Execute<ResponseModels.AFAttributeTemplate>(request);
+			var response = webConnection.Client.Execute<ResponseModels.AFAttributeTemplate>(request);
 
 			if (response.ErrorException != null)
 			{
@@ -27,12 +28,13 @@ namespace LazyPI.WebAPI
 			return new LazyObjects.AFAttributeTemplate(Connection, data.WebID, data.Name, data.Description, data.Path);
 		}
 
-		public LazyObjects.AFAttributeTemplate FindByPath(WebAPIConnection Connection, string Path)
+		public LazyObjects.AFAttributeTemplate FindByPath(LazyPI.Common.Connection Connection, string Path)
 		{
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/attributetemplates");
 			request.AddParameter("path", Path);
 
-            var response = Connection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFAttributeTemplate>(request);
+            var response = webConnection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFAttributeTemplate>(request);
 
             if (response.ErrorException != null)
             {
@@ -43,45 +45,49 @@ namespace LazyPI.WebAPI
 			return new LazyObjects.AFAttributeTemplate(Connection, data.WebID, data.Name, data.Description, data.Path);
 		}
 
-		public bool Update(WebAPIConnection Connection, LazyObjects.AFAttributeTemplate AttrTemp)
+		public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFAttributeTemplate AttrTemp)
 		{
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/attributetemplates/{webId}", Method.PATCH);
 			request.AddUrlSegment("webId", AttrTemp.ID);
 			request.AddBody(AttrTemp);
 
-			var statusCode = Connection.Client.Execute(request).StatusCode;
+			var statusCode = webConnection.Client.Execute(request).StatusCode;
 
 			return ((int)statusCode == 204);
 		}
 
-		public bool Delete(WebAPIConnection Connection, string AttrTempID)
+		public bool Delete(LazyPI.Common.Connection Connection, string AttrTempID)
 		{
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/attributetemplates/{webId}");
 			request.AddParameter("webId", AttrTempID);
 
-			var statusCode = Connection.Client.Execute(request).StatusCode;
+			var statusCode = webConnection.Client.Execute(request).StatusCode;
 
 			return ((int)statusCode == 204);
 		}
 
 		//This really creates a childe attributetemplate
 		//TODO: Something is wrong here ID should be a parent ID
-		public bool Create(WebAPIConnection Connection, LazyObjects.AFAttributeTemplate AttrTemp)
+		public bool Create(LazyPI.Common.Connection Connection, LazyObjects.AFAttributeTemplate AttrTemp)
 		{
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
 			request.AddUrlSegment("webId", AttrTemp.ID);
 			request.AddBody(AttrTemp);
 
-			var statusCode = Connection.Client.Execute(request).StatusCode;
+			var statusCode = webConnection.Client.Execute(request).StatusCode;
 			return ((int)statusCode == 201);
 		}
 
-		public IEnumerable<LazyObjects.AFAttributeTemplate> GetChildAttributeTemplates(WebAPIConnection Connection, string AttrTempID)
+		public IEnumerable<LazyObjects.AFAttributeTemplate> GetChildAttributeTemplates(LazyPI.Common.Connection Connection, string AttrTempID)
 		{
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
 			request.AddUrlSegment("webId", AttrTempID);
 			
-            var response = Connection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttributeTemplate>>(request);
+            var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttributeTemplate>>(request);
 
             if (response.ErrorException != null)
 			{

@@ -18,7 +18,7 @@ namespace LazyPI.WebAPI
         private RestSharp.RestClient _Client;
         protected AuthenticationType _AuthType;
 
-        public override RestSharp.RestClient Client
+        public RestSharp.RestClient Client
         {
             get { return _Client; }
         }
