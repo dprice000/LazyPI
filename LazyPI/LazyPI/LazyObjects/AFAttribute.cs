@@ -80,6 +80,10 @@ namespace LazyPI.LazyObjects
 
         #region "Constructors"
 
+        public AFAttribute()
+        {
+        }
+
         public AFAttribute(LazyPI.Common.Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
         {
             Initialize();
