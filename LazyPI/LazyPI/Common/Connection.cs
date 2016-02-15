@@ -28,11 +28,6 @@ namespace LazyPI.Common
                     return _Username;
                 }
             }
-
-            public abstract object Request
-            {
-                get;
-            }
         #endregion
 
     }

@@ -69,12 +69,22 @@ namespace LazyPI.WebAPI
 		}
 
 
-		public bool CreateElementTemplate(LazyPI.Common.Connection Connection, string ParentID, LazyObjects.AFAttributeTemplate Template)
+		public bool CreateElementTemplate(LazyPI.Common.Connection Connection, string ParentID, LazyObjects.AFElementTemplate Template)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/elementtemplates/{webId}/attributetemplates", Method.POST);
 			request.AddUrlSegment("webId", ParentID);
-			request.AddBody(Template);
+
+            ResponseModels.AFElementTemplate temp = new ResponseModels.AFElementTemplate();
+
+            temp.WebID = temp.ID;
+            temp.Name = Template.Name;
+            temp.Description = Template.Description;
+            temp.Path = Template.Path;
+            temp.CategoryNames = Template.Categories.ToList();
+            temp.AllowElementToExtend = Template.IsExtendable;
+
+			request.AddBody(temp);
 
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
 

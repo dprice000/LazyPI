@@ -134,7 +134,7 @@ namespace LazyPI.WebAPI
 
             ResponseModels.AFValue data = response.Data;
 
-            return new LazyObjects.AFValue(data.Timestamp, data.Value, data.Good, data.Questionable, data.Substituted);
+            return new LazyObjects.AFValue(data.Timestamp, data.Value, data.UnitsAbbreviation, data.Good, data.Questionable, data.Substituted);
         }
 
         /// <summary>

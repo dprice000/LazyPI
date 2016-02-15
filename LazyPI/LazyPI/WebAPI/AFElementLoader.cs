@@ -53,8 +53,15 @@ namespace LazyPI.WebAPI
 				var request = new RestRequest("/elements/{webId}", Method.PATCH);
 				request.AddUrlSegment("webId", Element.ID);
 
-				//TODO: You need to convert this object before putting it in the request
-				//request.AddBody(element);
+				ResponseModels.AFElement temp = new ResponseModels.AFElement();
+				temp.WebID = Element.ID;
+				temp.Name = Element.Name;
+				temp.Description = Element.Description;
+				temp.Path = Element.Path;
+				temp.CategoryNames = Element.Categories.ToList();
+				temp.TemplateName = Element.Template.Name;
+
+				request.AddBody(temp);
 
 				var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -172,7 +179,7 @@ namespace LazyPI.WebAPI
 				return results;
 			}
 
-			IEnumerable<LazyObjects.AFElement> GetElements(LazyPI.Common.Connection Connection, string RootID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", ElementType ElementType = ElementType.Any, bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, int MaxCount = 1000)
+			public IEnumerable<LazyObjects.AFElement> GetElements(LazyPI.Common.Connection Connection, string RootID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", ElementType ElementType = ElementType.Any, bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, int MaxCount = 1000)
 			{
 				WebAPIConnection webConnection = (WebAPIConnection)Connection;
 				var request = new RestRequest("/elements/{webId}/elements");

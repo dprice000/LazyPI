@@ -96,7 +96,7 @@ namespace LazyPI.LazyObjects
 				//Initialize Attributes Loader
 				_Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => 
 				{
-					List<LazyObjects.AFElement> resultList = _ElementLoader.GetAttributes(_Connection, this.ID).ToList();
+					List<LazyObjects.AFAttribute> resultList = _ElementLoader.GetAttributes(_Connection, this.ID).ToList();
 					ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>();
 
 					foreach (var attr in resultList)

@@ -197,6 +197,24 @@ namespace LazyPI.WebAPI
 			return results;
 		}
 
+		public string GetEventFrameTemplate(LazyPI.Common.Connection Connection, string FrameID)
+		{
+			WebAPIConnection webConnection = (WebAPIConnection)Connection;
+			var request = new RestRequest("/eventframes/{webId}");
+			request.AddUrlSegment("webId", FrameID);
+
+			var response = webConnection.Client.Execute<ResponseModels.AFEventFrame>(request);
+
+			if (response.ErrorException != null)
+			{
+				throw new ApplicationException("Error finding event frame by ID. (See Inner Details)", response.ErrorException);
+			}
+
+			ResponseModels.AFEventFrame data = response.Data;
+
+			return data.TemplateName;
+		}
+
 		public IEnumerable<LazyObjects.AFEventFrame> GetEventFrames(LazyPI.Common.Connection Connection, string FrameID, SearchMode SearchMode = SearchMode.Overlapped, string StartTime = "-8h", string EndTime = "*", string NameFilter = "*", string ReferencedElementNameFilter = "*", string CategoryName = null, string TemplateName = null, string ReferencedElementTemplateName = null, bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, int MaxCount = 1000)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
@@ -240,5 +258,13 @@ namespace LazyPI.WebAPI
 
 			return results;
 		}
+
+		//TODO: Implement this really damn long method.
+		//IEnumerable<LazyPI.LazyObjects.AFEventFrame> GetChildFrames(LazyPI.Common.Connection Connection, string FrameID, SearchMode SearchMode, string StartTime, string EndTime, string NameFilter, string ReferencedElementNameFilter, string CategoryName, string TemplateName, string ReferencedElementTemplateFilter, bool SearchFullHierarchy, string SortField, string SortOrder, int StartIndex, int MaxCount)
+		//{
+
+			
+		//
+		//}
 	}
 }

@@ -34,7 +34,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _Value = value;
-                _Timestamp = DateTimeOffset.Now;
+                _Timestamp = DateTime.Now;
             }
         }
 
