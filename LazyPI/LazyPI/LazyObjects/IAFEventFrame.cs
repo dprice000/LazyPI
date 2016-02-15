@@ -20,6 +20,6 @@ namespace LazyPI.LazyObjects
         IEnumerable<AFAttribute> GetAttributes(Connection Connection, string FrameID, string NameFilter, string CategoryName, string TemplateName, string ValueType, bool SearchFullHierarchy, string SortField, string SortOrder, int StartIndex, bool ShowExcluded, bool ShowHidden, int MaxCount);
         IEnumerable<string> GetCategories(Connection Connection, string FrameID);
         IEnumerable<AFElement> GetReferencedElements(Connection Connection, string FrameID);
-        //IEnumerable<AFEventFrame> GetChildFrames(Connection Connection, string FrameID, SearchMode SearchMode, string StartTime, string EndTime, string NameFilter, string ReferencedElementNameFilter, string CategoryName, string TemplateName, string ReferencedElementTemplateFilter, bool SearchFullHierarchy, string SortField, string SortOrder, int StartIndex, int MaxCount);
+        IEnumerable<AFEventFrame> GetEventFrames(Connection Connection, string FrameID);
     }
 }

@@ -76,7 +76,7 @@ namespace LazyPI.LazyObjects
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
                 _EventFrames = new Lazy<ObservableCollection<AFEventFrame>>(() => {
-                    List<AFEventFrame> frames = _EventFrameLoader.GetChildFrames(_Connection, _ID, SearchMode.None, "*-8d", "*", "*", "*", "*", "*", "*", false, "Name", "Ascending", 0, 1000).ToList();
+                    List<AFEventFrame> frames = _EventFrameLoader.GetEventFrames(_Connection, _ID).ToList();
 
                     ObservableCollection<AFEventFrame> obsList = new ObservableCollection<AFEventFrame>(frames);
                     obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
