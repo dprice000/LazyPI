@@ -75,14 +75,14 @@ namespace LazyPI.WebAPI
 			var request = new RestRequest("/elementtemplates/{webId}/attributetemplates", Method.POST);
 			request.AddUrlSegment("webId", ParentID);
 
-            ResponseModels.AFElementTemplate temp = new ResponseModels.AFElementTemplate();
+			ResponseModels.AFElementTemplate temp = new ResponseModels.AFElementTemplate();
 
-            temp.WebID = temp.ID;
-            temp.Name = Template.Name;
-            temp.Description = Template.Description;
-            temp.Path = Template.Path;
-            temp.CategoryNames = Template.Categories.ToList();
-            temp.AllowElementToExtend = Template.IsExtendable;
+			temp.WebID = temp.ID;
+			temp.Name = Template.Name;
+			temp.Description = Template.Description;
+			temp.Path = Template.Path;
+			temp.CategoryNames = Template.Categories.ToList();
+			temp.AllowElementToExtend = Template.IsExtendable;
 
 			request.AddBody(temp);
 
@@ -107,6 +107,22 @@ namespace LazyPI.WebAPI
 			var data = response.Data;
 
 			return data.AllowElementToExtend;
+		}
+
+		public IEnumerable<string> GetCategories(LazyPI.Common.Connection Connection, string TemplateID)
+		{
+			WebAPIConnection webConnection = (WebAPIConnection)Connection;
+			var request = new RestRequest("/elementtemplates/{webId}");
+			request.AddUrlSegment("webId", TemplateID);
+
+			var response = webConnection.Client.Execute<ResponseModels.AFElementTemplate>(request);
+
+			if (response.ErrorException != null)
+			{
+				throw new ApplicationException("Error finding element template by ID. (See Inner Details)", response.ErrorException);
+			}
+
+			return response.Data.CategoryNames;
 		}
 
 		public IEnumerable<LazyObjects.AFAttributeTemplate> GetAttributeTemplates(LazyPI.Common.Connection Connection, string ElementID)
