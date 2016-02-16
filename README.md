@@ -1,4 +1,6 @@
 # LazyPI
+
+[![Join the chat at https://gitter.im/dprice809/LazyPI](https://badges.gitter.im/dprice809/LazyPI.svg)](https://gitter.im/dprice809/LazyPI?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Coverage Status](https://coveralls.io/repos/github/dprice809/LazyPI/badge.svg?branch=master)](https://coveralls.io/github/dprice809/LazyPI?branch=master)
 
 A client side library for interfacing with the OSIsoft PI WebAPI. This project originally started out as a tool for deserializing PI WebAPI requests. 
