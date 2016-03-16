@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-	public class AFElementTemplateLoader : LazyObjects.IAFElementTemplate
+	public class AFElementTemplateConnector : LazyObjects.IAFElementTemplate
 	{
 		public LazyObjects.AFElementTemplate Find(LazyPI.Common.Connection Connection, string TemplateID)
 		{

@@ -107,7 +107,7 @@ namespace LazyPI.LazyObjects
             {
                 if (Connection is WebAPI.WebAPIConnection)
                 {
-                    _EventFrameLoader = new WebAPI.AFEventFrameLoader();
+                    _EventFrameLoader = new WebAPI.AFEventFrameConnector();
                 }
             }
         #endregion

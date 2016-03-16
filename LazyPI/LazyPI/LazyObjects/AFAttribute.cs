@@ -101,7 +101,7 @@ namespace LazyPI.LazyObjects
         {
             if (Connection is WebAPI.WebAPIConnection)
             {
-                _AttrLoader = new WebAPI.AFAttributeLoader();
+                _AttrLoader = new WebAPI.AFAttributeConnector();
             }
         }
         #endregion

@@ -59,19 +59,19 @@
     <Compile Include="LazyObjects\IAFEventFrame.cs" />
     <Compile Include="LazyObjects\IAFUnit.cs" />
     <Compile Include="LazyObjects\IAFAttributeCategory.cs" />
-    <Compile Include="WebAPI\AFAttributeLoader.cs" />
-    <Compile Include="WebAPI\AFAttributeTemplateLoader.cs" />
+    <Compile Include="WebAPI\AFAttributeConnector.cs" />
+    <Compile Include="WebAPI\AFAttributeTemplateConnector.cs" />
     <Compile Include="LazyObjects\IAFAttributeTemplate.cs" />
-    <Compile Include="WebAPI\AFElementTemplateLoader.cs" />
+    <Compile Include="WebAPI\AFElementTemplateConnector.cs" />
     <Compile Include="LazyObjects\IAFElementTemplate.cs" />
     <Compile Include="LazyObjects\AFElement.cs" />
-    <Compile Include="WebAPI\AFElementLoader.cs" />
+    <Compile Include="WebAPI\AFElementConnector.cs" />
     <Compile Include="LazyObjects\AFElementTemplate.cs" />
     <Compile Include="LazyObjects\AFAttributeTemplate.cs" />
     <Compile Include="LazyObjects\IAFElement.cs" />
     <Compile Include="Common\BaseObjects.cs" />
     <Compile Include="LazyObjects\IAFAttribute.cs" />
-    <Compile Include="WebAPI\AFEventFrameLoader.cs" />
+    <Compile Include="WebAPI\AFEventFrameConnector.cs" />
     <Compile Include="WebAPI\ResponseModels\ResponseModels.cs" />
   </ItemGroup>
   <ItemGroup>

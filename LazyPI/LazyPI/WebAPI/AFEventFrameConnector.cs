@@ -9,7 +9,7 @@ using ResponseModels = LazyPI.WebAPI.ResponseModels;
 
 namespace LazyPI.WebAPI
 {
-	public class AFEventFrameLoader : LazyObjects.IAFEventFrame
+	public class AFEventFrameConnector : LazyObjects.IAFEventFrame
 	{
 		public LazyObjects.AFEventFrame Find(LazyPI.Common.Connection Connection, string FrameID)
 		{

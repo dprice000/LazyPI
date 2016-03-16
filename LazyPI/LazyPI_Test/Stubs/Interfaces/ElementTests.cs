@@ -13,13 +13,13 @@ namespace LazyPI_Test.Stubs.Interfaces
     [TestClass]
     public class ElementTests
     {
-        AFElementLoader elementLoader;
+        AFElementConnector elementLoader;
         WebAPIConnection conn;
 
         [TestInitialize]
         public void Initialize()
         {
-            elementLoader = new AFElementLoader();
+            elementLoader = new AFElementConnector();
             conn = new WebAPIConnection(AuthenticationType.Kerberos);
         }
 

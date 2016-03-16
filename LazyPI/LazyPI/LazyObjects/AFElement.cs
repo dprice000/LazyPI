@@ -125,7 +125,7 @@ namespace LazyPI.LazyObjects
 			{
 				if (Connection is WebAPI.WebAPIConnection)
 				{
-					_ElementLoader = new WebAPI.AFElementLoader();
+					_ElementLoader = new WebAPI.AFElementConnector();
 				}
 			}
 		#endregion
