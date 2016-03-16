@@ -220,7 +220,7 @@ namespace LazyPI.WebAPI
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/eventframes/{webId}/eventframes");
 			request.AddUrlSegment("webId", FrameID);
-			request.AddParameter("searchMode", SearchMode.BackwardFromStartTime);
+			request.AddParameter("searchMode", LazyPI.Common.SearchMode.BackwardFromStartTime);
 			request.AddParameter("startTime", "*");
 
 			var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request);

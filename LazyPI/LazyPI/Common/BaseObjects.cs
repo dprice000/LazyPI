@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LazyPI
+namespace LazyPI.Common
 {
     /// <summary>
     /// Values to indicate which summary type calculation(s) should be performed. 

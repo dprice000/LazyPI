@@ -10,15 +10,17 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LazyPI_Test.Stubs.Interfaces
 {
-    public class ElementLoaderTests
-    { 
+    [TestClass]
+    public class ElementTests
+    {
+        AFElementLoader elementLoader;
+        WebAPIConnection conn;
+
         [TestInitialize]
         public void Initialize()
         {
-            AFElementLoader elementLoader = new AFElementLoader();
-            WebAPIConnection conn;
-            System.Security.SecureString pwd = new System.Security.SecureString();
-            conn = new WebAPIConnection(AuthenticationType.Basic, "", "", pwd);
+            elementLoader = new AFElementLoader();
+            conn = new WebAPIConnection(AuthenticationType.Kerberos);
         }
 
         [TestMethod]

@@ -7,11 +7,6 @@ using LazyPI.LazyObjects;
 
 namespace LazyPI.WebAPI.ResponseModels
 {
-    public class LinksResponse
-    {
-        public string Self { get; set; }
-    }
-
     /// <summary>
     /// A Base Object that all elements are derived from.
     /// </summary>
@@ -23,7 +18,7 @@ namespace LazyPI.WebAPI.ResponseModels
         public string Name { get; set; }
         public string Description { get; set; }
         public string Path { get; set; }
-        public LinksResponse Links { get; set; }
+        public Dictionary<string, string> Links { get; set; }
     }
 
     [Serializable]
@@ -178,7 +173,7 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class ResponseList<T>
     {
-        public LinksResponse Links { get; set; }
+        public Dictionary<string, string> Links { get; set; }
         public List<T> Items { get; set; }
     }
 }

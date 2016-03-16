@@ -23,18 +23,23 @@ namespace LazyPI.WebAPI
             get { return _Client; }
         }
 
-        public WebAPIConnection(AuthenticationType AuthType,string Hostname, string Username, System.Security.SecureString Password)
+        public WebAPIConnection(AuthenticationType AuthType,string Hostname = null, string Username = null, System.Security.SecureString Password = null)
         {
-            _Hostname = Hostname;
-            _Username = Username;
             _AuthType = AuthType;
+            _Hostname = Hostname;
             _Client = new RestSharp.RestClient(Hostname);
 
             if (AuthType == AuthenticationType.Basic)
+            {
                 _Client.Authenticator = new RestSharp.Authenticators.HttpBasicAuthenticator(Username, Password.ToString());
+                _Username = Username;
+            }
             else if (AuthType == AuthenticationType.Kerberos)
             {
-                System.Net.NetworkCredential netCred = new System.Net.NetworkCredential(Username, Password.ToString());
+                //Looksup credentails of the application is using the library
+                System.Net.NetworkCredential netCred = System.Net.CredentialCache.DefaultNetworkCredentials;
+                _Username = netCred.UserName;
+
                 _Client.Authenticator = new RestSharp.Authenticators.NtlmAuthenticator(netCred);
             }
         }

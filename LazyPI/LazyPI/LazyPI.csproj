@@ -45,6 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Connection.cs" />
+    <Compile Include="LazyObjects\AFDatabase.cs" />
+    <Compile Include="LazyObjects\AFServer.cs" />
+    <Compile Include="LazyObjects\IAFDatabase.cs" />
+    <Compile Include="LazyObjects\IAFServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebAPI\WebAPIConnection.cs" />
     <Compile Include="LazyObjects\AFAttribute.cs" />

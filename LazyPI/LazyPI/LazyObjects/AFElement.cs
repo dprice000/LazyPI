@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using RestSharp;
 using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-	public class AFElement : LazyPI.BaseObject
+	public class AFElement : BaseObject
 	{
 		private Lazy<AFElementTemplate> _Template;
 		private Lazy<AFElement> _Parent;
