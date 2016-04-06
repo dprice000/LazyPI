@@ -99,7 +99,7 @@ namespace LazyPI.WebAPI
 
             if (response.ErrorException != null)
             {
-                throw new ApplicationException("Error searching for element template. (See Inner Details)", response.ErrorException);
+                throw new ApplicationException("Error searching for elements. (See Inner Details)", response.ErrorException);
             }
 
             List<LazyObjects.AFElement> results = new List<LazyObjects.AFElement>();
@@ -122,7 +122,7 @@ namespace LazyPI.WebAPI
 
             if (response.ErrorException != null)
             {
-                throw new ApplicationException("Error searching for element template. (See Inner Details)", response.ErrorException);
+                throw new ApplicationException("Error searching for eventframes. (See Inner Details)", response.ErrorException);
             }
 
             List<LazyObjects.AFEventFrame> results = new List<LazyObjects.AFEventFrame>();
