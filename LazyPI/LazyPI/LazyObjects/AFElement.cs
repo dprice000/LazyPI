@@ -64,7 +64,7 @@ namespace LazyPI.LazyObjects
 			{
 			}
 
-			public AFElement(Connection Connection, string ID, string Name, string Description, string Path)
+			internal AFElement(Connection Connection, string ID, string Name, string Description, string Path)
 				: base(Connection, ID, Name, Description, Path)
 			{
 				CreateLoader(Connection);

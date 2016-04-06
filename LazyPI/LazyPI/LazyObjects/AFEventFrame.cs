@@ -65,7 +65,7 @@ namespace LazyPI.LazyObjects
             {
             }
 
-            public AFEventFrame(Connection Connection, string ID, string Name, string Description, string Path) 
+            internal AFEventFrame(Connection Connection, string ID, string Name, string Description, string Path) 
                 : base(Connection, ID, Name, Description, Path)
             {
                 Initialize();

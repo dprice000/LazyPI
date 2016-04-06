@@ -10,7 +10,7 @@ namespace LazyPI.LazyObjects
     public class AFDatabase : BaseObject
     {
         #region "Constructors"
-            public AFDatabase(Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
+            internal AFDatabase(Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
             {
             }
         #endregion

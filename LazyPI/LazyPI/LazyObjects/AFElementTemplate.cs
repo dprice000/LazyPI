@@ -38,7 +38,7 @@ namespace LazyPI.LazyObjects
             {
             }
 
-            public AFElementTemplate(Connection Connection, string ID, string Name, string Description, string Path)
+            internal AFElementTemplate(Connection Connection, string ID, string Name, string Description, string Path)
                 : base(Connection, ID, Name, Description, Path)
             {
                 Initialize();

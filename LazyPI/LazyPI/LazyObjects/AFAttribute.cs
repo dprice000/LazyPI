@@ -84,7 +84,7 @@ namespace LazyPI.LazyObjects
         {
         }
 
-        public AFAttribute(LazyPI.Common.Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
+        internal AFAttribute(LazyPI.Common.Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
         {
             Initialize();
         }

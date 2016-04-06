@@ -41,7 +41,7 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-            public AFServer(Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
+            internal AFServer(Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
             {
             }
 
