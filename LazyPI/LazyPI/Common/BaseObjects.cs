@@ -89,7 +89,7 @@ namespace LazyPI.Common
         ForwardInProgress
     }
 
-    public class BaseObject
+    internal class BaseObject
     {
         protected LazyPI.Common.Connection _Connection;
         protected string _ID;
