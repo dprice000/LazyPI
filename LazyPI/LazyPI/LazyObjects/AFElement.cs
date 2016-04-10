@@ -67,7 +67,6 @@ namespace LazyPI.LazyObjects
 			internal AFElement(Connection Connection, string ID, string Name, string Description, string Path)
 				: base(Connection, ID, Name, Description, Path)
 			{
-				CreateLoader(Connection);
 				Initialize();
 			}
 
@@ -76,6 +75,8 @@ namespace LazyPI.LazyObjects
 			/// </summary>
 			private void Initialize()
 			{
+				CreateLoader();
+
 				//Initialize Category List
 
 				_Categories = new Lazy<ObservableCollection<string>>(() => {
@@ -122,9 +123,9 @@ namespace LazyPI.LazyObjects
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 			}
 
-			private void CreateLoader(Connection Connection)
+			private void CreateLoader()
 			{
-				if (Connection is WebAPI.WebAPIConnection)
+				if (_Connection is WebAPI.WebAPIConnection)
 				{
 					_ElementLoader = new WebAPI.AFElementConnector();
 				}

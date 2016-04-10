@@ -20,7 +20,7 @@ namespace LazyPI_Test.Stubs.Interfaces
         public void Initialize()
         {
             elementLoader = new AFElementConnector();
-            conn = new WebAPIConnection(AuthenticationType.Kerberos);
+            conn = new WebAPIConnection(AuthType.Kerberos);
         }
 
         [TestMethod]

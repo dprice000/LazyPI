@@ -73,6 +73,8 @@ namespace LazyPI.LazyObjects
 
             private void Initialize()
             {
+                CreateLoader();
+
                 _Template = new Lazy<AFElementTemplate>(() =>
                 {
                    var templateName = _EventFrameLoader.GetEventFrameTemplate(_Connection, this._ID);
@@ -103,9 +105,9 @@ namespace LazyPI.LazyObjects
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
             }
 
-            private void CreateLoader(Connection Connection)
+            private void CreateLoader()
             {
-                if (Connection is WebAPI.WebAPIConnection)
+                if (_Connection is WebAPI.WebAPIConnection)
                 {
                     _EventFrameLoader = new WebAPI.AFEventFrameConnector();
                 }

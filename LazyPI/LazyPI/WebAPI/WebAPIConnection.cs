@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-    public enum AuthenticationType
+    public enum AuthType
     {
         Anonymous,
         Basic,
@@ -16,25 +16,32 @@ namespace LazyPI.WebAPI
     public class WebAPIConnection : LazyPI.Common.Connection
     {
         private RestSharp.RestClient _Client;
-        protected AuthenticationType _AuthType;
+        protected AuthType _AuthType;
 
         public RestSharp.RestClient Client
         {
             get { return _Client; }
         }
 
-        public WebAPIConnection(AuthenticationType AuthType,string Hostname = null, string Username = null, System.Security.SecureString Password = null)
+        /// <summary>
+        /// Creates a new webAPI connection
+        /// </summary>
+        /// <param name="AuthType">The form of connection to be used to connect to the webAPI.</param>
+        /// <param name="Hostname">The name or IP of the machined to connect to.</param>
+        /// <param name="Username">Only required for basic authentication.</param>
+        /// <param name="Password">Only required for basic authentication.</param>
+        public WebAPIConnection(AuthType AuthType,string Hostname = null, string Username = null, System.Security.SecureString Password = null)
         {
             _AuthType = AuthType;
             _Hostname = Hostname;
             _Client = new RestSharp.RestClient(Hostname);
 
-            if (AuthType == AuthenticationType.Basic)
+            if (AuthType == AuthType.Basic)
             {
                 _Client.Authenticator = new RestSharp.Authenticators.HttpBasicAuthenticator(Username, Password.ToString());
                 _Username = Username;
             }
-            else if (AuthType == AuthenticationType.Kerberos)
+            else if (AuthType == AuthType.Kerberos)
             {
                 //Looksup credentails of the application is using the library
                 System.Net.NetworkCredential netCred = System.Net.CredentialCache.DefaultNetworkCredentials;

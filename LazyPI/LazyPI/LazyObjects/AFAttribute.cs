@@ -94,12 +94,12 @@ namespace LazyPI.LazyObjects
         /// </summary>
         public void Initialize()
         {
-
+            CreateLoader();
         }
 
-        private void CreateLoader(Connection Connection)
+        private void CreateLoader()
         {
-            if (Connection is WebAPI.WebAPIConnection)
+            if (_Connection is WebAPI.WebAPIConnection)
             {
                 _AttrLoader = new WebAPI.AFAttributeConnector();
             }
