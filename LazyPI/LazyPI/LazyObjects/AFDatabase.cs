@@ -25,12 +25,12 @@ namespace LazyPI.LazyObjects
 
     }
 
-    internal class AFDatabaseCollection
+    internal class AFDatabases
     {
         private List<AFDatabase> _Databases;
 
         #region "Constructors"
-            internal AFDatabaseCollection(IEnumerable<AFDatabase> databases)
+            internal AFDatabases(IEnumerable<AFDatabase> databases)
             {
                 _Databases = new List<AFDatabase>(databases);
             }

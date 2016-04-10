@@ -8,6 +8,7 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
+
 	public class AFElement : BaseObject
 	{
 		private Lazy<AFElementTemplate> _Template;

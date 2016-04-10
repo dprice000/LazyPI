@@ -12,7 +12,7 @@ namespace LazyPI.LazyObjects
         private bool _IsConnected;
         private string _ServerVersion;
         private static IAFServer _ServerConnector;
-        private static Lazy<AFDatabaseCollection> _Databases;
+        private static Lazy<AFDatabases> _Databases;
 
         #region "Properties"
             public bool IsConnected
@@ -31,7 +31,7 @@ namespace LazyPI.LazyObjects
                 }
             }
 
-            public AFDatabaseCollection Databases
+            public AFDatabases Databases
             {
                 get
                 {
@@ -52,9 +52,9 @@ namespace LazyPI.LazyObjects
             {
                 CreateLoader();
 
-                _Databases = new Lazy<AFDatabaseCollection>(() =>
+                _Databases = new Lazy<AFDatabases>(() =>
                 {
-                    return new AFDatabaseCollection(_ServerConnector.GetDatabases(_Connection, _ID));
+                    return new AFDatabases(_ServerConnector.GetDatabases(_Connection, _ID));
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
             }
 
