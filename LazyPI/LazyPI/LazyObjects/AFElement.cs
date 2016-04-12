@@ -9,13 +9,28 @@ using LazyPI.Common;
 namespace LazyPI.LazyObjects
 {
 
+    public class AFElements : ObjectCollection<AFElement>
+    {
+        public AFElement this[string Name]
+        {
+            get
+            {
+                return _objects.Single(x => x.Name == Name);
+            }
+        }
+
+        public AFElements(IEnumerable<AFElement> elements) : base(elements)
+        {
+        }
+    }
+
 	public class AFElement : BaseObject
 	{
 		private Lazy<AFElementTemplate> _Template;
 		private Lazy<AFElement> _Parent;
 		private Lazy<ObservableCollection<string>> _Categories;
-		private Lazy<ObservableCollection<AFElement>> _Children;
-		private Lazy<ObservableCollection<AFAttribute>> _Attributes;
+		private Lazy<AFElements> _Children;
+		private Lazy<AFAttributes> _Attributes;
 		private static IAFElement _ElementLoader;
 
 		#region "Properties"
@@ -43,7 +58,7 @@ namespace LazyPI.LazyObjects
 				}
 			}
 
-			public ObservableCollection<AFElement> Children
+			public AFElements Children
 			{
 				get
 				{
@@ -51,7 +66,7 @@ namespace LazyPI.LazyObjects
 				}
 			}
 
-			public ObservableCollection<AFAttribute> Attributes
+			public AFAttributes Attributes
 			{
 				get
 				{
@@ -100,27 +115,19 @@ namespace LazyPI.LazyObjects
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Initialize Attributes Loader
-				_Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => 
+				_Attributes = new Lazy<AFAttributes>(() => 
 				{
 					List<LazyObjects.AFAttribute> resultList = _ElementLoader.GetAttributes(_Connection, this.ID).ToList();
-					ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>();
-
-					foreach (var attr in resultList)
-					{
-						obsList.Add(AFAttribute.Find(_Connection, attr.ID));
-					}
-					
-					obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(AttributesChanged);
+					AFAttributes obsList = new AFAttributes(resultList);
+				
 					return obsList;
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Initialize Children Loader
-				_Children = new Lazy<ObservableCollection<AFElement>>(() =>
+				_Children = new Lazy<AFElements>(() =>
 				{
 					List<LazyObjects.AFElement> resultList = _ElementLoader.GetElements(_Connection, this.ID).ToList();
-					ObservableCollection<AFElement> obsList = new ObservableCollection<AFElement>(resultList);
-					obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
-					return obsList;
+					return new AFElements(resultList);
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 			}
 

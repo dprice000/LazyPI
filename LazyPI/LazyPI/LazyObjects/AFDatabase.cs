@@ -25,16 +25,12 @@ namespace LazyPI.LazyObjects
 
     }
 
-    internal class AFDatabases
+    internal class AFDatabases : LazyPI.Common.ObjectCollection<AFDatabase>
     {
-        private List<AFDatabase> _Databases;
 
-        #region "Constructors"
-            internal AFDatabases(IEnumerable<AFDatabase> databases)
-            {
-                _Databases = new List<AFDatabase>(databases);
-            }
-        #endregion
+        public AFDatabases(IEnumerable<AFDatabase> databases) : base(databases)
+        {
+        }
 
         #region "Properties"
 
@@ -42,15 +38,7 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return _Databases.Single(x => x.Name == Name);
-            }
-        }
-
-        public AFDatabase this[int Index]
-        {
-            get
-            {
-                return _Databases[Index];
+                return _objects.Single(x => x.Name == Name);
             }
         }
         #endregion

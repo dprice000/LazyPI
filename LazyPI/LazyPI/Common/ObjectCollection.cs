@@ -8,13 +8,13 @@ namespace LazyPI.Common
 {
     abstract class ObjectCollection<T>
     {
-        private List<T> _objects;
+        protected List<T> _objects;
 
         #region "Constructors"
-        //internal ObjectCollection<T>(IEnumerable<T> elements)
-        //{
-        //    _elements = new List<AFElement>(elements);
-        //}
+            public ObjectCollection(IEnumerable<T> objects)
+            {
+                _objects = new List<T>(objects);
+            }
         #endregion
 
         #region "Properties"

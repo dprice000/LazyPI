@@ -7,6 +7,21 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
+    public class AFAttributes : ObjectCollection<AFAttribute>
+    {
+        public AFAttribute this[string Name]
+        {
+            get
+            {
+                return _objects.Single(x => x.Name == Name);
+            }
+        }
+
+        public AFAttributes(IEnumerable<AFAttribute> attributes) : base(attributes)
+        {
+        }
+    }
+
     public class AFAttribute : BaseObject
     {
         private string _UnitsName;
