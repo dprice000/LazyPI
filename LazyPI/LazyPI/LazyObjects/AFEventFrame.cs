@@ -8,6 +8,22 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
+    public class AFEventFrames : ObjectCollection<AFEventFrame>
+    {
+        public AFEventFrame this[string Name]
+        {
+            get
+            {
+                return _objects.Single(x => x.Name == Name);
+            }
+        }
+
+        public AFEventFrames(IEnumerable<AFEventFrame> frames)
+            : base(frames)
+        {
+        }
+    }
+
     public class AFEventFrame : BaseObject
     {
         private DateTimeOffset _StartTime;

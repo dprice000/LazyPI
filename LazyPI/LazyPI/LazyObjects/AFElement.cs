@@ -8,7 +8,6 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-
     public class AFElements : ObjectCollection<AFElement>
     {
         public AFElement this[string Name]
