@@ -28,7 +28,7 @@ namespace LazyPI.LazyObjects
 		private Lazy<AFElementTemplate> _Template;
 		private Lazy<AFElement> _Parent;
 		private Lazy<ObservableCollection<string>> _Categories;
-		private Lazy<AFElements> _Children;
+		private Lazy<AFElements> _Elements;
 		private Lazy<AFAttributes> _Attributes;
 		private static IAFElement _ElementLoader;
 
@@ -57,11 +57,11 @@ namespace LazyPI.LazyObjects
 				}
 			}
 
-			public AFElements Children
+			public AFElements Elements
 			{
 				get
 				{
-					return _Children.Value; 
+					return _Elements.Value; 
 				}
 			}
 
@@ -123,7 +123,7 @@ namespace LazyPI.LazyObjects
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Initialize Children Loader
-				_Children = new Lazy<AFElements>(() =>
+				_Elements = new Lazy<AFElements>(() =>
 				{
 					List<LazyObjects.AFElement> resultList = _ElementLoader.GetElements(_Connection, this.ID).ToList();
 					return new AFElements(resultList);

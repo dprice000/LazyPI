@@ -144,13 +144,19 @@ namespace LazyPI.Common
         { 
         }
 
+        public BaseObject(string Name, string Description)
+        {
+            _Name = Name;
+            _Description = Description;
+        }
+
         public BaseObject(LazyPI.Common.Connection Connection, string id, string name, string description, string path)
         {
-            this._Connection = Connection;
-            this._ID = id;
-            this._Name = name;
-            this._Description = description;
-            this._Path = path;
+            _Connection = Connection;
+            _ID = id;
+            _Name = name;
+            _Description = description;
+            _Path = path;
         }
         #endregion
     }

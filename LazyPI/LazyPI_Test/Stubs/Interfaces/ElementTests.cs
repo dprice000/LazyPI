@@ -124,9 +124,9 @@ namespace LazyPI_Test.Stubs.Interfaces
 
             parent = elementLoader.FindByPath(conn, parent.Path);
 
-            Assert.Equals(parent.Children.Count, 1);
+            Assert.Equals(parent.Elements.Count, 1);
 
-            AFElement refChild = parent.Children.First();
+            AFElement refChild = parent.Elements.First();
 
             Console.WriteLine("Test that original child and referenced child are identical.");
             Assert.Equals(child.Name, refChild.Name);
