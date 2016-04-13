@@ -72,7 +72,11 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-        public AFValue(DateTime TimeStamp, string Value, string Units, bool Good, bool Questionable, bool Substituted)
+        public AFValue()
+        {
+        }
+
+        internal AFValue(DateTime TimeStamp, string Value, string Units, bool Good, bool Questionable, bool Substituted)
         {
             _Timestamp = TimeStamp;
             _Value = Value;
