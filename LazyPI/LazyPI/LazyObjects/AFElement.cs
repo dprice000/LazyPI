@@ -8,7 +8,7 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-    public class AFElements : ObjectCollection<AFElement>
+    public class AFElements : AFObjectCollection<AFElement>
     {
         public AFElement this[string Name]
         {
@@ -18,7 +18,7 @@ namespace LazyPI.LazyObjects
             }
         }
 
-        public AFElements(IEnumerable<AFElement> elements) : base(elements)
+        internal AFElements(IEnumerable<AFElement> elements) : base(elements)
         {
         }
     }

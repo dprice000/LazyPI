@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LazyPI.Common
 {
-    abstract class ObjectCollection<T>
+    abstract class AFObjectCollection<T>
     {
-        protected List<T> _objects;
+        protected ObservableCollection<T> _objects;
 
         #region "Constructors"
-            public ObjectCollection(IEnumerable<T> objects)
+            public AFObjectCollection(IEnumerable<T> objects)
             {
-                _objects = new List<T>(objects);
+                _objects = new ObservableCollection<T>(objects);
             }
         #endregion
 

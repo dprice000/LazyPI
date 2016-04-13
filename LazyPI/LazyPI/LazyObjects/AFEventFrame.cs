@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
-    public class AFEventFrames : ObjectCollection<AFEventFrame>
+    public class AFEventFrames : AFObjectCollection<AFEventFrame>
     {
         public AFEventFrame this[string Name]
         {
@@ -18,7 +18,7 @@ namespace LazyPI.LazyObjects
             }
         }
 
-        public AFEventFrames(IEnumerable<AFEventFrame> frames)
+        internal AFEventFrames(IEnumerable<AFEventFrame> frames)
             : base(frames)
         {
         }
@@ -29,8 +29,8 @@ namespace LazyPI.LazyObjects
         private DateTimeOffset _StartTime;
         private DateTimeOffset _EndTime;
         private Lazy<AFElementTemplate> _Template;
-        private Lazy<ObservableCollection<AFEventFrame>> _EventFrames;
-        private Lazy<ObservableCollection<AFAttribute>> _Attributes;
+        private Lazy<AFEventFrames> _EventFrames;
+        private Lazy<AFAttributes> _Attributes;
         private ObservableCollection<string> _CategoryNames;
         private static IAFEventFrame _EventFrameLoader;
 
@@ -97,25 +97,16 @@ namespace LazyPI.LazyObjects
                    return AFElementTemplate.FindByName(templateName);
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
-                _EventFrames = new Lazy<ObservableCollection<AFEventFrame>>(() => {
+                _EventFrames = new Lazy<AFEventFrames>(() => {
                     List<AFEventFrame> frames = _EventFrameLoader.GetEventFrames(_Connection, _ID).ToList();
+                    AFEventFrames obsList = new AFEventFrames(frames);
 
-                    ObservableCollection<AFEventFrame> obsList = new ObservableCollection<AFEventFrame>(frames);
-                    obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ChildrenChanged);
-                    
                     return obsList;
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
-                _Attributes = new Lazy<ObservableCollection<AFAttribute>>(() => { 
+                _Attributes = new Lazy<AFAttributes>(() => { 
                     var attrs = _EventFrameLoader.GetAttributes(_Connection, this._ID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
-                    ObservableCollection<AFAttribute> obsList = new ObservableCollection<AFAttribute>();
-
-                    foreach (var attribute in attrs)
-                    {
-                        obsList.Add(AFAttribute.Find(_Connection, attribute.ID));
-                    }
-
-                    obsList.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(AttributesChanged);
+                    AFAttributes obsList = new AFAttributes(attrs);
 
                     return obsList;
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);

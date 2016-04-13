@@ -9,8 +9,6 @@ namespace LazyPI.LazyObjects
 {
     public class AFDatabase : BaseObject
     {
-        //private Lazy<List<AFElement>> _Elements;
-        //private Lazy<List<AFEventFrame>> _EventFrames;
 
         #region "Constructors"
             internal AFDatabase(Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
@@ -25,10 +23,10 @@ namespace LazyPI.LazyObjects
 
     }
 
-    internal class AFDatabases : LazyPI.Common.ObjectCollection<AFDatabase>
+    internal class AFDatabases : LazyPI.Common.AFObjectCollection<AFDatabase>
     {
 
-        public AFDatabases(IEnumerable<AFDatabase> databases) : base(databases)
+        internal AFDatabases(IEnumerable<AFDatabase> databases) : base(databases)
         {
         }
 

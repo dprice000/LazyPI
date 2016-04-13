@@ -7,7 +7,7 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-    public class AFAttributes : ObjectCollection<AFAttribute>
+    public class AFAttributes : AFObjectCollection<AFAttribute>
     {
         public AFAttribute this[string Name]
         {
@@ -17,7 +17,7 @@ namespace LazyPI.LazyObjects
             }
         }
 
-        public AFAttributes(IEnumerable<AFAttribute> attributes) : base(attributes)
+        internal AFAttributes(IEnumerable<AFAttribute> attributes) : base(attributes)
         {
         }
     }
