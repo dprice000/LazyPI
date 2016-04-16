@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.Common
 {
-    abstract class AFObjectCollection<T>
+    public abstract class AFObjectCollection<T>
     {
         protected ObservableCollection<T> _objects;
 

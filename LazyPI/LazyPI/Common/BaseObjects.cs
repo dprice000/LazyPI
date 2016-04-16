@@ -89,7 +89,7 @@ namespace LazyPI.Common
         ForwardInProgress
     }
 
-    internal class BaseObject
+    public class BaseObject
     {
         protected LazyPI.Common.Connection _Connection;
         protected string _ID;
@@ -159,5 +159,9 @@ namespace LazyPI.Common
             _Path = path;
         }
         #endregion
+
+        public abstract void CheckIn()
+        {
+        }
     }
 }

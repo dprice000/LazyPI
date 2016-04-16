@@ -8,20 +8,20 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-    public class AFElements : AFObjectCollection<AFElement>
-    {
-        public AFElement this[string Name]
-        {
-            get
-            {
-                return _objects.Single(x => x.Name == Name);
-            }
-        }
+	public class AFElements : AFObjectCollection<AFElement>
+	{
+		public AFElement this[string Name]
+		{
+			get
+			{
+				return _objects.Single(x => x.Name == Name);
+			}
+		}
 
-        internal AFElements(IEnumerable<AFElement> elements) : base(elements)
-        {
-        }
-    }
+		internal AFElements(IEnumerable<AFElement> elements) : base(elements)
+		{
+		}
+	}
 
 	public class AFElement : BaseObject
 	{

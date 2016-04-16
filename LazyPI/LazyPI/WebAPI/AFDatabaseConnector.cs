@@ -7,7 +7,7 @@ using RestSharp;
 
 namespace LazyPI.WebAPI
 {
-    public class AFDatabaseConnector
+    public class AFDatabaseConnector : LazyPI.LazyObjects.IAFDatabase
     {
 
         LazyPI.LazyObjects.AFDatabase Find(LazyPI.Common.Connection Connection, string ID)
