@@ -121,8 +121,32 @@ namespace LazyPI.LazyObjects
             }
         #endregion
 
-        #region "Callbacks"
-        private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        #region "Static Methods"
+            public static AFEventFrame Find(Connection Connection, string ID)
+            {
+                return _EventFrameLoader.Find(Connection, ID);
+            }
+
+            public static AFEventFrame FindByPath(Connection Connection, string Path)
+            {
+                return _EventFrameLoader.FindByPath(Connection, Path);
+            }
+
+            public static bool Delete(Connection Connection, string FrameID)
+            {
+                return _EventFrameLoader.Delete(Connection, FrameID);
+            }
+        #endregion
+
+        #region "Public Methods"
+            public void CheckIn()
+            {
+                _EventFrameLoader.Update(_Connection, this);
+            }
+        #endregion
+
+            #region "Callbacks"
+            private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {

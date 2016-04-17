@@ -8,19 +8,25 @@ using LazyPI.WebAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace LazyPI_Test.Stubs.Interfaces
+namespace LazyPI_Test.Controllers
 {
     [TestClass]
     public class ElementTests
     {
-        AFElementConnector elementLoader;
-        WebAPIConnection conn;
+        AFElementConnector _elementLoader;
+        AFDatabaseConnector _dbLoader;
+        AFServer _server;
+        AFDatabase _db;
+        WebAPIConnection _conn;
 
         [TestInitialize]
         public void Initialize()
         {
-            elementLoader = new AFElementConnector();
-            conn = new WebAPIConnection(AuthType.Kerberos);
+            _elementLoader = new AFElementConnector();
+            _dbLoader = new AFDatabaseConnector();
+            _conn = new WebAPIConnection(AuthType.Kerberos);
+            _server = AFServer.FindByName(_conn, "ServerName");
+            _db = _server.Databases["DatabaseName"];
         }
 
         [TestMethod]
@@ -38,7 +44,15 @@ namespace LazyPI_Test.Stubs.Interfaces
             Assert.Equals(element.Description, desc);
 
             Console.WriteLine("Test element creation.");
-            Assert.IsTrue(elementLoader.CreateChildElement(conn, "", element));
+
+            Assert.IsTrue(_db.CreateElement(element), "Assert creation passed");
+            
+            //Check that the the element can be found through the AFDB
+            Assert.IsNotNull(_db.Elements[element.Name], "Check AFDB element collection for new element.");
+
+            //TODO: There should be more tests for finding the element
+
+            Assert.IsTrue(_elementLoader.Delete(_conn, element.ID), "Delete new element.");
         }
 
         [TestMethod]
@@ -47,7 +61,7 @@ namespace LazyPI_Test.Stubs.Interfaces
             Console.WriteLine("Test Finding Element by Name");
             string name = "Test Element 1";
 
-            AFElement elem = elementLoader.Find(conn, name);
+            AFElement elem = _elementLoader.Find(_conn, name);
 
             Console.WriteLine("Test that found element is fully constructed");
             Assert.Equals(elem.Name, name);
@@ -64,7 +78,7 @@ namespace LazyPI_Test.Stubs.Interfaces
             Console.WriteLine("Test Finding Element by Path");
             string path = "";
 
-            AFElement elem = elementLoader.FindByPath(conn, path);
+            AFElement elem = _elementLoader.FindByPath(_conn, path);
 
             Assert.Equals(elem.Path, path);
             Assert.IsNotNull(elem.Name, "Check names exists.");
@@ -79,15 +93,15 @@ namespace LazyPI_Test.Stubs.Interfaces
             Console.WriteLine("Test updating element settings.");
             string name = "", desc = "";
 
-            AFElement elem = elementLoader.Find(conn, name);
+            AFElement elem = _elementLoader.Find(_conn, name);
             Assert.Equals(elem.Name, name);
             Random ran = new Random();
             name += ran.Next(100).ToString();
             desc += ran.Next(100).ToString();
 
-            Assert.IsTrue(elementLoader.Update(conn, elem));
+            Assert.IsTrue(_elementLoader.Update(_conn, elem));
 
-            elem = elementLoader.Find(conn, name);
+            elem = _elementLoader.Find(_conn, name);
 
             Assert.Equals(elem.Name, name);
             Assert.Equals(elem.Description, desc);
@@ -102,8 +116,8 @@ namespace LazyPI_Test.Stubs.Interfaces
             parent.Name = "Parent Element";
             parent.Description = "Parent Desciption";
 
-            Assert.IsTrue(elementLoader.CreateChildElement(conn, "", parent));
-            parent = elementLoader.Find(conn, parent.Name);
+            Assert.IsTrue(_elementLoader.CreateChildElement(_conn, "", parent));
+            parent = _elementLoader.Find(_conn, parent.Name);
 
             Assert.IsNotNull(parent.ID);
             Assert.IsNotNull(parent.Path);
@@ -112,9 +126,9 @@ namespace LazyPI_Test.Stubs.Interfaces
             child.Name = "Child Element";
             child.Description = "Child Description";
 
-            Assert.IsTrue(elementLoader.CreateChildElement(conn, parent.ID, child));
+            Assert.IsTrue(_elementLoader.CreateChildElement(_conn, parent.ID, child));
 
-            child = elementLoader.FindByPath(conn, child.Path);
+            child = _elementLoader.FindByPath(_conn, child.Path);
    
             Assert.IsNotNull(child.Name);
             Assert.IsNotNull(child.ID);
@@ -122,15 +136,25 @@ namespace LazyPI_Test.Stubs.Interfaces
             Assert.IsNotNull(child.Description);
             Assert.Equals(child.Parent.ID, parent.ID);
 
-            parent = elementLoader.FindByPath(conn, parent.Path);
+            parent = _elementLoader.FindByPath(_conn, parent.Path);
 
-            Assert.Equals(parent.Elements.Count, 1);
+            //Assert.(parent.Elements.Count, 1);
 
-            AFElement refChild = parent.Elements.First();
+            AFElement refChild = parent.Elements[0];
 
             Console.WriteLine("Test that original child and referenced child are identical.");
             Assert.Equals(child.Name, refChild.Name);
             Assert.Equals(child.Path, refChild.Path);
+
+            Assert.IsTrue(Delete(parent.ID), "Parent Deleted");
+            Assert.IsNull(_elementLoader.Find(_conn, parent.ID), "Assert that parent no longer exists");
+            Assert.IsNull(_elementLoader.Find(_conn, child.ID), "Assert that child no longer exists.");
+        }
+
+        [TestMethod]
+        public bool Delete(string ID)
+        {
+           return _elementLoader.Delete(_conn, ID);
         }
     }
 }
