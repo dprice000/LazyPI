@@ -26,8 +26,8 @@ namespace LazyPI.LazyObjects
 
     public class AFEventFrame : BaseObject
     {
-        private DateTimeOffset _StartTime;
-        private DateTimeOffset _EndTime;
+        private DateTime _StartTime;
+        private DateTime _EndTime;
         private Lazy<AFElementTemplate> _Template;
         private Lazy<AFEventFrames> _EventFrames;
         private Lazy<AFAttributes> _Attributes;
@@ -35,7 +35,7 @@ namespace LazyPI.LazyObjects
         private static IAFEventFrame _EventFrameLoader;
 
         #region "Properties"
-        public DateTimeOffset StartTime
+        public DateTime StartTime
         {
             get
             {
@@ -47,7 +47,7 @@ namespace LazyPI.LazyObjects
             }
         }
 
-        public DateTimeOffset EndTime
+        public DateTime EndTime
         {
             get
             {

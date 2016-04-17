@@ -27,6 +27,17 @@ namespace LazyPI_Test.Controllers
             _conn = new WebAPIConnection(AuthType.Kerberos);
             _server = AFServer.FindByName(_conn, "ServerName");
             _db = _server.Databases["DatabaseName"];
+
+            Console.WriteLine("Test Element Intial Configuration");
+        }
+
+        public static AFElement GenerateElement()
+        {
+            AFElement ele = new AFElement();
+            ele.Name = "Test Element";
+            ele.Description = "This is a unit test element.";
+
+            return ele;
         }
 
         [TestMethod]
@@ -34,7 +45,6 @@ namespace LazyPI_Test.Controllers
         {
             AFElement element = new AFElement();
 
-            Console.WriteLine("Test Element Intial Configuration");
             string name = "Test Element 1";
             element.Name = name;
             Assert.Equals(element.Name, name);
