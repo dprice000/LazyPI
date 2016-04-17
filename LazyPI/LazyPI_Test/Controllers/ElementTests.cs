@@ -13,8 +13,6 @@ namespace LazyPI_Test.Controllers
     [TestClass]
     public class ElementTests
     {
-        AFElementController _elementLoader;
-        AFDatabaseController _dbLoader;
         AFServer _server;
         AFDatabase _db;
         WebAPIConnection _conn;
@@ -22,8 +20,6 @@ namespace LazyPI_Test.Controllers
         [TestInitialize]
         public void Initialize()
         {
-            _elementLoader = new AFElementController();
-            _dbLoader = new AFDatabaseController();
             _conn = new WebAPIConnection(AuthType.Kerberos);
             _server = AFServer.FindByName(_conn, "ServerName");
             _db = _server.Databases["DatabaseName"];
@@ -62,7 +58,7 @@ namespace LazyPI_Test.Controllers
 
             //TODO: There should be more tests for finding the element
 
-            Assert.IsTrue(_elementLoader.Delete(_conn, element.ID), "Delete new element.");
+            Assert.IsTrue(AFElement.Delete(_conn, element.ID), "Delete new element.");
         }
 
         [TestMethod]
@@ -71,7 +67,7 @@ namespace LazyPI_Test.Controllers
             Console.WriteLine("Test Finding Element by Name");
             string name = "Test Element 1";
 
-            AFElement elem = _elementLoader.Find(_conn, name);
+            AFElement elem = AFElement.Find(_conn, name);
 
             Console.WriteLine("Test that found element is fully constructed");
             Assert.Equals(elem.Name, name);
@@ -88,7 +84,7 @@ namespace LazyPI_Test.Controllers
             Console.WriteLine("Test Finding Element by Path");
             string path = "";
 
-            AFElement elem = _elementLoader.FindByPath(_conn, path);
+            AFElement elem = AFElement.FindByPath(_conn, path);
 
             Assert.Equals(elem.Path, path);
             Assert.IsNotNull(elem.Name, "Check names exists.");
@@ -103,15 +99,15 @@ namespace LazyPI_Test.Controllers
             Console.WriteLine("Test updating element settings.");
             string name = "", desc = "";
 
-            AFElement elem = _elementLoader.Find(_conn, name);
+            AFElement elem = AFElement.Find(_conn, name);
             Assert.Equals(elem.Name, name);
             Random ran = new Random();
             name += ran.Next(100).ToString();
             desc += ran.Next(100).ToString();
 
-            Assert.IsTrue(_elementLoader.Update(_conn, elem));
+            elem.CheckIn();
 
-            elem = _elementLoader.Find(_conn, name);
+            elem = AFElement.Find(_conn, name);
 
             Assert.Equals(elem.Name, name);
             Assert.Equals(elem.Description, desc);
@@ -126,8 +122,8 @@ namespace LazyPI_Test.Controllers
             parent.Name = "Parent Element";
             parent.Description = "Parent Desciption";
 
-            Assert.IsTrue(_elementLoader.CreateChildElement(_conn, "", parent));
-            parent = _elementLoader.Find(_conn, parent.Name);
+            _db.CreateElement(parent);
+            parent = AFElement.Find(_conn, parent.Name);
 
             Assert.IsNotNull(parent.ID);
             Assert.IsNotNull(parent.Path);
@@ -136,9 +132,9 @@ namespace LazyPI_Test.Controllers
             child.Name = "Child Element";
             child.Description = "Child Description";
 
-            Assert.IsTrue(_elementLoader.CreateChildElement(_conn, parent.ID, child));
+            parent.Elements.Add(child);
 
-            child = _elementLoader.FindByPath(_conn, child.Path);
+            child = AFElement.FindByPath(_conn, child.Path);
    
             Assert.IsNotNull(child.Name);
             Assert.IsNotNull(child.ID);
@@ -146,7 +142,7 @@ namespace LazyPI_Test.Controllers
             Assert.IsNotNull(child.Description);
             Assert.Equals(child.Parent.ID, parent.ID);
 
-            parent = _elementLoader.FindByPath(_conn, parent.Path);
+            parent = AFElement.FindByPath(_conn, parent.Path);
 
             //Assert.(parent.Elements.Count, 1);
 
@@ -156,9 +152,9 @@ namespace LazyPI_Test.Controllers
             Assert.Equals(child.Name, refChild.Name);
             Assert.Equals(child.Path, refChild.Path);
 
-            Assert.IsTrue(_elementLoader.Delete(_conn, parent.ID), "Parent Deleted");
-            Assert.IsNull(_elementLoader.Find(_conn, parent.ID), "Assert that parent no longer exists");
-            Assert.IsNull(_elementLoader.Find(_conn, child.ID), "Assert that child no longer exists.");
+            Assert.IsTrue(AFElement.Delete(_conn, parent.ID), "Parent Deleted");
+            Assert.IsNull(AFElement.Find(_conn, parent.ID), "Assert that parent no longer exists");
+            Assert.IsNull(AFElement.Find(_conn, child.ID), "Assert that child no longer exists.");
         }
 
         [TestMethod]
@@ -197,7 +193,7 @@ namespace LazyPI_Test.Controllers
             Assert.IsNotNull(attr.Name);
             Assert.IsNotNull(attr.Description);
             Assert.IsNotNull(attr.Path);
-            Assert.IsTrue(_elementLoader.Delete(_conn, element.ID), "Delete new element.");
+            Assert.IsTrue(AFElement.Delete(_conn, element.ID), "Delete new element.");
         }
     }
 }
