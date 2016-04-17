@@ -7,13 +7,13 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-    public class AFAttributes : AFObjectCollection<AFAttribute>
+    public class AFAttributes : System.Collections.ObjectModel.ObservableCollection<AFAttribute>
     {
         public AFAttribute this[string Name]
         {
             get
             {
-                return _objects.Single(x => x.Name == Name);
+                return this.Single(x => x.Name == Name);
             }
         }
 

@@ -156,15 +156,48 @@ namespace LazyPI_Test.Controllers
             Assert.Equals(child.Name, refChild.Name);
             Assert.Equals(child.Path, refChild.Path);
 
-            Assert.IsTrue(Delete(parent.ID), "Parent Deleted");
+            Assert.IsTrue(_elementLoader.Delete(_conn, parent.ID), "Parent Deleted");
             Assert.IsNull(_elementLoader.Find(_conn, parent.ID), "Assert that parent no longer exists");
             Assert.IsNull(_elementLoader.Find(_conn, child.ID), "Assert that child no longer exists.");
         }
 
         [TestMethod]
-        public bool Delete(string ID)
+        public void CreateAttribute()
         {
-           return _elementLoader.Delete(_conn, ID);
+            AFElement element = new AFElement();
+
+            string name = "Test Element 1";
+            element.Name = name;
+            Assert.Equals(element.Name, name);
+
+            string desc = "Lazy PI Unit Test Element";
+            element.Description = desc;
+            Assert.Equals(element.Description, desc);
+
+            Console.WriteLine("Test element creation.");
+
+            Assert.IsTrue(_db.CreateElement(element), "Assert creation passed");
+
+            element = _db.Elements[element.Name];
+
+            //Check that the the element can be found through the AFDB
+            Assert.IsNotNull(element, "Check AFDB element collection for new element.");
+
+            AFAttribute attr = new AFAttribute();
+            attr.Name = "Test Attribute";
+            attr.Description = "Created by WebAPI tests";
+
+            element.Attributes.Add(attr);
+
+            Assert.Equals(element.Attributes.Count, 1);
+            attr = element.Attributes[attr.Name];
+
+            Assert.IsNotNull(attr);
+            Assert.IsNotNull(attr.ID);
+            Assert.IsNotNull(attr.Name);
+            Assert.IsNotNull(attr.Description);
+            Assert.IsNotNull(attr.Path);
+            Assert.IsTrue(_elementLoader.Delete(_conn, element.ID), "Delete new element.");
         }
     }
 }

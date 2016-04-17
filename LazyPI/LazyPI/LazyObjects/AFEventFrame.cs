@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
-    public class AFEventFrames : AFObjectCollection<AFEventFrame>
+    public class AFEventFrames : ObservableCollection<AFEventFrame>
     {
         public AFEventFrame this[string Name]
         {
             get
             {
-                return _objects.Single(x => x.Name == Name);
+                return this.Single(x => x.Name == Name);
             }
         }
 

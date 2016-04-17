@@ -15,7 +15,7 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return new AFElements(_DBLoader.GetElements(_Connection));
+                return new AFElements(_DBLoader.GetElements(_Connection, _ID));
             }
         }
 
@@ -23,7 +23,7 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return new AFEventFrames(_DBLoader.GetEventFrames(_Connection));
+                return new AFEventFrames(_DBLoader.GetEventFrames(_Connection, _ID));
             }
         }
 
@@ -43,12 +43,12 @@ namespace LazyPI.LazyObjects
         #region "Interacitons"
             public bool CreateElement(AFElement Element)
             {
-                return _DBLoader.CreateElement(_Connection, Element);
+                return _DBLoader.CreateElement(_Connection, _ID, Element);
             }
 
             public bool CreateEventFrame(AFEventFrame Frame)
             {
-                return _DBLoader.CreateEventFrame(_Connection, Frame);
+                return _DBLoader.CreateEventFrame(_Connection, _ID, Frame);
             }
 
             public void CheckIn()
@@ -58,7 +58,7 @@ namespace LazyPI.LazyObjects
         #endregion
     }
 
-    public class AFDatabases : LazyPI.Common.AFObjectCollection<AFDatabase>
+    public class AFDatabases : System.Collections.ObjectModel.ObservableCollection<AFDatabase>
     {
         internal AFDatabases(IEnumerable<AFDatabase> databases) : base(databases)
         {
@@ -70,7 +70,7 @@ namespace LazyPI.LazyObjects
             {
                 get
                 {
-                    return _objects.Single(x => x.Name == Name);
+                    return this.Single(x => x.Name == Name);
                 }
             }
         #endregion

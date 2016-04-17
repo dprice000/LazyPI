@@ -13,9 +13,9 @@ namespace LazyPI.LazyObjects
         AFDatabase FindByPath(Connection Connection, string Path);
         bool Update(Connection Connection, AFDatabase AFDB);
         bool Delete(Connection Connection, string DatabaseID);
-        bool CreateElement(Connection Connection, AFElement Element);
-        bool CreateEventFrame(Connection Connection, AFEventFrame EventFrame);
-        IEnumerable<AFElement> GetElements(Connection Connection);
-        IEnumerable<AFEventFrame> GetEventFrames(Connection Connection);
+        bool CreateElement(Connection Connection, string DatabaseID, AFElement Element);
+        bool CreateEventFrame(Connection Connection, string DatabaseID, AFEventFrame EventFrame);
+        IEnumerable<AFElement> GetElements(Connection Connection, string DatabaseID);
+        IEnumerable<AFEventFrame> GetEventFrames(Connection Connection, string DatabaseID);
     }
 }

@@ -9,7 +9,7 @@ namespace LazyPI.WebAPI
 {
     public class AFServerController : LazyObjects.IAFServerController
     {
-         LazyPI.LazyObjects.AFServer Find(LazyPI.Common.Connection Connection, string ID)
+        public LazyPI.LazyObjects.AFServer Find(LazyPI.Common.Connection Connection, string ID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetservers/{webId}");
@@ -57,7 +57,7 @@ namespace LazyPI.WebAPI
             return new LazyObjects.AFServer(Connection, data.WebID, data.Name, data.Description, data.IsConnected, data.ServerVersion, data.Path);
         }
 
-        IEnumerable<LazyObjects.AFServer> List(LazyPI.Common.Connection Connection)
+        public IEnumerable<LazyObjects.AFServer> List(LazyPI.Common.Connection Connection)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetservers");
@@ -78,10 +78,11 @@ namespace LazyPI.WebAPI
             return results;
         }
 
-        public IEnumerable<LazyPI.LazyObjects.AFDatabase> GetDatabases(LazyPI.Common.Connection Connection)
+        public IEnumerable<LazyPI.LazyObjects.AFDatabase> GetDatabases(LazyPI.Common.Connection Connection, string AFServerID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetservers/{webId}/assetdatabases");
+            request.AddUrlSegment("webId", AFServerID);
 
             var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFDB>>(request);
 
@@ -123,7 +124,7 @@ namespace LazyPI.WebAPI
             return results;
         }
 
-        bool CreateAssetDatabase(LazyPI.Common.Connection Connection, string AFServerID, LazyObjects.AFDatabase AFDB)
+        public bool CreateAssetDatabase(LazyPI.Common.Connection Connection, string AFServerID, LazyObjects.AFDatabase AFDB)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetservers/{webId}/assetdatabases", Method.POST);
@@ -135,7 +136,7 @@ namespace LazyPI.WebAPI
             return ((int)statusCode == 201);
         }
 
-        bool CreateUnitClass(LazyPI.Common.Connection Connection, string AFServerID, LazyObjects.AFUnit UnitClass)
+        public bool CreateUnitClass(LazyPI.Common.Connection Connection, string AFServerID, LazyObjects.AFUnit UnitClass)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetservers/{webId}/unitclasses", Method.POST);

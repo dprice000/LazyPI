@@ -159,9 +159,5 @@ namespace LazyPI.Common
             _Path = path;
         }
         #endregion
-
-        public abstract void CheckIn()
-        {
-        }
     }
 }

@@ -8,19 +8,26 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-	public class AFElements : AFObjectCollection<AFElement>
+	public class AFElements : ObservableCollection<AFElement>
 	{
 		public AFElement this[string Name]
 		{
 			get
 			{
-				return _objects.Single(x => x.Name == Name);
+				return this.Single(x => x.Name == Name);
 			}
 		}
 
 		internal AFElements(IEnumerable<AFElement> elements) : base(elements)
 		{
 		}
+
+        protected override void InsertItem(int index, AFElement item)
+        {
+            base.InsertItem(index, item);
+
+
+        }
 	}
 
 	public class AFElement : BaseObject
@@ -28,8 +35,6 @@ namespace LazyPI.LazyObjects
 		private Lazy<AFElementTemplate> _Template;
 		private Lazy<AFElement> _Parent;
 		private Lazy<ObservableCollection<string>> _Categories;
-		private Lazy<AFElements> _Elements;
-		private Lazy<AFAttributes> _Attributes;
 		private static IAFElementController _ElementLoader;
 
 		#region "Properties"
@@ -61,7 +66,10 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-					return _Elements.Value; 
+					return new AFElements(_ElementLoader.GetElements(_Connection, _ID)); 
+				}
+				set
+				{
 				}
 			}
 
@@ -69,7 +77,10 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-					return _Attributes.Value;
+					return new AFAttributes(_ElementLoader.GetAttributes(_Connection, _ID));
+				}
+				set
+				{
 				}
 			}
 		#endregion
@@ -111,22 +122,6 @@ namespace LazyPI.LazyObjects
 				_Parent = new Lazy<AFElement>(() =>
 				{
 					return _ElementLoader.FindByPath(_Connection, parentPath);
-				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-
-				//Initialize Attributes Loader
-				_Attributes = new Lazy<AFAttributes>(() => 
-				{
-					List<LazyObjects.AFAttribute> resultList = _ElementLoader.GetAttributes(_Connection, this.ID).ToList();
-					AFAttributes obsList = new AFAttributes(resultList);
-				
-					return obsList;
-				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-
-				//Initialize Children Loader
-				_Elements = new Lazy<AFElements>(() =>
-				{
-					List<LazyObjects.AFElement> resultList = _ElementLoader.GetElements(_Connection, this.ID).ToList();
-					return new AFElements(resultList);
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 			}
 

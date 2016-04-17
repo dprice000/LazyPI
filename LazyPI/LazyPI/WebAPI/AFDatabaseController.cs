@@ -9,7 +9,7 @@ namespace LazyPI.WebAPI
 {
     public class AFDatabaseController : LazyPI.LazyObjects.IAFDatabaseController
     {
-        LazyPI.LazyObjects.AFDatabase Find(LazyPI.Common.Connection Connection, string ID)
+        public LazyPI.LazyObjects.AFDatabase Find(LazyPI.Common.Connection Connection, string ID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetdatabases/{webId}");
@@ -25,7 +25,7 @@ namespace LazyPI.WebAPI
             return new LazyObjects.AFDatabase(Connection, data.WebID, data.Name, data.Description, data.Path);
         }
 
-        public LazyObjects.AFAttribute FindByPath(LazyPI.Common.Connection Connection, string Path)
+        public LazyObjects.AFDatabase FindByPath(LazyPI.Common.Connection Connection, string Path)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetdatabases");
@@ -38,7 +38,7 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFAttribute(Connection, data.WebID, data.Name, data.Description, data.Path);
+            return new LazyObjects.AFDatabase(Connection, data.WebID, data.Name, data.Description, data.Path);
         }
 
         public bool Update(LazyPI.Common.Connection Connection, LazyPI.LazyObjects.AFDatabase AFDB)
@@ -64,11 +64,11 @@ namespace LazyPI.WebAPI
             return ((int)statusCode == 204);
         }
 
-        public bool CreateElement(LazyPI.Common.Connection Connection, LazyPI.LazyObjects.AFElement Element)
+        public bool CreateElement(LazyPI.Common.Connection Connection, string DatabaseID, LazyPI.LazyObjects.AFElement Element)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetdatabases/{webId}/elements", Method.POST);
-            request.AddUrlSegment("webId", Element.ID);
+            request.AddUrlSegment("webId", DatabaseID);
             request.AddBody(Element);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
@@ -76,7 +76,7 @@ namespace LazyPI.WebAPI
             return ((int)statusCode == 204);
         }
 
-        public bool CreateEventFrame(LazyPI.Common.Connection Connection, string DatabaseID, LazyPI.LazyObjects.AFElement EventFrame)
+        public bool CreateEventFrame(LazyPI.Common.Connection Connection, string DatabaseID, LazyPI.LazyObjects.AFEventFrame EventFrame)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetdatabases/{webId}/eventframes", Method.POST);
