@@ -28,7 +28,7 @@ namespace LazyPI.LazyObjects
         private string _AttrType;
         private IEnumerable<string> _Categories;
         private string _ConfigString;
-        private static IAFAttribute _AttrLoader;
+        private static IAFAttributeController _AttrLoader;
 
         #region "Properties"
         public IEnumerable<string> Categories
@@ -116,7 +116,7 @@ namespace LazyPI.LazyObjects
         {
             if (_Connection is WebAPI.WebAPIConnection)
             {
-                _AttrLoader = new WebAPI.AFAttributeConnector();
+                _AttrLoader = new WebAPI.AFAttributeController();
             }
         }
         #endregion

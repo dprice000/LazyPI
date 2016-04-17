@@ -15,7 +15,7 @@ namespace LazyPI.LazyObjects
         private double _ReferenceFactor;
         private double _ReferenceOffset;
         private string _ReferenceUnitAbbreviation;
-        private static IAFUnit _UnitLoader;
+        private static IAFUnitController _UnitLoader;
 
         #region "Properties"
 

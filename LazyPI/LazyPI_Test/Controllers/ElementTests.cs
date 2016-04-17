@@ -13,8 +13,8 @@ namespace LazyPI_Test.Controllers
     [TestClass]
     public class ElementTests
     {
-        AFElementConnector _elementLoader;
-        AFDatabaseConnector _dbLoader;
+        AFElementController _elementLoader;
+        AFDatabaseController _dbLoader;
         AFServer _server;
         AFDatabase _db;
         WebAPIConnection _conn;
@@ -22,8 +22,8 @@ namespace LazyPI_Test.Controllers
         [TestInitialize]
         public void Initialize()
         {
-            _elementLoader = new AFElementConnector();
-            _dbLoader = new AFDatabaseConnector();
+            _elementLoader = new AFElementController();
+            _dbLoader = new AFDatabaseController();
             _conn = new WebAPIConnection(AuthType.Kerberos);
             _server = AFServer.FindByName(_conn, "ServerName");
             _db = _server.Databases["DatabaseName"];

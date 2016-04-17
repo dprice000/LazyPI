@@ -8,8 +8,8 @@ namespace LazyPI_Test.Controllers
     [TestClass]
     public class EventFrameTests
     {
-        AFEventFrameConnector _frameLoader;
-        AFDatabaseConnector _dbLoader;
+        AFEventFrameController _frameLoader;
+        AFDatabaseController _dbLoader;
         AFServer _server;
         AFDatabase _db;
         WebAPIConnection _conn;
@@ -17,8 +17,8 @@ namespace LazyPI_Test.Controllers
         [TestInitialize]
         public void Initialize()
         {
-            _frameLoader = new AFEventFrameConnector();
-            _dbLoader = new AFDatabaseConnector();
+            _frameLoader = new AFEventFrameController();
+            _dbLoader = new AFDatabaseController();
             _conn = new WebAPIConnection(AuthType.Kerberos);
             _server = AFServer.FindByName(_conn, "ServerName");
             _db = _server.Databases["DatabaseName"];

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-    public class AFAttributeConnector : LazyObjects.IAFAttribute
+    public class AFAttributeController : LazyObjects.IAFAttributeController
     {
         /// <summary>
         /// Returns the AF Attribute specified by the WebID.

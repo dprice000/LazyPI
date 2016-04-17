@@ -8,7 +8,7 @@ using RestSharp;
 
 namespace LazyPI.WebAPI
 {
-	public class AFAttributeTemplateConnector : LazyObjects.IAFAttributeTemplate
+	public class AFAttributeTemplateController : LazyObjects.IAFAttributeTemplateController
 	{
 		public LazyObjects.AFAttributeTemplate Find(LazyPI.Common.Connection Connection, string AttrTempID)
 		{

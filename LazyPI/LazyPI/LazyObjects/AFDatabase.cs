@@ -9,7 +9,7 @@ namespace LazyPI.LazyObjects
 {
     public class AFDatabase : BaseObject
     {
-        private IAFDatabase _DBLoader;
+        private IAFDatabaseController _DBLoader;
 
         public AFElements Elements
         {
@@ -36,7 +36,7 @@ namespace LazyPI.LazyObjects
             private void Initialize()
             {
                 if(_Connection is LazyPI.WebAPI.WebAPIConnection)
-                    _DBLoader = new LazyPI.WebAPI.AFDatabaseConnector();
+                    _DBLoader = new LazyPI.WebAPI.AFDatabaseController();
             }
         #endregion
 

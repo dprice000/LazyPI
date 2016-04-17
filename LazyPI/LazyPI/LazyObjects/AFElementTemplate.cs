@@ -13,7 +13,7 @@ namespace LazyPI.LazyObjects
         private IEnumerable<string> _CategoryList;
         private Lazy<ObservableCollection<string>> _Categories;
         private bool _IsExtendable;
-        private static IAFElementTemplate _templateLoader;
+        private static IAFElementTemplateContoller _templateLoader;
 
         #region "Properties"
             public ObservableCollection<string> Categories

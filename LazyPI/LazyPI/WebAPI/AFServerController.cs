@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-    public class AFServerConnector : LazyObjects.IAFServer
+    public class AFServerController : LazyObjects.IAFServerController
     {
         
     }

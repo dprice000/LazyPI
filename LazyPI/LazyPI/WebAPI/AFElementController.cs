@@ -9,7 +9,7 @@ using ResponseModels = LazyPI.WebAPI.ResponseModels;
 
 namespace LazyPI.WebAPI
 {
-	public class AFElementConnector : LazyObjects.IAFElement
+	public class AFElementController : LazyObjects.IAFElementController
 	{
 		// These functions have direct references to WebAPI calls
 		#region "Public Methods"

@@ -11,7 +11,7 @@ namespace LazyPI.LazyObjects
     {
         private bool _IsConnected;
         private string _ServerVersion;
-        private static IAFServer _ServerConnector;
+        private static IAFServerController _ServerConnector;
         private static Lazy<AFDatabases> _Databases;
 
         #region "Properties"
@@ -62,7 +62,7 @@ namespace LazyPI.LazyObjects
             {
                 if(_Connection is WebAPI.WebAPIConnection)
                 {
-                    _ServerConnector = new WebAPI.AFServerConnector();
+                    _ServerConnector = new WebAPI.AFServerController();
                 }
             }
         #endregion

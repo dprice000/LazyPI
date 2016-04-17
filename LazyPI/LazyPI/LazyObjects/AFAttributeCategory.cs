@@ -9,7 +9,7 @@ namespace LazyPI.LazyObjects
 {
     public class AFAttributeCategory : BaseObject
     {
-        private IAFAttributeCategory _CategoryLoader;
+        private IAFAttributeCategoryController _CategoryLoader;
 
         private void Initialize()
         { 

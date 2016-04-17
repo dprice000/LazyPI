@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
-    public interface IAFUnit
+    public interface IAFUnitController
     {
         AFUnit Find(Connection Connection, string ID);
         AFUnit FindByPath(Connection Connection, string Path);

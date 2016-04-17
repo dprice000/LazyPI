@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
-    public interface IAFElement
+    public interface IAFElementController
     {
         AFElement Find(Connection Connection, string ElementID);
         AFElement FindByPath(Connection Connection, string Path);

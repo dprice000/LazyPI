@@ -7,7 +7,7 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-    public interface IAFDatabase
+    public interface IAFDatabaseController
     {
         AFDatabase Find(Connection Connection, string ID);
         AFDatabase FindByPath(Connection Connection, string Path);

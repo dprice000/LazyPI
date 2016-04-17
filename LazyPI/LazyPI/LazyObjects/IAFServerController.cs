@@ -7,7 +7,7 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-    public interface IAFServer
+    public interface IAFServerController
     {
         AFServer Find(Connection Connection, string ServerID);
         AFServer FindByPath(Connection Connection, string Path);

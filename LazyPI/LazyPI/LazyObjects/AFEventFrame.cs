@@ -32,7 +32,7 @@ namespace LazyPI.LazyObjects
         private Lazy<AFEventFrames> _EventFrames;
         private Lazy<AFAttributes> _Attributes;
         private ObservableCollection<string> _CategoryNames;
-        private static IAFEventFrame _EventFrameLoader;
+        private static IAFEventFrameController _EventFrameLoader;
 
         #region "Properties"
         public DateTime StartTime
@@ -116,7 +116,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Connection is WebAPI.WebAPIConnection)
                 {
-                    _EventFrameLoader = new WebAPI.AFEventFrameConnector();
+                    _EventFrameLoader = new WebAPI.AFEventFrameController();
                 }
             }
         #endregion

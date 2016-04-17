@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
-    public interface IAFEventFrame
+    public interface IAFEventFrameController
     {
         AFEventFrame Find(Connection Connection, string FrameID);
         AFEventFrame FindByPath(Connection Connection, string Path);

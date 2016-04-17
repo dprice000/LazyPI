@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
-    public interface IAFAttributeCategory
+    public interface IAFAttributeCategoryController
     {
         AFAttributeCategory Find(Connection Connection, string ID);
         AFAttributeCategory FindByPath(Connection Connection, string Path);

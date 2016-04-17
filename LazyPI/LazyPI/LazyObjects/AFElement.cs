@@ -30,7 +30,7 @@ namespace LazyPI.LazyObjects
 		private Lazy<ObservableCollection<string>> _Categories;
 		private Lazy<AFElements> _Elements;
 		private Lazy<AFAttributes> _Attributes;
-		private static IAFElement _ElementLoader;
+		private static IAFElementController _ElementLoader;
 
 		#region "Properties"
 			public ObservableCollection<string> Categories
@@ -134,7 +134,7 @@ namespace LazyPI.LazyObjects
 			{
 				if (_Connection is WebAPI.WebAPIConnection)
 				{
-					_ElementLoader = new WebAPI.AFElementConnector();
+					_ElementLoader = new WebAPI.AFElementController();
 				}
 			}
 		#endregion
