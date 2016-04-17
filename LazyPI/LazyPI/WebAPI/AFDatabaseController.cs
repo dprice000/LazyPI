@@ -9,7 +9,6 @@ namespace LazyPI.WebAPI
 {
     public class AFDatabaseController : LazyPI.LazyObjects.IAFDatabaseController
     {
-
         LazyPI.LazyObjects.AFDatabase Find(LazyPI.Common.Connection Connection, string ID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
