@@ -48,7 +48,6 @@ namespace LazyPI.WebAPI
             request.AddUrlSegment("webId", AFDB.ID);
 
             ResponseModels.AFDB body = new ResponseModels.AFDB(AFDB.WebID, AFDB.ID, AFDB.Name, AFDB.Description, AFDB.Path);
-
             request.AddBody(body);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;

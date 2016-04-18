@@ -53,13 +53,7 @@ namespace LazyPI.WebAPI
 				var request = new RestRequest("/elements/{webId}", Method.PATCH);
 				request.AddUrlSegment("webId", Element.ID);
 
-				ResponseModels.AFElement temp = new ResponseModels.AFElement();
-				temp.WebID = Element.ID;
-				temp.Name = Element.Name;
-				temp.Description = Element.Description;
-				temp.Path = Element.Path;
-				temp.CategoryNames = Element.Categories.ToList();
-				temp.TemplateName = Element.Template.Name;
+				ResponseModels.AFElement temp = new ResponseModels.AFElement(Element.ID, Element.WebID, Element.Name, Element.Description, Element.Path);
 
 				request.AddBody(temp);
 

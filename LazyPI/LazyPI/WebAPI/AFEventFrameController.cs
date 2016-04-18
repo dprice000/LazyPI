@@ -52,7 +52,11 @@ namespace LazyPI.WebAPI
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/eventframes/{webId}", Method.PATCH);
 			request.AddUrlSegment("webId", Eventframe.ID);
-			request.AddBody(Eventframe);
+
+			ResponseModels.AFEventFrame frame = new ResponseModels.AFEventFrame(Eventframe.ID, Eventframe.WebID, Eventframe.Name, Eventframe.Description, Eventframe.Path);
+			frame.StartTime = Eventframe.StartTime;
+			frame.EndTime = Eventframe.EndTime;
+			request.AddBody(frame);
 
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
 

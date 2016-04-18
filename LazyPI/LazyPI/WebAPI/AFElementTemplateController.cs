@@ -52,7 +52,10 @@ namespace LazyPI.WebAPI
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/elementtemplates/{webId}", Method.PATCH);
 			request.AddUrlSegment("webId", template.ID);
-			request.AddBody(template);
+            ResponseModels.AFElementTemplate temp = new ResponseModels.AFElementTemplate(template.ID, template.WebID, template.Name, template.Description, template.Path);
+            temp.AllowElementToExtend = template.IsExtendable;
+
+			request.AddBody(temp);
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
 
 			return ((int)statusCode == 204);
