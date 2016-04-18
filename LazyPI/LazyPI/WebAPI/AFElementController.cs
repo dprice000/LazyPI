@@ -244,7 +244,7 @@ namespace LazyPI.WebAPI
 
 				foreach (var element in data.Items)
 				{
-					results.Add(new LazyObjects.AFElement(Connection, element.WebID, element.Name, element.Description, element.Path));
+					results.Add(new LazyObjects.AFElement(Connection, element.WebID, element.ID, element.Name, element.Description, element.Path));
 				}
 
 				return results;
