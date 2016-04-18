@@ -279,7 +279,7 @@ namespace LazyPI.WebAPI
 
 				foreach (ResponseModels.AFEventFrame frame in data.Items)
 				{
-					results.Add(new LazyObjects.AFEventFrame(Connection, frame.WebID, frame.Name, frame.Description, frame.Path));
+					results.Add(new LazyObjects.AFEventFrame(Connection, frame.WebID, frame.ID, frame.Name, frame.Description, frame.Path));
 				}
 
 				return results;
