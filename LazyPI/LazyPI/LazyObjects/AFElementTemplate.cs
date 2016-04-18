@@ -38,8 +38,8 @@ namespace LazyPI.LazyObjects
             {
             }
 
-            internal AFElementTemplate(Connection Connection, string ID, string Name, string Description, string Path)
-                : base(Connection, ID, Name, Description, Path)
+            internal AFElementTemplate(Connection Connection, string WebID, string ID, string Name, string Description, string Path)
+                : base(Connection, WebID, ID, Name, Description, Path)
             {
                 Initialize();
             }
@@ -100,12 +100,12 @@ namespace LazyPI.LazyObjects
             {
                 public static AFElementTemplate CreateInstance(Connection Connection, BaseObject bObj)
                 {
-                    return new AFElementTemplate(Connection, bObj.ID, bObj.Name, bObj.Description, bObj.Path);
+                    return new AFElementTemplate(Connection, bObj.WebID, bObj.ID, bObj.Name, bObj.Description, bObj.Path);
                 }
 
-                public static AFElementTemplate CreateInstance(Connection Connection, string ID, string Name, string Description, string Path)
+                public static AFElementTemplate CreateInstance(Connection Connection, string WebID, string ID, string Name, string Description, string Path)
                 {
-                    return new AFElementTemplate(Connection, ID, Name, Description, Path);
+                    return new AFElementTemplate(Connection, WebID, ID, Name, Description, Path);
                 }
             }
         #endregion

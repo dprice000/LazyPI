@@ -193,6 +193,12 @@ namespace LazyPI_Test.Controllers
             Assert.IsNotNull(attr.Name);
             Assert.IsNotNull(attr.Description);
             Assert.IsNotNull(attr.Path);
+
+            string val = "Test string";
+
+            attr.SetValue(new AFValue(val));
+            Assert.Equals(attr.GetValue().Value, val);
+
             Assert.IsTrue(AFElement.Delete(_conn, element.ID), "Delete new element.");
         }
     }

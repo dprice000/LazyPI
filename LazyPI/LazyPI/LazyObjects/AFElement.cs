@@ -90,8 +90,8 @@ namespace LazyPI.LazyObjects
 			{
 			}
 
-			internal AFElement(Connection Connection, string ID, string Name, string Description, string Path)
-				: base(Connection, ID, Name, Description, Path)
+			internal AFElement(Connection Connection, string WebID, string ID, string Name, string Description, string Path)
+				: base(Connection, WebID, ID, Name, Description, Path)
 			{
 				Initialize();
 			}

@@ -27,7 +27,7 @@ namespace LazyPI.WebAPI
 				}
 
 				ResponseModels.AFElement data = response.Data;
-				return new LazyObjects.AFElement(Connection, data.WebID, data.Name, data.Description, data.Path);
+				return new LazyObjects.AFElement(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
 			}
 
 			public LazyObjects.AFElement FindByPath(LazyPI.Common.Connection Connection, string Path)
@@ -44,7 +44,7 @@ namespace LazyPI.WebAPI
 					throw new ApplicationException("Error finding element by path. (See Inner Details)", response.ErrorException);
 				}
 
-				return new LazyObjects.AFElement(Connection, data.WebID, data.Name, data.Description, data.Path);
+				return new LazyObjects.AFElement(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
 			}
 
 			public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFElement Element)

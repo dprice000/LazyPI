@@ -26,7 +26,7 @@ namespace LazyPI.WebAPI
 
 			var data = response.Data;
 
-			return new LazyObjects.AFEventFrame(Connection, data.WebID, data.Name, data.Description, data.Path);
+			return new LazyObjects.AFEventFrame(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
 		}
 
 		public LazyObjects.AFEventFrame FindByPath(LazyPI.Common.Connection Connection, string Path)
@@ -44,7 +44,7 @@ namespace LazyPI.WebAPI
 
 			var data = response.Data;
 
-			return new LazyObjects.AFEventFrame(Connection, data.WebID, data.Name, data.Description, data.Path);
+			return new LazyObjects.AFEventFrame(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
 		}
 
 		public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFEventFrame Eventframe)
@@ -141,7 +141,7 @@ namespace LazyPI.WebAPI
 
 			foreach(ResponseModels.AFAttribute attr in data)
 			{
-				results.Add(new LazyObjects.AFAttribute(Connection, attr.ID, attr.Name, attr.Description, attr.Path));
+				results.Add(new LazyObjects.AFAttribute(Connection, attr.WebID, attr.ID, attr.Name, attr.Description, attr.Path));
 			}
 
 			return results;
@@ -236,7 +236,7 @@ namespace LazyPI.WebAPI
 
 			foreach (var frame in data.Items)
 			{
-				results.Add(new LazyObjects.AFEventFrame(Connection, frame.WebID, frame.Name, frame.Description, frame.Path));
+				results.Add(new LazyObjects.AFEventFrame(Connection, frame.WebID, frame.ID, frame.Name, frame.Description, frame.Path));
 			}
 
 			return results;

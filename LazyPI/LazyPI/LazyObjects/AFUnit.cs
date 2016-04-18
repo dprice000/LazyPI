@@ -75,7 +75,7 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-        internal AFUnit(Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
+        internal AFUnit(Connection Connection, string WebID, string ID, string Name, string Description, string Path) : base(Connection, WebID, ID, Name, Description, Path)
         {
             Initialize();
         }
@@ -90,13 +90,13 @@ namespace LazyPI.LazyObjects
         public AFUnit Find(Connection Connection, string ID)
         {
             BaseObject baseObj = _UnitLoader.Find(Connection, ID);
-            return new AFUnit(Connection, baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
+            return new AFUnit(Connection, baseObj.WebID, baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
         }
 
         public AFUnit FindByPath(Connection Connection, string Path)
         {
             BaseObject baseObj = _UnitLoader.FindByPath(Connection, Path);
-            return new AFUnit(Connection, baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
+            return new AFUnit(Connection, baseObj.WebID, baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
         }
 
         public static bool Delete(Connection Connection, string ID)

@@ -41,7 +41,7 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Constructors"
-            internal AFServer(Connection Connection, string ID, string Name, string Description, bool IsConnected , string ServerVersion, string Path) : base(Connection, ID, Name, Description, Path)
+            internal AFServer(Connection Connection, string WebID, string ID, string Name, string Description, bool IsConnected , string ServerVersion, string Path) : base(Connection, WebID, ID, Name, Description, Path)
             {
                 Initialize();
                 _IsConnected = IsConnected;

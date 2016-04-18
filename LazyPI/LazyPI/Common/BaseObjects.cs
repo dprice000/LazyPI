@@ -93,6 +93,7 @@ namespace LazyPI.Common
     {
         protected LazyPI.Common.Connection _Connection;
         protected string _ID;
+        protected string _WebID;
         protected string _Name;
         protected string _Path;
         protected string _Description;
@@ -103,6 +104,14 @@ namespace LazyPI.Common
             get
             {
                 return _ID;
+            }
+        }
+
+        public string WebID
+        {
+            get
+            {
+                return _WebID;
             }
         }
 
@@ -150,13 +159,14 @@ namespace LazyPI.Common
             _Description = Description;
         }
 
-        public BaseObject(LazyPI.Common.Connection Connection, string id, string name, string description, string path)
+        public BaseObject(LazyPI.Common.Connection Connection, string webId, string id, string name, string description, string path)
         {
             _Connection = Connection;
             _ID = id;
             _Name = name;
             _Description = description;
             _Path = path;
+            _WebID = webId;
         }
         #endregion
     }

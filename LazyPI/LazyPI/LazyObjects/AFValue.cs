@@ -76,6 +76,16 @@ namespace LazyPI.LazyObjects
         {
         }
 
+        public AFValue(string value)
+        {
+            _Value = value;
+        }
+
+        public AFValue(object value)
+        {
+            _Value = value.ToString();
+        }
+
         internal AFValue(DateTime TimeStamp, string Value, string Units, bool Good, bool Questionable, bool Substituted)
         {
             _Timestamp = TimeStamp;

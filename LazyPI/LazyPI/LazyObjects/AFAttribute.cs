@@ -99,7 +99,7 @@ namespace LazyPI.LazyObjects
         {
         }
 
-        internal AFAttribute(LazyPI.Common.Connection Connection, string ID, string Name, string Description, string Path) : base(Connection, ID, Name, Description, Path)
+        internal AFAttribute(LazyPI.Common.Connection Connection,string WebID, string ID, string Name, string Description, string Path) : base(Connection, WebID, ID, Name, Description, Path)
         {
             Initialize();
         }
@@ -107,7 +107,7 @@ namespace LazyPI.LazyObjects
         /// <summary>
         /// Initialize all lazy loaded objects
         /// </summary>
-        public void Initialize()
+        private void Initialize()
         {
             CreateLoader();
         }

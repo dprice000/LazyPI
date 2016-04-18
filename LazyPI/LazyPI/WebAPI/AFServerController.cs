@@ -22,7 +22,7 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFServer(Connection, data.WebID, data.Name, data.Description, data.IsConnected, data.ServerVersion, data.Path);
+            return new LazyObjects.AFServer(Connection, data.WebID, data.ID, data.Name, data.Description, data.IsConnected, data.ServerVersion, data.Path);
         }
 
         public LazyObjects.AFServer FindByPath(LazyPI.Common.Connection Connection, string Path)
@@ -38,7 +38,7 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFServer(Connection, data.WebID, data.Name, data.Description, data.IsConnected, data.ServerVersion, data.Path);
+            return new LazyObjects.AFServer(Connection, data.WebID, data.ID, data.Name, data.Description, data.IsConnected, data.ServerVersion, data.Path);
         }
 
         public LazyObjects.AFServer FindByName(LazyPI.Common.Connection Connection, string Name)
@@ -54,7 +54,7 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFServer(Connection, data.WebID, data.Name, data.Description, data.IsConnected, data.ServerVersion, data.Path);
+            return new LazyObjects.AFServer(Connection, data.WebID, data.ID, data.Name, data.Description, data.IsConnected, data.ServerVersion, data.Path);
         }
 
         public IEnumerable<LazyObjects.AFServer> List(LazyPI.Common.Connection Connection)
@@ -72,7 +72,7 @@ namespace LazyPI.WebAPI
 
             foreach(var server in response.Data.Items)
             {
-                results.Add(new LazyObjects.AFServer(Connection, server.ID, server.Name, server.Description, server.IsConnected, server.ServerVersion, server.Path));
+                results.Add(new LazyObjects.AFServer(Connection, server.WebID, server.ID, server.Name, server.Description, server.IsConnected, server.ServerVersion, server.Path));
             }
 
             return results;
@@ -95,7 +95,7 @@ namespace LazyPI.WebAPI
 
             foreach (var element in response.Data.Items)
             {
-                results.Add(new LazyObjects.AFDatabase(Connection, element.ID, element.Name, element.Description, element.Path));
+                results.Add(new LazyObjects.AFDatabase(Connection, element.WebID, element.ID, element.Name, element.Description, element.Path));
             }
 
             return results;
@@ -118,7 +118,7 @@ namespace LazyPI.WebAPI
 
             foreach (var element in response.Data.Items)
             {
-                results.Add(new LazyObjects.AFUnit(Connection, element.ID, element.Name, element.Description, element.Path));
+                results.Add(new LazyObjects.AFUnit(Connection, element.WebID, element.ID, element.Name, element.Description, element.Path));
             }
 
             return results;

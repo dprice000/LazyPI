@@ -13,6 +13,19 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public abstract class BaseResponse
     {
+        public BaseResponse()
+        {
+        }
+
+        public BaseResponse(string ID, string WebID, string Name, string Description, string Path)
+        {
+            this.WebID = WebID;
+            this.ID = ID;
+            this.Name = Name;
+            this.Description = Description;
+            this.Path = Path;
+        }
+
         public string WebID { get; set; }
         public string ID { get; set; }
         public string Name { get; set; }
@@ -52,6 +65,15 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class AFServer : BaseResponse
     {
+        public AFServer()
+        {
+        }
+
+        public AFServer(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
+
         public bool IsConnected { get; set; }
         public string ServerVersion { get; set; }
     }
@@ -59,11 +81,24 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class AFDB : BaseResponse
     {
+        public AFDB()
+        {
+        }
+
+        public AFDB(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
     }
 
     [Serializable]
     public class UnitClass : BaseResponse
     {
+        public UnitClass(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
+
         public string CanonicalUnitName { get; set; }
         public string CanonicalUnitAbbreviation { get; set; }
     }
@@ -71,16 +106,42 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class AttributeCategory : BaseResponse
     {
+        public AttributeCategory()
+        {
+        }
+
+        public AttributeCategory(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
     }
 
     [Serializable]
     public class ElementCategory : BaseResponse
     {
+        public ElementCategory()
+        {
+        }
+
+        public ElementCategory(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
     }
 
     [Serializable]
     public class AFElement : BaseResponse
     {
+        public AFElement()
+        {
+        }
+
+        public AFElement(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
+
+
         public string TemplateName { get; set; }
         public List<string> CategoryNames { get; set; }
     }
@@ -88,6 +149,15 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class AFAttributeTemplate : BaseResponse
     {
+        public AFAttributeTemplate()
+        {
+        }
+
+        public AFAttributeTemplate(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
+
         public string Type { get; set; }
         public string TypeQualifier { get; set; }
         public string DefaultUnitsName { get; set; }
@@ -102,6 +172,15 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class AFAttribute : BaseResponse
     {
+        public AFAttribute()
+        {
+        }
+
+        public AFAttribute(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
+
         public string Type { get; set; }
         public string TypeQualifier { get; set; }
         public string DefaultUnitsName { get; set; }
@@ -117,6 +196,10 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class AFValue
     {
+        public AFValue()
+        {
+        }
+
         public DateTime Timestamp { get; set; }
         public string Value { get; set; }
         public string UnitsAbbreviation { get; set; }
@@ -128,6 +211,15 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class AFElementTemplate : BaseResponse
     {
+        public AFElementTemplate()
+        {
+        }
+
+        public AFElementTemplate(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
+
         public bool AllowElementToExtend { get; set; }
         public List<string> CategoryNames { get; set; }
     }
@@ -135,6 +227,15 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class AFEventFrame : BaseResponse
     {
+        public AFEventFrame()
+        {
+        }
+
+        public AFEventFrame(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
+
         public string TemplateName { get; set; }
         public List<string> CategoryNames { get; set; }
         public DateTime StartTime { get; set; }
@@ -145,17 +246,37 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class AFEnumerationSet : BaseResponse
     {
+        public AFEnumerationSet()
+        {
+        }
     }
 
     [Serializable]
     public class AFTable : BaseResponse
     {
+        public AFTable()
+        {
+        }
+
+        public AFTable(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
+
         public List<string> CategoryNames { get; set; }
     }
 
     [Serializable]
     public class AFTableCategory : BaseResponse
     {
+        public AFTableCategory()
+        {
+        }
+
+        public AFTableCategory(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
     }
 
     [Serializable]

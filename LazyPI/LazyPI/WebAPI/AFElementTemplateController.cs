@@ -26,7 +26,7 @@ namespace LazyPI.WebAPI
 
 			var data = response.Data;
 
-			return new LazyObjects.AFElementTemplate(Connection, data.WebID, data.Name, data.Description, data.Path);
+			return new LazyObjects.AFElementTemplate(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
 		}
 
 		public LazyObjects.AFElementTemplate FindByPath(LazyPI.Common.Connection Connection, string Path)
@@ -44,7 +44,7 @@ namespace LazyPI.WebAPI
 
 			var data = response.Data;
 
-			return new LazyObjects.AFElementTemplate(Connection, data.WebID, data.Name, data.Description, data.Path);
+			return new LazyObjects.AFElementTemplate(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
 		}
 
 		public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFElementTemplate template)
@@ -144,7 +144,7 @@ namespace LazyPI.WebAPI
 
 			foreach (var template in data.Items)
 			{
-				LazyObjects.AFAttributeTemplate attr = new LazyObjects.AFAttributeTemplate(Connection, template.WebID, template.Name, template.Description, template.Path);
+				LazyObjects.AFAttributeTemplate attr = new LazyObjects.AFAttributeTemplate(Connection, template.WebID, template.ID, template.Name, template.Description, template.Path);
 				results.Add(attr);
 			}
 

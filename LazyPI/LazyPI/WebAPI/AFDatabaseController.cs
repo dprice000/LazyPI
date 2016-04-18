@@ -22,7 +22,7 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFDatabase(Connection, data.WebID, data.Name, data.Description, data.Path);
+            return new LazyObjects.AFDatabase(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
         }
 
         public LazyObjects.AFDatabase FindByPath(LazyPI.Common.Connection Connection, string Path)
@@ -38,7 +38,7 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFDatabase(Connection, data.WebID, data.Name, data.Description, data.Path);
+            return new LazyObjects.AFDatabase(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
         }
 
         public bool Update(LazyPI.Common.Connection Connection, LazyPI.LazyObjects.AFDatabase AFDB)
@@ -46,7 +46,10 @@ namespace LazyPI.WebAPI
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/attributes/{webId}", Method.PATCH);
             request.AddUrlSegment("webId", AFDB.ID);
-            request.AddBody(AFDB);
+
+            ResponseModels.AFDB body = new ResponseModels.AFDB(AFDB.WebID, AFDB.ID, AFDB.Name, AFDB.Description, AFDB.Path);
+
+            request.AddBody(body);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -105,7 +108,7 @@ namespace LazyPI.WebAPI
 
             foreach (var element in response.Data.Items)
             {
-                results.Add(new LazyObjects.AFElement(Connection, element.ID, element.Name, element.Description, element.Path));
+                results.Add(new LazyObjects.AFElement(Connection, element.WebID, element.ID, element.Name, element.Description, element.Path));
             }
 
             return results;
@@ -128,7 +131,7 @@ namespace LazyPI.WebAPI
 
             foreach (var eventframe in response.Data.Items)
             {
-                results.Add(new LazyObjects.AFEventFrame(Connection, eventframe.ID, eventframe.Name, eventframe.Description, eventframe.Path));
+                results.Add(new LazyObjects.AFEventFrame(Connection, eventframe.WebID, eventframe.ID, eventframe.Name, eventframe.Description, eventframe.Path));
             }
 
             return results;

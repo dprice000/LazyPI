@@ -8,8 +8,6 @@ namespace LazyPI_Test.Controllers
     [TestClass]
     public class EventFrameTests
     {
-        AFEventFrameController _frameLoader;
-        AFDatabaseController _dbLoader;
         AFServer _server;
         AFDatabase _db;
         WebAPIConnection _conn;
@@ -17,8 +15,6 @@ namespace LazyPI_Test.Controllers
         [TestInitialize]
         public void Initialize()
         {
-            _frameLoader = new AFEventFrameController();
-            _dbLoader = new AFDatabaseController();
             _conn = new WebAPIConnection(AuthType.Kerberos);
             _server = AFServer.FindByName(_conn, "ServerName");
             _db = _server.Databases["DatabaseName"];
@@ -59,8 +55,7 @@ namespace LazyPI_Test.Controllers
             Assert.Equals(frame.StartTime, foundFrame.StartTime);
             Assert.IsNull(frame.EndTime, "Assert EndTime is null.");
 
-            
-            Assert.IsTrue(_frameLoader.Delete(_conn, foundFrame.ID), "Assert frame is deleted.");
+            Assert.IsTrue(AFEventFrame.Delete(_conn, foundFrame.ID), "Assert frame is deleted.");
         }
 
         /// <summary>
@@ -72,7 +67,6 @@ namespace LazyPI_Test.Controllers
             AFElement ele = ElementTests.GenerateElement();
 
             _db.CreateElement(ele);
-
             ele = _db.Elements[ele.Name];
 
             Assert.IsNotNull(ele, "Assert that element exists in AFDB");
@@ -97,8 +91,8 @@ namespace LazyPI_Test.Controllers
             frame.EndTime = DateTime.UtcNow.AddMinutes(5);
             frame.Name += " (Updated)";
 
-            Assert.IsTrue(_frameLoader.Update(_conn, frame), "Assert update passes");
-            Assert.IsTrue(_frameLoader.Delete(_conn, frame.ID), "Assert frame is deleted.");
+            frame.CheckIn();
+            Assert.IsTrue(AFEventFrame.Delete(_conn, frame.ID), "Assert frame is deleted.");
         }
     }
 }
