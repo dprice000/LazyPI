@@ -277,6 +277,9 @@ namespace LazyPI.LazyObjects
 			_IsDeleted = false;
             _Elements = null;
             _Attributes = null;
+            _Template = null;
+            _Categories = null;
+            _Parent = null;
 		}
 	}
 
