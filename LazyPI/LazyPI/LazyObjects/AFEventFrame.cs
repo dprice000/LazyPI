@@ -248,6 +248,8 @@ namespace LazyPI.LazyObjects
             _IsNew = false;
             _IsDirty = false;
             _IsDeleted = false;
+            _EventFrames = null;
+            _Attributes = null;
         }
     }
 }
