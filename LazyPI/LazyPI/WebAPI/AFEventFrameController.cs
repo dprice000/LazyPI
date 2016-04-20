@@ -51,7 +51,7 @@ namespace LazyPI.WebAPI
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/eventframes/{webId}", Method.PATCH);
-			request.AddUrlSegment("webId", Eventframe.ID);
+			request.AddUrlSegment("webId", Eventframe.WebID);
 
 			ResponseModels.AFEventFrame frame = new ResponseModels.AFEventFrame(Eventframe.ID, Eventframe.WebID, Eventframe.Name, Eventframe.Description, Eventframe.Path);
 			frame.StartTime = Eventframe.StartTime;

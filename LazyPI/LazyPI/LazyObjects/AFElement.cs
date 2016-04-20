@@ -22,22 +22,49 @@ namespace LazyPI.LazyObjects
 		{
 		}
 
-        protected override void InsertItem(int index, AFElement item)
-        {
-            base.InsertItem(index, item);
+		protected override void InsertItem(int index, AFElement item)
+		{
+			base.InsertItem(index, item);
 
 
-        }
+		}
 	}
 
 	public class AFElement : BaseObject
 	{
+		private bool _IsNew;
+		private bool _IsDirty;
+		private bool _IsDeleted;
 		private Lazy<AFElementTemplate> _Template;
 		private Lazy<AFElement> _Parent;
 		private Lazy<ObservableCollection<string>> _Categories;
 		private static IAFElementController _ElementLoader;
 
 		#region "Properties"
+			public bool IsNew
+			{
+				get
+				{
+					return _IsNew;
+				}
+			}
+
+			public bool IsDirty
+			{
+				get
+				{
+					return _IsDirty;
+				}
+			}
+
+			public bool IsDeleted
+			{
+				get
+				{
+					return _IsDeleted;
+				}
+			}
+
 			public ObservableCollection<string> Categories
 			{
 				get
@@ -66,7 +93,7 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-					return new AFElements(_ElementLoader.GetElements(_Connection, _ID)); 
+					return new AFElements(_ElementLoader.GetElements(_Connection, _WebID)); 
 				}
 				set
 				{
@@ -77,7 +104,7 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-					return new AFAttributes(_ElementLoader.GetAttributes(_Connection, _ID));
+					return new AFAttributes(_ElementLoader.GetAttributes(_Connection, _WebID));
 				}
 				set
 				{
@@ -106,13 +133,13 @@ namespace LazyPI.LazyObjects
 				//Initialize Category List
 
 				_Categories = new Lazy<ObservableCollection<string>>(() => {
-					return new ObservableCollection<string>(_ElementLoader.GetCategories(_Connection, _ID));
+					return new ObservableCollection<string>(_ElementLoader.GetCategories(_Connection, _WebID));
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
 				//Initialize Template Loader
 				_Template = new Lazy<AFElementTemplate>(() =>
 				{
-					string templateName = _ElementLoader.GetElementTemplate(_Connection, this._ID);
+					string templateName = _ElementLoader.GetElementTemplate(_Connection, _WebID);
 					return AFElementTemplate.Find(_Connection, templateName);
 				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
@@ -134,67 +161,18 @@ namespace LazyPI.LazyObjects
 			}
 		#endregion
 
-		#region"Callbacks"
-			private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-			{
-				if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-				{
-					AFAttribute.Create(_Connection, this._ID, (AFAttribute)sender);
-				}
-				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-				{
-					AFAttribute obj = (AFAttribute)sender;
-					AFAttribute.Delete(_Connection, obj.ID);
-				}
-				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-				{
-					throw new NotImplementedException("Replace is not supported by LazyPI.");
-				}
-				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
-				{
-					throw new NotImplementedException("Reset is not supported by LazyPI.");
-				}
-				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-				{
-					throw new NotImplementedException("Move is not supported by LazyPI.");
-				}
-			}
-
-			/// <summary>
-			/// Notifies when developer makes changes to list. This method makes call back to insure PI is up to date.
-			/// </summary>
-			/// <param name="sender">Object that triggered the change.</param>
-			/// <param name="e">Arguments that define the event.</param>
-			private void ChildrenChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-			{
-				if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-				{
-					_ElementLoader.CreateChildElement(_Connection, this._ID, (AFElement)sender);
-				}
-				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-				{
-					AFElement element = (AFElement)sender;
-					Delete(_Connection, element._ID);
-				}
-				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-				{
-					throw new NotImplementedException("Replace is not supported by LazyPI.");
-				}
-				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
-				{
-					throw new NotImplementedException("Reset is not supported by LazyPI.");
-				}
-				else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-				{
-					throw new NotImplementedException("Move is not supported by LazyPI.");
-				}
-			}
-		#endregion
-
 		#region "Interactions"
 			public void CheckIn()
 			{
-				_ElementLoader.Update(_Connection, this);
+				if (_IsDeleted)
+					_ElementLoader.Delete(_Connection, _WebID);
+				else if (_IsDirty)
+					_ElementLoader.Update(_Connection, this);
+			}
+
+			public void Delete()
+			{
+				_IsDeleted = true;
 			}
 		#endregion
 
@@ -217,16 +195,6 @@ namespace LazyPI.LazyObjects
 		public static AFElement FindByPath(Connection Connection, string Path)
 		{
 			return _ElementLoader.FindByPath(Connection, Path);
-		}
-
-		/// <summary>
-		/// Removes specific element from AF Database
-		/// </summary>
-		/// <param name="ElementID">The ID of the element to be deleted</param>
-		/// <returns></returns>
-		public static bool Delete(Connection Connection, string ElementID)
-		{
-			return _ElementLoader.Delete(Connection, ElementID);
 		}
 
 		/// <summary>

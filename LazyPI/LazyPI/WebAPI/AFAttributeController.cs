@@ -63,7 +63,7 @@ namespace LazyPI.WebAPI
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/attributes/{webId}", Method.PATCH);
-            request.AddUrlSegment("webId", Attr.ID);
+            request.AddUrlSegment("webId", Attr.WebID);
 
             //TODO: There are members of the body object that do not translate to the lazy object. What's with that?
             ResponseModels.AFAttribute body = new ResponseModels.AFAttribute();

@@ -84,11 +84,11 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return _AttrLoader.GetValue(_Connection, this.ID);
+                return _AttrLoader.GetValue(_Connection, _WebID);
             }
             set
             {
-                _AttrLoader.SetValue(_Connection, this.ID, value);
+                _AttrLoader.SetValue(_Connection, _WebID, value);
             }
         }
         #endregion
@@ -137,7 +137,7 @@ namespace LazyPI.LazyObjects
         /// <returns>Returns a complete AFAttribute.</returns>
         public AFValue GetValue()
         {
-            return _AttrLoader.GetValue(_Connection, this._ID);
+            return _AttrLoader.GetValue(_Connection, _WebID);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace LazyPI.LazyObjects
         /// <returns>Returns true if no errors occur.</returns>
         public bool SetValue(AFValue Value)
         {
-           return _AttrLoader.SetValue(_Connection, this._ID, Value);
+           return _AttrLoader.SetValue(_Connection, _WebID, Value);
         }
 
         #endregion

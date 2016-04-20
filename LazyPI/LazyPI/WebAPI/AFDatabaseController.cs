@@ -45,7 +45,7 @@ namespace LazyPI.WebAPI
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/attributes/{webId}", Method.PATCH);
-            request.AddUrlSegment("webId", AFDB.ID);
+            request.AddUrlSegment("webId", AFDB.WebID);
 
             ResponseModels.AFDB body = new ResponseModels.AFDB(AFDB.WebID, AFDB.ID, AFDB.Name, AFDB.Description, AFDB.Path);
             request.AddBody(body);

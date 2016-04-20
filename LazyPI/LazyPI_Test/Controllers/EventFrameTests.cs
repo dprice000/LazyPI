@@ -55,7 +55,17 @@ namespace LazyPI_Test.Controllers
             Assert.Equals(frame.StartTime, foundFrame.StartTime);
             Assert.IsNull(frame.EndTime, "Assert EndTime is null.");
 
-            Assert.IsTrue(AFEventFrame.Delete(_conn, foundFrame.ID), "Assert frame is deleted.");
+            foundFrame.Delete();
+            foundFrame.CheckIn();
+
+            try
+            {
+                var x = _db.EventFrames[foundFrame.Name];
+                Assert.Fail("Index out of bound was not thrown!");
+            }
+            catch(Exception ex)
+            {
+            }
         }
 
         /// <summary>
@@ -92,7 +102,12 @@ namespace LazyPI_Test.Controllers
             frame.Name += " (Updated)";
 
             frame.CheckIn();
-            Assert.IsTrue(AFEventFrame.Delete(_conn, frame.ID), "Assert frame is deleted.");
+
+            frame.Delete();
+            frame.CheckIn();
+
+            AFEventFrame temp = AFEventFrame.Find(_conn, frame.WebID);
+            Assert.IsNull(temp); 
         }
     }
 }

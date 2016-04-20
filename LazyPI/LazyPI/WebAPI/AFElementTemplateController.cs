@@ -51,7 +51,7 @@ namespace LazyPI.WebAPI
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/elementtemplates/{webId}", Method.PATCH);
-			request.AddUrlSegment("webId", template.ID);
+			request.AddUrlSegment("webId", template.WebID);
             ResponseModels.AFElementTemplate temp = new ResponseModels.AFElementTemplate(template.ID, template.WebID, template.Name, template.Description, template.Path);
             temp.AllowElementToExtend = template.IsExtendable;
 

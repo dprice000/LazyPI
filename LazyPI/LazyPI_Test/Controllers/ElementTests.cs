@@ -58,7 +58,10 @@ namespace LazyPI_Test.Controllers
 
             //TODO: There should be more tests for finding the element
 
-            Assert.IsTrue(AFElement.Delete(_conn, element.ID), "Delete new element.");
+            element.Delete();
+            element.CheckIn();
+
+            Assert.IsNull(AFElement.Find(_conn, element.WebID));
         }
 
         [TestMethod]
@@ -152,7 +155,8 @@ namespace LazyPI_Test.Controllers
             Assert.Equals(child.Name, refChild.Name);
             Assert.Equals(child.Path, refChild.Path);
 
-            Assert.IsTrue(AFElement.Delete(_conn, parent.ID), "Parent Deleted");
+            parent.Delete();
+            parent.CheckIn();
             Assert.IsNull(AFElement.Find(_conn, parent.ID), "Assert that parent no longer exists");
             Assert.IsNull(AFElement.Find(_conn, child.ID), "Assert that child no longer exists.");
         }
@@ -196,10 +200,14 @@ namespace LazyPI_Test.Controllers
 
             string val = "Test string";
 
+            // Test set and get of AFValue object
             attr.SetValue(new AFValue(val));
-            Assert.Equals(attr.GetValue().Value, val);
+            AFValue valObj = attr.GetValue();
+            Assert.Equals(valObj.Value, val);
 
-            Assert.IsTrue(AFElement.Delete(_conn, element.ID), "Delete new element.");
+            element.Delete();
+            element.CheckIn();
+            Assert.IsNull(AFElement.Find(_conn, element.WebID));
         }
     }
 }

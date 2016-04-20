@@ -13,7 +13,7 @@ namespace LazyPI.WebAPI
 	{
 		// These functions have direct references to WebAPI calls
 		#region "Public Methods"
-			public LazyObjects.AFElement Find(LazyPI.Common.Connection Connection,string ElementID)
+			public LazyObjects.AFElement Find(LazyPI.Common.Connection Connection, string ElementID)
 			{
 				WebAPIConnection webConnection = (WebAPIConnection)Connection;
 				var request = new RestRequest("/elements/{webId}");
@@ -51,7 +51,7 @@ namespace LazyPI.WebAPI
 			{
 				WebAPIConnection webConnection = (WebAPIConnection)Connection;
 				var request = new RestRequest("/elements/{webId}", Method.PATCH);
-				request.AddUrlSegment("webId", Element.ID);
+				request.AddUrlSegment("webId", Element.WebID);
 
 				ResponseModels.AFElement temp = new ResponseModels.AFElement(Element.ID, Element.WebID, Element.Name, Element.Description, Element.Path);
 

@@ -15,7 +15,7 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return new AFElements(_DBLoader.GetElements(_Connection, _ID));
+                return new AFElements(_DBLoader.GetElements(_Connection, _WebID));
             }
         }
 
@@ -23,7 +23,7 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return new AFEventFrames(_DBLoader.GetEventFrames(_Connection, _ID));
+                return new AFEventFrames(_DBLoader.GetEventFrames(_Connection, _WebID));
             }
         }
 
@@ -43,12 +43,12 @@ namespace LazyPI.LazyObjects
         #region "Interacitons"
             public bool CreateElement(AFElement Element)
             {
-                return _DBLoader.CreateElement(_Connection, _ID, Element);
+                return _DBLoader.CreateElement(_Connection, _WebID, Element);
             }
 
             public bool CreateEventFrame(AFEventFrame Frame)
             {
-                return _DBLoader.CreateEventFrame(_Connection, _ID, Frame);
+                return _DBLoader.CreateEventFrame(_Connection, _WebID, Frame);
             }
 
             public void CheckIn()

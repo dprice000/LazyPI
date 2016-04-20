@@ -26,6 +26,9 @@ namespace LazyPI.LazyObjects
 
     public class AFEventFrame : BaseObject
     {
+        private bool _IsNew;
+        private bool _IsDirty;
+        private bool _IsDeleted;
         private DateTime _StartTime;
         private DateTime _EndTime;
         private Lazy<AFElementTemplate> _Template;
@@ -35,6 +38,30 @@ namespace LazyPI.LazyObjects
         private static IAFEventFrameController _EventFrameLoader;
 
         #region "Properties"
+        public bool IsNew
+        {
+            get
+            {
+                return _IsNew;
+            }
+        }
+
+        public bool IsDirty
+        {
+            get
+            {
+                return _IsDirty;
+            }
+        }
+
+        public bool IsDeleted
+        {
+            get
+            {
+                return _IsDeleted;
+            }
+        }
+
         public DateTime StartTime
         {
             get
@@ -93,19 +120,19 @@ namespace LazyPI.LazyObjects
 
                 _Template = new Lazy<AFElementTemplate>(() =>
                 {
-                   var templateName = _EventFrameLoader.GetEventFrameTemplate(_Connection, this._ID);
+                   var templateName = _EventFrameLoader.GetEventFrameTemplate(_Connection, _WebID);
                    return AFElementTemplate.FindByName(templateName);
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
                 _EventFrames = new Lazy<AFEventFrames>(() => {
-                    List<AFEventFrame> frames = _EventFrameLoader.GetEventFrames(_Connection, _ID).ToList();
+                    List<AFEventFrame> frames = _EventFrameLoader.GetEventFrames(_Connection, _WebID).ToList();
                     AFEventFrames obsList = new AFEventFrames(frames);
 
                     return obsList;
                 }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 
                 _Attributes = new Lazy<AFAttributes>(() => { 
-                    var attrs = _EventFrameLoader.GetAttributes(_Connection, this._ID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
+                    var attrs = _EventFrameLoader.GetAttributes(_Connection, _WebID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
                     AFAttributes obsList = new AFAttributes(attrs);
 
                     return obsList;
@@ -131,70 +158,29 @@ namespace LazyPI.LazyObjects
             {
                 return _EventFrameLoader.FindByPath(Connection, Path);
             }
-
-            public static bool Delete(Connection Connection, string FrameID)
-            {
-                return _EventFrameLoader.Delete(Connection, FrameID);
-            }
         #endregion
 
         #region "Public Methods"
             public void CheckIn()
             {
-                _EventFrameLoader.Update(_Connection, this);
-            }
-        #endregion
+                if (_IsDeleted)
+                {
+                    _EventFrameLoader.Delete(_Connection, _WebID);
+                }
+                else if(_IsDirty)
+                {
+                    _EventFrameLoader.Update(_Connection, this);
+                }
+            }      
 
-            #region "Callbacks"
-            private void AttributesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            /// <summary>
+            /// Sets the 
+            /// </summary>
+            /// <returns></returns>
+            public void Delete()
             {
-                AFAttribute.Create(_Connection, this._ID, (AFAttribute)sender);
+                _IsDeleted = true;
             }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                AFAttribute obj = (AFAttribute)sender;
-                AFAttribute.Delete(_Connection, obj.ID);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-            {
-                throw new NotImplementedException("Replace is not supported by LazyPI.");
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
-            {
-                throw new NotImplementedException("Reset is not supported by LazyPI.");
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                throw new NotImplementedException("Move is not supported by LazyPI.");
-            }
-        }
-
-        private void ChildrenChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                _EventFrameLoader.CreateEventFrame(_Connection, this._ID, (AFEventFrame)sender);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                AFEventFrame obj = (AFEventFrame)sender;
-                _EventFrameLoader.Delete(_Connection, obj._ID);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-            {
-                throw new NotImplementedException("Replace is not supported by LazyPI.");
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
-            {
-                throw new NotImplementedException("Reset is not supported by LazyPI.");
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                throw new NotImplementedException("Move is not supported by LazyPI.");
-            }
-        }
         #endregion
     }
 }

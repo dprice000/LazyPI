@@ -49,7 +49,7 @@ namespace LazyPI.WebAPI
 		{
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/attributetemplates/{webId}", Method.PATCH);
-			request.AddUrlSegment("webId", AttrTemp.ID);
+			request.AddUrlSegment("webId", AttrTemp.WebID);
 
 			request.AddBody(AttrTemp);
 
@@ -75,7 +75,7 @@ namespace LazyPI.WebAPI
 		{
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/attributetemplates/{webId}/attributetemplates");
-			request.AddUrlSegment("webId", AttrTemp.ID);
+			request.AddUrlSegment("webId", AttrTemp.WebID);
 			request.AddBody(AttrTemp);
 
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
