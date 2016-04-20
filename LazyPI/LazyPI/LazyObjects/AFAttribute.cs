@@ -76,21 +76,6 @@ namespace LazyPI.LazyObjects
                 _AttrType = value;
             }
         }
-
-        /// <summary>
-        /// Current value held by the attribute.
-        /// </summary>
-        public AFValue Value
-        {
-            get
-            {
-                return _AttrLoader.GetValue(_Connection, _WebID);
-            }
-            set
-            {
-                _AttrLoader.SetValue(_Connection, _WebID, value);
-            }
-        }
         #endregion
 
         #region "Constructors"
@@ -122,7 +107,6 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Interactions"
-
         /// <summary>
         /// Gets the an AFValue with the current value held in the attribute.
         /// </summary>
@@ -145,18 +129,6 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Static Functions"
-            /// <summary>
-            /// Creates element using the partial Attribute provided.
-            /// </summary>
-            /// <param name="ElementID">The element that will hold the attribute.</param>
-            /// <param name="Attr">The partial attribute holding information to create attribute.</param>
-            /// <returns>Returns true if creation completes properly.</returns>
-            /// <remarks>It is expected that the attribute will not have ID and Path</remarks>
-            public static bool Create(LazyPI.Common.Connection Connection, string ElementID, AFAttribute Attr)
-            {
-                return _AttrLoader.Create(Connection, ElementID, Attr);
-            }
-            
             /// <summary>
             /// Finds attribute with the ID specified.
             /// </summary>

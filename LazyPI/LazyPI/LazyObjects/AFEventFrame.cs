@@ -22,6 +22,17 @@ namespace LazyPI.LazyObjects
             : base(frames)
         {
         }
+
+        protected override void InsertItem(int index, AFEventFrame item)
+        {
+            item.IsNew = true;
+            base.InsertItem(index, item);
+        }
+
+        protected override void RemoveItem(int index)
+        {
+            this[index].IsDeleted = true;
+        }
     }
 
     public class AFEventFrame : BaseObject
@@ -44,6 +55,10 @@ namespace LazyPI.LazyObjects
             {
                 return _IsNew;
             }
+            internal set
+            {
+                _IsNew = value;
+            }
         }
 
         public bool IsDirty
@@ -59,6 +74,10 @@ namespace LazyPI.LazyObjects
             get
             {
                 return _IsDeleted;
+            }
+            internal set
+            {
+                _IsDeleted = value;
             }
         }
 
