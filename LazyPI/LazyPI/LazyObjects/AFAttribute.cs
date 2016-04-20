@@ -7,7 +7,7 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-    public class AFAttributes : System.Collections.ObjectModel.ObservableCollection<AFAttribute>
+    public class AFAttributes : System.Collections.ObjectModel.Collection<AFAttribute>
     {
         public AFAttribute this[string Name]
         {
@@ -17,7 +17,7 @@ namespace LazyPI.LazyObjects
             }
         }
 
-        internal AFAttributes(IEnumerable<AFAttribute> attributes) : base(attributes)
+        internal AFAttributes(IList<AFAttribute> attributes) : base(attributes)
         {
         }
     }
@@ -122,14 +122,6 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Interactions"
-
-        /// <summary>
-        /// Updates the AF Database to match all changes made to attribute.
-        /// </summary>
-        public void CheckIn()
-        {
-            _AttrLoader.Update(_Connection, this);
-        }
 
         /// <summary>
         /// Gets the an AFValue with the current value held in the attribute.

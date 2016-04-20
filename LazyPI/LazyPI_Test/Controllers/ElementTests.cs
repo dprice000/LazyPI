@@ -29,9 +29,14 @@ namespace LazyPI_Test.Controllers
 
         public static AFElement GenerateElement()
         {
+            string name = "Test Element";
+            string desc = "This is a unit test element.";
             AFElement ele = new AFElement();
-            ele.Name = "Test Element";
-            ele.Description = "This is a unit test element.";
+            ele.Name = name;
+            ele.Description = desc;
+
+            Assert.Equals(ele.Name, name);
+            Assert.Equals(ele.Description, desc);
 
             return ele;
         }
@@ -39,81 +44,51 @@ namespace LazyPI_Test.Controllers
         [TestMethod]
         public void CreateElement()
         {
-            AFElement element = new AFElement();
-
-            string name = "Test Element 1";
-            element.Name = name;
-            Assert.Equals(element.Name, name);
-
-            string desc = "Lazy PI Unit Test Element";
-            element.Description = desc;
-            Assert.Equals(element.Description, desc);
+            AFElement element = GenerateElement();
 
             Console.WriteLine("Test element creation.");
-
             Assert.IsTrue(_db.CreateElement(element), "Assert creation passed");
             
             //Check that the the element can be found through the AFDB
             Assert.IsNotNull(_db.Elements[element.Name], "Check AFDB element collection for new element.");
+            Assert.IsNotNull(AFElement.Find(_conn, element.WebID));
+            Assert.IsNotNull(AFElement.FindByPath(_conn, element.Path));
+            //Assert.IsNotNull(AFElement.FindByTemplate());
+            //Assert.IsNotNull(AFElement.FindByCategory(_conn, element.Categories.First()));
 
             //TODO: There should be more tests for finding the element
-
             element.Delete();
+            Assert.IsTrue(element.IsDeleted);
             element.CheckIn();
 
             Assert.IsNull(AFElement.Find(_conn, element.WebID));
         }
 
         [TestMethod]
-        public void FindByName()
-        {
-            Console.WriteLine("Test Finding Element by Name");
-            string name = "Test Element 1";
-
-            AFElement elem = AFElement.Find(_conn, name);
-
-            Console.WriteLine("Test that found element is fully constructed");
-            Assert.Equals(elem.Name, name);
-            Assert.IsNotNull(elem.ID, "Check element has an ID");
-            Assert.IsNotNull(elem.Description, "Check element has a description.");
-            Assert.IsNotNull(elem.Path, "Check element has a path.");
-
-            Assert.IsNotNull(elem.Parent, "Check element has a parent.");
-        }
-
-        [TestMethod]
-        public void FindByPath()
-        {
-            Console.WriteLine("Test Finding Element by Path");
-            string path = "";
-
-            AFElement elem = AFElement.FindByPath(_conn, path);
-
-            Assert.Equals(elem.Path, path);
-            Assert.IsNotNull(elem.Name, "Check names exists.");
-            Assert.IsNotNull(elem.ID, "Check ID exists.");
-            Assert.IsNotNull(elem.Description, "Check description exists.");
-            Assert.IsNotNull(elem.Parent, "Check element has parent.");
-        }
-
-        [TestMethod]
         public void Update()
         {
             Console.WriteLine("Test updating element settings.");
-            string name = "", desc = "";
+
+            string name = "Updated element", desc = "Updated description";
+            AFElement element = GenerateElement();
+
+            Console.WriteLine("Test element creation.");
+            Assert.IsTrue(_db.CreateElement(element), "Assert creation passed");
 
             AFElement elem = AFElement.Find(_conn, name);
             Assert.Equals(elem.Name, name);
             Random ran = new Random();
-            name += ran.Next(100).ToString();
-            desc += ran.Next(100).ToString();
-
+            elem.Name = name;
+            elem.Description = desc;
+            Assert.IsTrue(elem.IsDirty);
             elem.CheckIn();
 
             elem = AFElement.Find(_conn, name);
-
             Assert.Equals(elem.Name, name);
             Assert.Equals(elem.Description, desc);
+
+            elem.Delete();
+            elem.CheckIn();
         }
 
         [TestMethod]
@@ -156,6 +131,8 @@ namespace LazyPI_Test.Controllers
             Assert.Equals(child.Path, refChild.Path);
 
             parent.Delete();
+            Assert.IsTrue(parent.IsDeleted);
+
             parent.CheckIn();
             Assert.IsNull(AFElement.Find(_conn, parent.ID), "Assert that parent no longer exists");
             Assert.IsNull(AFElement.Find(_conn, child.ID), "Assert that child no longer exists.");
@@ -188,6 +165,7 @@ namespace LazyPI_Test.Controllers
             attr.Description = "Created by WebAPI tests";
 
             element.Attributes.Add(attr);
+            element.CheckIn();
 
             Assert.Equals(element.Attributes.Count, 1);
             attr = element.Attributes[attr.Name];
@@ -206,6 +184,8 @@ namespace LazyPI_Test.Controllers
             Assert.Equals(valObj.Value, val);
 
             element.Delete();
+            Assert.IsTrue(element.IsDeleted);
+
             element.CheckIn();
             Assert.IsNull(AFElement.Find(_conn, element.WebID));
         }

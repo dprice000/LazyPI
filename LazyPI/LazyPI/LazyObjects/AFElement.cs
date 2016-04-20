@@ -8,7 +8,7 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-	public class AFElements : ObservableCollection<AFElement>
+	public class AFElements : Collection<AFElement>
 	{
 		public AFElement this[string Name]
 		{
@@ -18,15 +18,19 @@ namespace LazyPI.LazyObjects
 			}
 		}
 
-		internal AFElements(IEnumerable<AFElement> elements) : base(elements)
+		internal AFElements(IList<AFElement> elements) : base(elements)
 		{
 		}
 
 		protected override void InsertItem(int index, AFElement item)
 		{
+			item.IsNew = true;
 			base.InsertItem(index, item);
+		}
 
-
+		protected override void RemoveItem(int index)
+		{
+			this[index].IsDeleted = true;
 		}
 	}
 
@@ -35,9 +39,11 @@ namespace LazyPI.LazyObjects
 		private bool _IsNew;
 		private bool _IsDirty;
 		private bool _IsDeleted;
-		private Lazy<AFElementTemplate> _Template;
-		private Lazy<AFElement> _Parent;
-		private Lazy<ObservableCollection<string>> _Categories;
+		private AFElementTemplate _Template;
+		private AFElement _Parent;
+		private AFElements _Elements;
+		private AFAttributes _Attributes;
+		private List<string> _Categories;
 		private static IAFElementController _ElementLoader;
 
 		#region "Properties"
@@ -47,6 +53,10 @@ namespace LazyPI.LazyObjects
 				{
 					return _IsNew;
 				}
+				internal set
+				{
+					_IsNew = value;
+				}
 			}
 
 			public bool IsDirty
@@ -54,6 +64,10 @@ namespace LazyPI.LazyObjects
 				get
 				{
 					return _IsDirty;
+				}
+				internal set
+				{
+					_IsDirty = value;
 				}
 			}
 
@@ -63,13 +77,22 @@ namespace LazyPI.LazyObjects
 				{
 					return _IsDeleted;
 				}
+				internal set
+				{
+					_IsDeleted = value;
+				}
 			}
 
-			public ObservableCollection<string> Categories
+			public List<string> Categories
 			{
 				get
 				{
-					return _Categories.Value;
+                    if (_Categories == null)
+                    {
+                        _Categories = new List<string>(_ElementLoader.GetCategories(_Connection, _WebID));
+                    }
+
+					return _Categories;
 				}
 			}
 
@@ -77,7 +100,13 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-					return _Template.Value;
+                    if (_Template == null)
+                    {
+                        string templateName = _ElementLoader.GetElementTemplate(_Connection, _WebID);
+                        _Template = AFElementTemplate.Find(_Connection, templateName);
+                    }
+
+					return _Template;
 				}
 			}
 
@@ -85,7 +114,13 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-					return _Parent.Value;
+                    if (_Parent == null)
+                    {
+                        string parentPath = _Path.Substring(0, _Path.LastIndexOf('\\'));
+                        _Parent = _ElementLoader.FindByPath(_Connection, parentPath);
+                    }
+
+					return _Parent;
 				}
 			}
 
@@ -93,10 +128,15 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-					return new AFElements(_ElementLoader.GetElements(_Connection, _WebID)); 
+					if(_Elements == null)
+						_Elements = new AFElements(_ElementLoader.GetElements(_Connection, _WebID).ToList());
+
+					return _Elements;
 				}
 				set
 				{
+					_Elements = value;
+                    _IsDirty = true;
 				}
 			}
 
@@ -104,10 +144,15 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-					return new AFAttributes(_ElementLoader.GetAttributes(_Connection, _WebID));
+					if(_Attributes == null)
+						_Attributes = new AFAttributes(_ElementLoader.GetAttributes(_Connection, _WebID).ToList());
+
+					return _Attributes;
 				}
 				set
 				{
+					_Attributes = value;
+                    _IsDirty = true;
 				}
 			}
 		#endregion
@@ -132,24 +177,6 @@ namespace LazyPI.LazyObjects
 
 				//Initialize Category List
 
-				_Categories = new Lazy<ObservableCollection<string>>(() => {
-					return new ObservableCollection<string>(_ElementLoader.GetCategories(_Connection, _WebID));
-				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-
-				//Initialize Template Loader
-				_Template = new Lazy<AFElementTemplate>(() =>
-				{
-					string templateName = _ElementLoader.GetElementTemplate(_Connection, _WebID);
-					return AFElementTemplate.Find(_Connection, templateName);
-				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-
-				//Initialize Parent Loader
-				string parentPath = Path.Substring(0, Path.LastIndexOf('\\')); 
-				
-				_Parent = new Lazy<AFElement>(() =>
-				{
-					return _ElementLoader.FindByPath(_Connection, parentPath);
-				}, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
 			}
 
 			private void CreateLoader()
@@ -164,10 +191,31 @@ namespace LazyPI.LazyObjects
 		#region "Interactions"
 			public void CheckIn()
 			{
-				if (_IsDeleted)
+			    if (_IsDeleted)
 					_ElementLoader.Delete(_Connection, _WebID);
-				else if (_IsDirty)
-					_ElementLoader.Update(_Connection, this);
+
+                if (_IsDirty && !_IsDeleted)
+                {
+                    _ElementLoader.Update(_Connection, this);
+
+                    if (_Elements != null)
+                    {
+                        foreach (AFElement ele in _Elements.Where(x => x.IsNew || IsDeleted))
+                        {
+                            if (ele.IsNew)
+                            {
+                                _ElementLoader.CreateChildElement(_Connection, _WebID, ele);
+                            }
+                            else if (ele.IsDeleted)
+                            {
+                                ele.Delete();
+                                ele.CheckIn();
+                            }
+                        }
+                    }
+                }
+
+				ResetState();
 			}
 
 			public void Delete()
@@ -221,6 +269,13 @@ namespace LazyPI.LazyObjects
 			return _ElementLoader.GetElements(Connection, RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 		}
 		#endregion
+
+		private void ResetState()
+		{
+			_IsNew = false;
+			_IsDirty = false;
+			_IsDeleted = false;
+		}
 	}
 
 }

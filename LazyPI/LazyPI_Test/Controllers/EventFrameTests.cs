@@ -100,10 +100,12 @@ namespace LazyPI_Test.Controllers
 
             frame.EndTime = DateTime.UtcNow.AddMinutes(5);
             frame.Name += " (Updated)";
-
+            Assert.IsTrue(frame.IsDirty);
             frame.CheckIn();
 
             frame.Delete();
+            Assert.IsTrue(frame.IsDeleted);
+
             frame.CheckIn();
 
             AFEventFrame temp = AFEventFrame.Find(_conn, frame.WebID);
