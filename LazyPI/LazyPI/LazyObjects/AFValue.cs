@@ -7,10 +7,11 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
+    
     public class AFValue : BaseObject
     {
         private DateTime _Timestamp;
-        private string _Value;
+        private object _Value;
         private string _UnitsAbbreviation;
         private bool _Good;
         private bool _Questionable;
@@ -25,7 +26,7 @@ namespace LazyPI.LazyObjects
             }
         }
 
-        public string Value
+        public object Value
         {
             get
             {
@@ -76,14 +77,9 @@ namespace LazyPI.LazyObjects
         {
         }
 
-        public AFValue(string value)
-        {
-            _Value = value;
-        }
-
         public AFValue(object value)
         {
-            _Value = value.ToString();
+            _Value = value;
         }
 
         internal AFValue(DateTime TimeStamp, string Value, string Units, bool Good, bool Questionable, bool Substituted)

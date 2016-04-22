@@ -189,5 +189,27 @@ namespace LazyPI_Test.Controllers
             element.CheckIn();
             Assert.IsNull(AFElement.Find(_conn, element.WebID));
         }
+
+        /// <summary>
+        /// Simulates the case where two element exist with the same name on the same level.
+        /// </summary>
+        public void DuplicateNames()
+        {
+            AFElement ele1 = GenerateElement();
+            AFElement ele2 = GenerateElement();
+
+            _db.CreateElement(ele1);
+            Assert.IsNotNull(_db.Elements[ele1.Name]);
+            _db.CreateElement(ele2);
+            Assert.IsNotNull(_db.Elements[ele2.Name]);
+
+            ele2.Delete();
+            ele1.Delete();
+            ele1.CheckIn();
+            ele2.CheckIn();
+
+            Assert.IsNull(_db.Elements[ele1.Name]);
+            Assert.IsNull(_db.Elements[ele2.Name]);
+        }
     }
 }

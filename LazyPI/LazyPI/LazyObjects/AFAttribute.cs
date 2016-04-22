@@ -13,17 +13,24 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return this.Single(x => x.Name == Name);
+                return this.SingleOrDefault(x => x.Name == Name);
             }
         }
 
         internal AFAttributes(IList<AFAttribute> attributes) : base(attributes)
         {
         }
+
+        protected override void RemoveItem(int index)
+        {
+            this[index].IsDeleted = true;
+        }
     }
 
     public class AFAttribute : BaseObject
     {
+        private bool _IsDirty;
+        private bool _IsDeleted;
         private string _UnitsName;
         private string _AttrType;
         private IEnumerable<string> _Categories;
@@ -31,6 +38,30 @@ namespace LazyPI.LazyObjects
         private static IAFAttributeController _AttrLoader;
 
         #region "Properties"
+        public bool IsDeleted
+        {
+            get
+            {
+                return _IsDeleted;
+            }
+            internal set
+            {
+                _IsDeleted = value;
+            }
+        }
+
+        public bool IsDirty
+        {
+            get
+            {
+                return _IsDirty; 
+            }
+            internal set
+            {
+                _IsDirty = value;
+            }
+        }
+
         public IEnumerable<string> Categories
         {
             get

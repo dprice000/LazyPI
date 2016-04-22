@@ -14,7 +14,7 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return this.Single(x => x.Name == Name);
+                return this.SingleOrDefault(x => x.Name == Name);
             }
         }
 
@@ -31,7 +31,10 @@ namespace LazyPI.LazyObjects
 
         protected override void RemoveItem(int index)
         {
-            this[index].IsDeleted = true;
+            AFEventFrame frame = this[index];
+            frame.Delete();
+            frame.CheckIn();
+            base.RemoveItem(index);
         }
     }
 
@@ -49,6 +52,32 @@ namespace LazyPI.LazyObjects
         private static IAFEventFrameController _EventFrameLoader;
 
         #region "Properties"
+        public string Name
+        {
+            get
+            {
+                return base.Name;
+            }
+            set
+            {
+                base.Name = value;
+                _IsDirty = true;
+            }
+        }
+
+        public string Description
+        {
+            get
+            {
+                return base.Description;
+            }
+            set
+            {
+                base.Description = value;
+                _IsDirty = true;
+            }
+        }
+
         public bool IsNew
         {
             get
@@ -90,6 +119,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _StartTime = value;
+                _IsDirty = true;
             }
         }
 
@@ -102,6 +132,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _EndTime = value;
+                _IsDirty = true;
             }
         }
 
@@ -210,8 +241,7 @@ namespace LazyPI.LazyObjects
                 {
                     _EventFrameLoader.Delete(_Connection, _WebID);
                 }
-
-                if(_IsDirty && !_IsDeleted)
+                else if(_IsDirty)
                 {
                     _EventFrameLoader.Update(_Connection, this);
 
@@ -226,6 +256,14 @@ namespace LazyPI.LazyObjects
                                 frame.Delete();
                                 frame.CheckIn();
                             }
+                        }
+                    }
+
+                    if (_Attributes != null)
+                    {
+                        foreach (AFAttribute attr in _Attributes.Where(x => x.IsDeleted))
+                        {
+                            AFAttribute.Delete(_Connection, attr.WebID);
                         }
                     }
                 }

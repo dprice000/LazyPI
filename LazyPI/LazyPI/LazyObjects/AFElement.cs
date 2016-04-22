@@ -14,11 +14,11 @@ namespace LazyPI.LazyObjects
 		{
 			get
 			{
-				return this.Single(x => x.Name == Name);
+				return this.SingleOrDefault(x => x.Name == Name && !x.IsDeleted);
 			}
 		}
 
-		internal AFElements(IList<AFElement> elements) : base(elements)
+		internal AFElements(IEnumerable<AFElement> elements) : base(elements.ToList())
 		{
 		}
 
@@ -30,7 +30,10 @@ namespace LazyPI.LazyObjects
 
 		protected override void RemoveItem(int index)
 		{
-			this[index].IsDeleted = true;
+			AFElement ele = this[index];
+			ele.Delete();
+			ele.CheckIn();
+			base.RemoveItem(index);
 		}
 	}
 
@@ -47,6 +50,32 @@ namespace LazyPI.LazyObjects
 		private static IAFElementController _ElementLoader;
 
 		#region "Properties"
+            public string Name
+            {
+                get
+                {
+                    return base.Name;
+                }
+                set
+                {
+                    base.Name = value;
+                    _IsDirty = true;
+                }
+            }
+
+            public string Description
+            {
+                get
+                {
+                    return base.Description;
+                }
+                set
+                {
+                    base.Description = value;
+                    _IsDirty = true;
+                }
+            }
+
 			public bool IsNew
 			{
 				get
@@ -87,10 +116,10 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-                    if (_Categories == null)
-                    {
-                        _Categories = new List<string>(_ElementLoader.GetCategories(_Connection, _WebID));
-                    }
+					if (_Categories == null)
+					{
+						_Categories = new List<string>(_ElementLoader.GetCategories(_Connection, _WebID));
+					}
 
 					return _Categories;
 				}
@@ -100,11 +129,11 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-                    if (_Template == null)
-                    {
-                        string templateName = _ElementLoader.GetElementTemplate(_Connection, _WebID);
-                        _Template = AFElementTemplate.Find(_Connection, templateName);
-                    }
+					if (_Template == null)
+					{
+						string templateName = _ElementLoader.GetElementTemplate(_Connection, _WebID);
+						_Template = AFElementTemplate.Find(_Connection, templateName);
+					}
 
 					return _Template;
 				}
@@ -114,11 +143,11 @@ namespace LazyPI.LazyObjects
 			{
 				get
 				{
-                    if (_Parent == null)
-                    {
-                        string parentPath = _Path.Substring(0, _Path.LastIndexOf('\\'));
-                        _Parent = _ElementLoader.FindByPath(_Connection, parentPath);
-                    }
+					if (_Parent == null)
+					{
+						string parentPath = _Path.Substring(0, _Path.LastIndexOf('\\'));
+						_Parent = _ElementLoader.FindByPath(_Connection, parentPath);
+					}
 
 					return _Parent;
 				}
@@ -136,7 +165,7 @@ namespace LazyPI.LazyObjects
 				set
 				{
 					_Elements = value;
-                    _IsDirty = true;
+					_IsDirty = true;
 				}
 			}
 
@@ -152,7 +181,7 @@ namespace LazyPI.LazyObjects
 				set
 				{
 					_Attributes = value;
-                    _IsDirty = true;
+					_IsDirty = true;
 				}
 			}
 		#endregion
@@ -191,29 +220,43 @@ namespace LazyPI.LazyObjects
 		#region "Interactions"
 			public void CheckIn()
 			{
-			    if (_IsDeleted)
+				if (_IsDeleted)
+				{
 					_ElementLoader.Delete(_Connection, _WebID);
+				}
+				else if (_IsDirty)
+				{
+					_ElementLoader.Update(_Connection, this);
 
-                if (_IsDirty && !_IsDeleted)
-                {
-                    _ElementLoader.Update(_Connection, this);
+					if (_Elements != null)
+					{
+						foreach (AFElement ele in _Elements.Where(x => x.IsNew || IsDeleted))
+						{
+							if (ele.IsNew)
+							{
+								_ElementLoader.CreateChildElement(_Connection, _WebID, ele);
+							}
+							else if (ele.IsDeleted)
+							{
+								ele.Delete();
+								ele.CheckIn();
+							}
+						}
+					}
 
-                    if (_Elements != null)
-                    {
-                        foreach (AFElement ele in _Elements.Where(x => x.IsNew || IsDeleted))
-                        {
-                            if (ele.IsNew)
-                            {
-                                _ElementLoader.CreateChildElement(_Connection, _WebID, ele);
-                            }
-                            else if (ele.IsDeleted)
-                            {
-                                ele.Delete();
-                                ele.CheckIn();
-                            }
-                        }
-                    }
-                }
+					if (_Attributes != null)
+					{
+						foreach (AFAttribute attr in _Attributes.Where(x => x.IsDeleted || x.IsDirty))
+						{
+							if(attr.IsDeleted)
+								AFAttribute.Delete(_Connection, attr.WebID);
+							else if (attr.IsDirty)
+							{
+								
+							}
+						}
+					}
+				}
 
 				ResetState();
 			}
@@ -275,11 +318,11 @@ namespace LazyPI.LazyObjects
 			_IsNew = false;
 			_IsDirty = false;
 			_IsDeleted = false;
-            _Elements = null;
-            _Attributes = null;
-            _Template = null;
-            _Categories = null;
-            _Parent = null;
+			_Elements = null;
+			_Attributes = null;
+			_Template = null;
+			_Categories = null;
+			_Parent = null;
 		}
 	}
 

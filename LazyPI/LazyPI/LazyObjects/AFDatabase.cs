@@ -70,7 +70,7 @@ namespace LazyPI.LazyObjects
             {
                 get
                 {
-                    return this.Single(x => x.Name == Name);
+                    return this.SingleOrDefault(x => x.Name == Name);
                 }
             }
         #endregion
