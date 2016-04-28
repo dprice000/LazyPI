@@ -11,11 +11,17 @@ namespace LazyPI.LazyObjects
     {
         private IAFDatabaseController _DBController;
 
+        private AFElements _Elements;
+        private AFEventFrames _EventFrames;
+
         public AFElements Elements
         {
             get
             {
-                return new AFElements(_DBController.GetElements(_Connection, _WebID));
+                if(_Elements == null)
+                    _Elements = new AFElements(_DBController.GetElements(_Connection, _WebID));
+
+                return _Elements;
             }
         }
 
@@ -23,7 +29,10 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return new AFEventFrames(_DBController.GetEventFrames(_Connection, _WebID));
+                if(_EventFrames == null)
+                    _EventFrames = new AFEventFrames(_DBController.GetEventFrames(_Connection, _WebID));
+
+                return _EventFrames;
             }
         }
 
