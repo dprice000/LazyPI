@@ -49,7 +49,7 @@ namespace LazyPI.LazyObjects
         private AFEventFrames _EventFrames;
         private AFAttributes _Attributes;
         private ObservableCollection<string> _CategoryNames;
-        private static IAFEventFrameController _EventFrameLoader;
+        private static IAFEventFrameController _EventFrameController;
 
         #region "Properties"
         public string Name
@@ -142,7 +142,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Template == null)
                 {
-                    var templateName = _EventFrameLoader.GetEventFrameTemplate(_Connection, _WebID);
+                    var templateName = _EventFrameController.GetEventFrameTemplate(_Connection, _WebID);
                     _Template =  AFElementTemplate.FindByName(templateName);
                 }
 
@@ -156,7 +156,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Attributes == null)
                 {
-                    var attrs = _EventFrameLoader.GetAttributes(_Connection, _WebID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
+                    var attrs = _EventFrameController.GetAttributes(_Connection, _WebID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
                     _Attributes = new AFAttributes(attrs.ToList());
                 }
 
@@ -175,7 +175,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_EventFrames == null)
                 {
-                    List<AFEventFrame> frames = _EventFrameLoader.GetEventFrames(_Connection, _WebID).ToList();
+                    List<AFEventFrame> frames = _EventFrameController.GetEventFrames(_Connection, _WebID).ToList();
                     _EventFrames = new AFEventFrames(frames);
                 }
 
@@ -210,27 +210,31 @@ namespace LazyPI.LazyObjects
 
             private void Initialize()
             {
-                CreateLoader();
+                _EventFrameController = GetController(_Connection);
             }
 
-            private void CreateLoader()
+            private static IAFEventFrameController GetController(Connection Connection)
             {
-                if (_Connection is WebAPI.WebAPIConnection)
+                IAFEventFrameController result = null;
+
+                if (Connection is WebAPI.WebAPIConnection)
                 {
-                    _EventFrameLoader = new WebAPI.AFEventFrameController();
+                    result = new WebAPI.AFEventFrameController();
                 }
+
+                return result;
             }
         #endregion
 
         #region "Static Methods"
             public static AFEventFrame Find(Connection Connection, string ID)
             {
-                return _EventFrameLoader.Find(Connection, ID);
+                return GetController(Connection).Find(Connection, ID);
             }
 
             public static AFEventFrame FindByPath(Connection Connection, string Path)
             {
-                return _EventFrameLoader.FindByPath(Connection, Path);
+                return GetController(Connection).FindByPath(Connection, Path);
             }
         #endregion
 
@@ -239,18 +243,18 @@ namespace LazyPI.LazyObjects
             {
                 if (_IsDeleted)
                 {
-                    _EventFrameLoader.Delete(_Connection, _WebID);
+                    _EventFrameController.Delete(_Connection, _WebID);
                 }
                 else if(_IsDirty)
                 {
-                    _EventFrameLoader.Update(_Connection, this);
+                    _EventFrameController.Update(_Connection, this);
 
                     if (_EventFrames != null)
                     {
                         foreach (AFEventFrame frame in _EventFrames.Where(x => x.IsNew || x.IsDeleted))
                         {
                             if (frame.IsNew)
-                                _EventFrameLoader.CreateEventFrame(_Connection, _WebID, frame);
+                                _EventFrameController.CreateEventFrame(_Connection, _WebID, frame);
                             else if (frame.IsDeleted)
                             {
                                 frame.Delete();

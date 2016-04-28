@@ -11,8 +11,8 @@ namespace LazyPI.LazyObjects
     {
         private bool _IsConnected;
         private string _ServerVersion;
-        private static IAFServerController _ServerConnector;
-        private static Lazy<AFDatabases> _Databases;
+        private static IAFServerController _ServerController;
+        private static AFDatabases _Databases;
 
         #region "Properties"
             public bool IsConnected
@@ -35,7 +35,10 @@ namespace LazyPI.LazyObjects
             {
                 get
                 {
-                    return _Databases.Value;
+                    if(_Databases == null)
+                        _Databases = new AFDatabases(_ServerController.GetDatabases(_Connection, _ID));
+    
+                    return _Databases;
                 }
             }
         #endregion
@@ -50,20 +53,17 @@ namespace LazyPI.LazyObjects
 
             private void Initialize()
             {
-                CreateLoader();
-
-                _Databases = new Lazy<AFDatabases>(() =>
-                {
-                    return new AFDatabases(_ServerConnector.GetDatabases(_Connection, _ID));
-                }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+                _ServerController = GetController(_Connection);
             }
 
-            private void CreateLoader()
+            private static IAFServerController GetController(Connection Connection)
             {
-                if(_Connection is WebAPI.WebAPIConnection)
-                {
-                    _ServerConnector = new WebAPI.AFServerController();
-                }
+                IAFServerController result = null;
+
+                if(Connection is WebAPI.WebAPIConnection)
+                    result = new WebAPI.AFServerController();
+
+                return result;
             }
         #endregion
 
@@ -76,7 +76,7 @@ namespace LazyPI.LazyObjects
             /// <returns></returns>
             public static AFServer FindByName(Connection Connection, string Name)
             {
-                return _ServerConnector.FindByName(Connection, Name);
+                return GetController(Connection).FindByName(Connection, Name);
             }
             
             /// <summary>
@@ -87,7 +87,7 @@ namespace LazyPI.LazyObjects
             /// <returns></returns>
             public static AFServer Find(Connection Connection, string ID)
             {
-                return _ServerConnector.Find(Connection, ID);
+                return GetController(Connection).Find(Connection, ID);
             }
 
             /// <summary>
@@ -97,7 +97,7 @@ namespace LazyPI.LazyObjects
             /// <returns></returns>
             public static List<AFServer> GetList(Connection Connection)
             {
-                return new List<AFServer>(_ServerConnector.List(Connection));
+                return new List<AFServer>(GetController(Connection).List(Connection));
             }
         #endregion
     }

@@ -47,34 +47,34 @@ namespace LazyPI.LazyObjects
 		private AFElements _Elements;
 		private AFAttributes _Attributes;
 		private List<string> _Categories;
-		private static IAFElementController _ElementLoader;
+		private static IAFElementController _ElementController;
 
 		#region "Properties"
-            public string Name
-            {
-                get
-                {
-                    return base.Name;
-                }
-                set
-                {
-                    base.Name = value;
-                    _IsDirty = true;
-                }
-            }
+			public string Name
+			{
+				get
+				{
+					return base.Name;
+				}
+				set
+				{
+					base.Name = value;
+					_IsDirty = true;
+				}
+			}
 
-            public string Description
-            {
-                get
-                {
-                    return base.Description;
-                }
-                set
-                {
-                    base.Description = value;
-                    _IsDirty = true;
-                }
-            }
+			public string Description
+			{
+				get
+				{
+					return base.Description;
+				}
+				set
+				{
+					base.Description = value;
+					_IsDirty = true;
+				}
+			}
 
 			public bool IsNew
 			{
@@ -118,7 +118,7 @@ namespace LazyPI.LazyObjects
 				{
 					if (_Categories == null)
 					{
-						_Categories = new List<string>(_ElementLoader.GetCategories(_Connection, _WebID));
+						_Categories = new List<string>(_ElementController.GetCategories(_Connection, _WebID));
 					}
 
 					return _Categories;
@@ -131,7 +131,7 @@ namespace LazyPI.LazyObjects
 				{
 					if (_Template == null)
 					{
-						string templateName = _ElementLoader.GetElementTemplate(_Connection, _WebID);
+						string templateName = _ElementController.GetElementTemplate(_Connection, _WebID);
 						_Template = AFElementTemplate.Find(_Connection, templateName);
 					}
 
@@ -146,7 +146,7 @@ namespace LazyPI.LazyObjects
 					if (_Parent == null)
 					{
 						string parentPath = _Path.Substring(0, _Path.LastIndexOf('\\'));
-						_Parent = _ElementLoader.FindByPath(_Connection, parentPath);
+						_Parent = _ElementController.FindByPath(_Connection, parentPath);
 					}
 
 					return _Parent;
@@ -158,7 +158,7 @@ namespace LazyPI.LazyObjects
 				get
 				{
 					if(_Elements == null)
-						_Elements = new AFElements(_ElementLoader.GetElements(_Connection, _WebID).ToList());
+						_Elements = new AFElements(_ElementController.GetElements(_Connection, _WebID).ToList());
 
 					return _Elements;
 				}
@@ -174,7 +174,7 @@ namespace LazyPI.LazyObjects
 				get
 				{
 					if(_Attributes == null)
-						_Attributes = new AFAttributes(_ElementLoader.GetAttributes(_Connection, _WebID).ToList());
+						_Attributes = new AFAttributes(_ElementController.GetAttributes(_Connection, _WebID).ToList());
 
 					return _Attributes;
 				}
@@ -202,18 +202,21 @@ namespace LazyPI.LazyObjects
 			/// </summary>
 			private void Initialize()
 			{
-				CreateLoader();
+				_ElementController = GetController(_Connection);
 
 				//Initialize Category List
-
 			}
 
-			private void CreateLoader()
+			private static IAFElementController GetController(Connection Connection)
 			{
-				if (_Connection is WebAPI.WebAPIConnection)
+				IAFElementController result = null;
+
+				if (Connection is WebAPI.WebAPIConnection)
 				{
-					_ElementLoader = new WebAPI.AFElementController();
+					result = new WebAPI.AFElementController();
 				}
+
+				return result;
 			}
 		#endregion
 
@@ -222,11 +225,11 @@ namespace LazyPI.LazyObjects
 			{
 				if (_IsDeleted)
 				{
-					_ElementLoader.Delete(_Connection, _WebID);
+					_ElementController.Delete(_Connection, _WebID);
 				}
 				else if (_IsDirty)
 				{
-					_ElementLoader.Update(_Connection, this);
+					_ElementController.Update(_Connection, this);
 
 					if (_Elements != null)
 					{
@@ -234,7 +237,7 @@ namespace LazyPI.LazyObjects
 						{
 							if (ele.IsNew)
 							{
-								_ElementLoader.CreateChildElement(_Connection, _WebID, ele);
+								_ElementController.CreateChildElement(_Connection, _WebID, ele);
 							}
 							else if (ele.IsDeleted)
 							{
@@ -275,7 +278,7 @@ namespace LazyPI.LazyObjects
 		/// <returns></returns>
 		public static AFElement Find(Connection Connection, string ID)
 		{
-			return _ElementLoader.Find(Connection, ID);
+			return GetController(Connection).Find(Connection, ID);
 		}
 
 		/// <summary>
@@ -285,7 +288,7 @@ namespace LazyPI.LazyObjects
 		/// <returns></returns>
 		public static AFElement FindByPath(Connection Connection, string Path)
 		{
-			return _ElementLoader.FindByPath(Connection, Path);
+			return GetController(Connection).FindByPath(Connection, Path);
 		}
 
 		/// <summary>
@@ -297,7 +300,7 @@ namespace LazyPI.LazyObjects
 		/// <returns>A list of elements that have a specific category.</returns>
 		public static IEnumerable<AFElement> FindByCategory(Connection Connection, string RootID, string CategoryName, int MaxCount = 1000)
 		{
-			return _ElementLoader.GetElements(Connection, RootID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
+			return GetController(Connection).GetElements(Connection, RootID, "*", CategoryName, "*", ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 		}
 
 		/// <summary>
@@ -309,7 +312,7 @@ namespace LazyPI.LazyObjects
 		/// <returns>A list of elements that have a specific template.</returns>
 		public static IEnumerable<AFElement> FindByTemplate(Connection Connection, string RootID, string TemplateName, int MaxCount = 1000)
 		{
-			return _ElementLoader.GetElements(Connection, RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
+			return GetController(Connection).GetElements(Connection, RootID, "*", "*", TemplateName, ElementType.Any, false, "Name", "Ascending", 0, MaxCount);
 		}
 		#endregion
 

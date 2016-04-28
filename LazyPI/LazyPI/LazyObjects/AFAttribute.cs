@@ -35,7 +35,7 @@ namespace LazyPI.LazyObjects
         private string _AttrType;
         private IEnumerable<string> _Categories;
         private string _ConfigString;
-        private static IAFAttributeController _AttrLoader;
+        private static IAFAttributeController _AttrController;
 
         #region "Properties"
         public bool IsDeleted
@@ -125,15 +125,17 @@ namespace LazyPI.LazyObjects
         /// </summary>
         private void Initialize()
         {
-            CreateLoader();
+            _AttrController = GetController(_Connection);
         }
 
-        private void CreateLoader()
+        private static IAFAttributeController GetController(Connection Connection)
         {
-            if (_Connection is WebAPI.WebAPIConnection)
-            {
-                _AttrLoader = new WebAPI.AFAttributeController();
-            }
+            IAFAttributeController result = null;
+
+            if (Connection is WebAPI.WebAPIConnection)
+                result = new WebAPI.AFAttributeController();
+
+            return result;
         }
         #endregion
 
@@ -144,7 +146,7 @@ namespace LazyPI.LazyObjects
         /// <returns>Returns a complete AFAttribute.</returns>
         public AFValue GetValue()
         {
-            return _AttrLoader.GetValue(_Connection, _WebID);
+            return _AttrController.GetValue(_Connection, _WebID);
         }
 
         /// <summary>
@@ -154,7 +156,7 @@ namespace LazyPI.LazyObjects
         /// <returns>Returns true if no errors occur.</returns>
         public bool SetValue(AFValue Value)
         {
-           return _AttrLoader.SetValue(_Connection, _WebID, Value);
+           return _AttrController.SetValue(_Connection, _WebID, Value);
         }
 
         #endregion
@@ -167,7 +169,7 @@ namespace LazyPI.LazyObjects
             /// <returns>Returns a complete AFAttribute.</returns>
             public static AFAttribute Find(Connection Connection,string ID)
             {
-                return _AttrLoader.Find(Connection, ID);
+                return GetController(Connection).Find(Connection, ID);
             }
 
             /// <summary>
@@ -177,7 +179,7 @@ namespace LazyPI.LazyObjects
             /// <returns></returns>
             public static AFAttribute FindByPath(Connection Connection, string Path)
             {
-                return _AttrLoader.FindByPath(Connection, Path);
+                return GetController(Connection).FindByPath(Connection, Path);
             }
 
 
@@ -188,7 +190,7 @@ namespace LazyPI.LazyObjects
             /// <returns></returns>
             public static bool Delete(Connection Connection, string ID)
             {
-                return _AttrLoader.Delete(Connection, ID);
+                return GetController(Connection).Delete(Connection, ID);
             }
         #endregion
     }

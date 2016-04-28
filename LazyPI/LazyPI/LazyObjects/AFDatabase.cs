@@ -9,13 +9,13 @@ namespace LazyPI.LazyObjects
 {
     public class AFDatabase : BaseObject
     {
-        private IAFDatabaseController _DBLoader;
+        private IAFDatabaseController _DBController;
 
         public AFElements Elements
         {
             get
             {
-                return new AFElements(_DBLoader.GetElements(_Connection, _WebID));
+                return new AFElements(_DBController.GetElements(_Connection, _WebID));
             }
         }
 
@@ -23,7 +23,7 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                return new AFEventFrames(_DBLoader.GetEventFrames(_Connection, _WebID));
+                return new AFEventFrames(_DBController.GetEventFrames(_Connection, _WebID));
             }
         }
 
@@ -35,25 +35,34 @@ namespace LazyPI.LazyObjects
 
             private void Initialize()
             {
-                if(_Connection is LazyPI.WebAPI.WebAPIConnection)
-                    _DBLoader = new LazyPI.WebAPI.AFDatabaseController();
+                _DBController = GetController(_Connection);
+            }
+
+            private static IAFDatabaseController GetController(Connection Connection)
+            {
+                IAFDatabaseController result = null;
+
+                if(Connection is WebAPI.WebAPIConnection)
+                    result = new WebAPI.AFDatabaseController();
+
+                return result;
             }
         #endregion
 
         #region "Interacitons"
             public bool CreateElement(AFElement Element)
             {
-                return _DBLoader.CreateElement(_Connection, _WebID, Element);
+                return _DBController.CreateElement(_Connection, _WebID, Element);
             }
 
             public bool CreateEventFrame(AFEventFrame Frame)
             {
-                return _DBLoader.CreateEventFrame(_Connection, _WebID, Frame);
+                return _DBController.CreateEventFrame(_Connection, _WebID, Frame);
             }
 
             public void CheckIn()
             {
-                _DBLoader.Update(_Connection, this);
+                _DBController.Update(_Connection, this);
             }
         #endregion
     }
