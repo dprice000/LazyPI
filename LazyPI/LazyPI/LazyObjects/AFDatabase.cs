@@ -65,7 +65,6 @@ namespace LazyPI.LazyObjects
         }
 
         #region "Properties"
-
             public AFDatabase this[string Name]
             {
                 get

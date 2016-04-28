@@ -29,7 +29,7 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFAttribute(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
+            return new LazyObjects.AFAttribute(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace LazyPI.WebAPI
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/attributes");
-            request.AddParameter("path", Path);
+            request.AddParameter("path", Path, ParameterType.GetOrPost);
             var response = webConnection.Client.Execute<ResponseModels.AFAttribute>(request);
 
             if (response.ErrorException != null)
@@ -51,7 +51,7 @@ namespace LazyPI.WebAPI
             }
             
             var data = response.Data;
-            return new LazyObjects.AFAttribute(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
+            return new LazyObjects.AFAttribute(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace LazyPI.WebAPI
 
             //TODO: There are members of the body object that do not translate to the lazy object. What's with that?
             ResponseModels.AFAttribute body = new ResponseModels.AFAttribute();
-            body.WebID = Attr.ID;
+            body.WebId = Attr.ID;
             body.Name = Attr.Name;
             body.Description = Attr.Description;
             body.ConfigString = Attr.ConfigString;

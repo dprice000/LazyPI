@@ -26,14 +26,14 @@ namespace LazyPI.WebAPI
 
 			var data = response.Data;
 
-			return new LazyObjects.AFElementTemplate(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
+			return new LazyObjects.AFElementTemplate(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
 		}
 
 		public LazyObjects.AFElementTemplate FindByPath(LazyPI.Common.Connection Connection, string Path)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/elementtemplates");
-			request.AddParameter("path", Path);
+			request.AddParameter("path", Path, ParameterType.GetOrPost);
 
 			var response = webConnection.Client.Execute<ResponseModels.AFElementTemplate>(request);
 
@@ -44,7 +44,7 @@ namespace LazyPI.WebAPI
 
 			var data = response.Data;
 
-			return new LazyObjects.AFElementTemplate(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
+			return new LazyObjects.AFElementTemplate(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
 		}
 
 		public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFElementTemplate template)
@@ -80,7 +80,7 @@ namespace LazyPI.WebAPI
 
 			ResponseModels.AFElementTemplate temp = new ResponseModels.AFElementTemplate();
 
-			temp.WebID = temp.ID;
+			temp.WebId = temp.Id;
 			temp.Name = Template.Name;
 			temp.Description = Template.Description;
 			temp.Path = Template.Path;
@@ -147,7 +147,7 @@ namespace LazyPI.WebAPI
 
 			foreach (var template in data.Items)
 			{
-				LazyObjects.AFAttributeTemplate attr = new LazyObjects.AFAttributeTemplate(Connection, template.WebID, template.ID, template.Name, template.Description, template.Path);
+				LazyObjects.AFAttributeTemplate attr = new LazyObjects.AFAttributeTemplate(Connection, template.WebId, template.Id, template.Name, template.Description, template.Path);
 				results.Add(attr);
 			}
 

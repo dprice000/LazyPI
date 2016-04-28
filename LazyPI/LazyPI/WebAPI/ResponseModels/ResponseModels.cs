@@ -19,15 +19,15 @@ namespace LazyPI.WebAPI.ResponseModels
 
         public BaseResponse(string ID, string WebID, string Name, string Description, string Path)
         {
-            this.WebID = WebID;
-            this.ID = ID;
+            this.WebId = WebID;
+            this.Id = ID;
             this.Name = Name;
             this.Description = Description;
             this.Path = Path;
         }
 
-        public string WebID { get; set; }
-        public string ID { get; set; }
+        public string WebId { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Path { get; set; }

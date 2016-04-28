@@ -22,14 +22,14 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFDatabase(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
+            return new LazyObjects.AFDatabase(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
         }
 
         public LazyObjects.AFDatabase FindByPath(LazyPI.Common.Connection Connection, string Path)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/assetdatabases");
-            request.AddParameter("path", Path);
+            request.AddParameter("path", Path, ParameterType.GetOrPost);
             var response = webConnection.Client.Execute<ResponseModels.AFAttribute>(request);
 
             if (response.ErrorException != null)
@@ -38,7 +38,7 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFDatabase(Connection, data.WebID, data.ID, data.Name, data.Description, data.Path);
+            return new LazyObjects.AFDatabase(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
         }
 
         public bool Update(LazyPI.Common.Connection Connection, LazyPI.LazyObjects.AFDatabase AFDB)
@@ -93,7 +93,7 @@ namespace LazyPI.WebAPI
         public IEnumerable<LazyPI.LazyObjects.AFElement> GetElements(LazyPI.Common.Connection Connection, string DatabaseID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/assetdatabases/{webId}/elements", Method.POST);
+            var request = new RestRequest("/assetdatabases/{webId}/elements");
             request.AddUrlSegment("webId", DatabaseID);
 
             var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request);
@@ -107,7 +107,7 @@ namespace LazyPI.WebAPI
 
             foreach (var element in response.Data.Items)
             {
-                results.Add(new LazyObjects.AFElement(Connection, element.WebID, element.ID, element.Name, element.Description, element.Path));
+                results.Add(new LazyObjects.AFElement(Connection, element.WebId, element.Id, element.Name, element.Description, element.Path));
             }
 
             return results;
@@ -116,7 +116,7 @@ namespace LazyPI.WebAPI
         public IEnumerable<LazyPI.LazyObjects.AFEventFrame> GetEventFrames(LazyPI.Common.Connection Connection, string DatabaseID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/assetdatabases/{webId}/eventframes", Method.POST);
+            var request = new RestRequest("/assetdatabases/{webId}/eventframes");
             request.AddUrlSegment("webId", DatabaseID);
 
             var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request);
@@ -130,7 +130,7 @@ namespace LazyPI.WebAPI
 
             foreach (var eventframe in response.Data.Items)
             {
-                results.Add(new LazyObjects.AFEventFrame(Connection, eventframe.WebID, eventframe.ID, eventframe.Name, eventframe.Description, eventframe.Path));
+                results.Add(new LazyObjects.AFEventFrame(Connection, eventframe.WebId, eventframe.Id, eventframe.Name, eventframe.Description, eventframe.Path));
             }
 
             return results;

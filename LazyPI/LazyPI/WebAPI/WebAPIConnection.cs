@@ -30,24 +30,31 @@ namespace LazyPI.WebAPI
         /// <param name="Hostname">The name or IP of the machined to connect to.</param>
         /// <param name="Username">Only required for basic authentication.</param>
         /// <param name="Password">Only required for basic authentication.</param>
-        public WebAPIConnection(AuthType AuthType,string Hostname = null, string Username = null, System.Security.SecureString Password = null)
+        public WebAPIConnection(AuthType AuthType,string Hostname = null, string Username = null, string Password = null)
         {
             _AuthType = AuthType;
             _Hostname = Hostname;
-            _Client = new RestSharp.RestClient(Hostname);
 
             if (AuthType == AuthType.Basic)
             {
-                _Client.Authenticator = new RestSharp.Authenticators.HttpBasicAuthenticator(Username, Password.ToString());
+                _Client = new RestSharp.RestClient(Hostname)
+                    {
+                        Authenticator = new RestSharp.Authenticators.HttpBasicAuthenticator(Username, Password.ToString())
+                    };
                 _Username = Username;
             }
             else if (AuthType == AuthType.Kerberos)
             {
+
+                System.Net.NetworkCredential netCred = new System.Net.NetworkCredential(Username, Password);
+
                 //Looksup credentails of the application is using the library
-                System.Net.NetworkCredential netCred = System.Net.CredentialCache.DefaultNetworkCredentials;
+                _Client = new RestSharp.RestClient(Hostname)
+                {
+                    Authenticator = new RestSharp.Authenticators.NtlmAuthenticator(netCred)
+                };
                 _Username = netCred.UserName;
 
-                _Client.Authenticator = new RestSharp.Authenticators.NtlmAuthenticator(netCred);
             }
         }
     }
