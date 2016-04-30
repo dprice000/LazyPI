@@ -53,9 +53,8 @@ namespace LazyPI.WebAPI
 				var request = new RestRequest("/elements/{webId}", Method.PATCH);
 				request.AddUrlSegment("webId", Element.WebID);
 
-				ResponseModels.AFElement temp = new ResponseModels.AFElement(Element.ID, Element.WebID, Element.Name, Element.Description, Element.Path);
-
-				request.AddBody(temp);
+				ResponseModels.AFElement body = DataConversions.Convert(Element);
+				request.AddJsonBody(body);
 
 				var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -78,7 +77,9 @@ namespace LazyPI.WebAPI
 				WebAPIConnection webConnection = (WebAPIConnection)Connection;
 				var request = new RestRequest("/elements/{webId}/attributes", Method.POST);
 				request.AddUrlSegment("webId", ParentID);
-				request.AddBody(Attr);
+
+                ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
+				request.AddJsonBody(body);
 
 				var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -90,7 +91,9 @@ namespace LazyPI.WebAPI
 				WebAPIConnection webConnection = (WebAPIConnection)Connection;
 				var request = new RestRequest("/elements/{webId}/elements", Method.POST);
 				request.AddUrlSegment("webId", ParentID);
-				request.AddBody(Element);
+
+                ResponseModels.AFElement body = DataConversions.Convert(Element);
+				request.AddJsonBody(body);
 
 				var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -279,5 +282,6 @@ namespace LazyPI.WebAPI
 				return results;
 			}
 		#endregion
+
 	}
 }

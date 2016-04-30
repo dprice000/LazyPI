@@ -34,6 +34,7 @@ namespace LazyPI.LazyObjects
         private string _UnitsName;
         private string _AttrType;
         private IEnumerable<string> _Categories;
+        private string _DataReferencePlugin;
         private string _ConfigString;
         private static IAFAttributeController _AttrController;
 
@@ -96,6 +97,18 @@ namespace LazyPI.LazyObjects
             }
         }
 
+        public string DataReferencePlugIn
+        {
+            get
+            {
+                return _DataReferencePlugin;
+            }
+            set
+            {
+                _DataReferencePlugin = value;
+            }
+        }
+
         public string Type
         {
             get
@@ -140,6 +153,12 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Interactions"
+
+        public PIPoint GetPoint()
+        {
+            return _AttrController.GetPoint(_Connection, _WebID);
+        }
+
         /// <summary>
         /// Gets the an AFValue with the current value held in the attribute.
         /// </summary>

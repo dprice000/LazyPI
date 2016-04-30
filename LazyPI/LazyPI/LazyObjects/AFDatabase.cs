@@ -76,9 +76,9 @@ namespace LazyPI.LazyObjects
         #endregion
     }
 
-    public class AFDatabases : System.Collections.ObjectModel.ObservableCollection<AFDatabase>
+    public class AFDatabases : System.Collections.ObjectModel.Collection<AFDatabase>
     {
-        internal AFDatabases(IEnumerable<AFDatabase> databases) : base(databases)
+        internal AFDatabases(IEnumerable<AFDatabase> databases) : base(databases.ToList())
         {
         }
 

@@ -53,10 +53,8 @@ namespace LazyPI.WebAPI
 			var request = new RestRequest("/eventframes/{webId}", Method.PATCH);
 			request.AddUrlSegment("webId", Eventframe.WebID);
 
-			ResponseModels.AFEventFrame frame = new ResponseModels.AFEventFrame(Eventframe.ID, Eventframe.WebID, Eventframe.Name, Eventframe.Description, Eventframe.Path);
-			frame.StartTime = Eventframe.StartTime;
-			frame.EndTime = Eventframe.EndTime;
-			request.AddBody(frame);
+            ResponseModels.AFEventFrame body = DataConversions.Convert(Eventframe);
+			request.AddJsonBody(body);
 
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -90,7 +88,8 @@ namespace LazyPI.WebAPI
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/eventframes/{webId}/attributes", Method.POST);
 			request.AddUrlSegment("webId", FrameID);
-			request.AddBody(attribute);
+            ResponseModels.AFAttribute body = DataConversions.Convert(attribute);
+			request.AddJsonBody(body);
 
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -102,7 +101,9 @@ namespace LazyPI.WebAPI
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
 			var request = new RestRequest("/eventframes/{webId}/eventframes", Method.POST);
 			request.AddUrlSegment("webId", FrameID);
-			request.AddBody(Eventframe);
+
+            ResponseModels.AFEventFrame body = DataConversions.Convert(Eventframe);
+			request.AddJsonBody(body);
 
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -245,50 +246,5 @@ namespace LazyPI.WebAPI
 
 			return results;
 		}
-
-
-		//public IEnumerable<LazyObjects.AFEventFrame> GetEventFrames(LazyPI.Common.Connection Connection, string FrameID, SearchMode SearchMode = SearchMode.Overlapped, string StartTime = "-8h", string EndTime = "*", string NameFilter = "*", string ReferencedElementNameFilter = "*", string CategoryName = null, string TemplateName = null, string ReferencedElementTemplateName = null, bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, int MaxCount = 1000)
-		//{
-		//    WebAPIConnection webConnection = (WebAPIConnection)Connection;
-		//    var request = new RestRequest("/eventframes/{webId}/eventframes");
-		//    request.AddUrlSegment("webId", FrameID);
-		//    request.AddParameter("searchMode", SearchMode);
-		//    request.AddParameter("startTime", StartTime);
-		//    request.AddParameter("endTime", EndTime);
-		//    request.AddParameter("nameFilter", NameFilter);
-		//    request.AddParameter("referencedElementNameFilter", ReferencedElementNameFilter);
-
-
-		//    if (CategoryName != null)
-		//        request.AddParameter("categoryName", CategoryName);
-		//    if (TemplateName != null)
-		//        request.AddParameter("templateName", TemplateName);
-		//    if (ReferencedElementTemplateName != null)
-		//        request.AddParameter("referencedElementTemplateName", ReferencedElementTemplateName);
-
-		//    request.AddParameter("searchFullHierarchy", SearchFullHierarchy);
-		//    request.AddParameter("sortField", SortField);
-		//    request.AddParameter("sortOrder", SortOrder);
-		//    request.AddParameter("startIndex", StartIndex);
-		//    request.AddParameter("maxCount", MaxCount);
-
-		//    var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request);
-
-		//    if (response.ErrorException != null)
-		//    {
-		//        throw new ApplicationException("Error retrieving event frames child event frames. (See Inner Details)", response.ErrorException);
-		//    }
-
-		//    var data = response.Data;
-
-		//    List<LazyObjects.AFEventFrame> results = new List<LazyObjects.AFEventFrame>();
-
-		//    foreach (var frame in data.Items)
-		//    {
-		//        results.Add(new LazyObjects.AFEventFrame(Connection, frame.WebID, frame.Name, frame.Description, frame.Path));
-		//    }
-
-		//    return results;
-		//}
 	}
 }

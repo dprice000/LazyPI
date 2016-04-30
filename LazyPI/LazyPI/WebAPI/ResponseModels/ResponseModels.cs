@@ -282,6 +282,15 @@ namespace LazyPI.WebAPI.ResponseModels
     [Serializable]
     public class DataPoint : BaseResponse
     {
+        public DataPoint()
+        {
+        }
+
+        public DataPoint(string ID, string WebID, string Name, string Description, string Path)
+            : base(ID, WebID, Name, Description, Path)
+        {
+        }
+
         public string PointClass { get; set; }
         public string PointType { get; set; }
         public bool Future { get; set; }

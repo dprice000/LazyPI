@@ -65,16 +65,9 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/attributes/{webId}", Method.PATCH);
             request.AddUrlSegment("webId", Attr.WebID);
 
-            //TODO: There are members of the body object that do not translate to the lazy object. What's with that?
-            ResponseModels.AFAttribute body = new ResponseModels.AFAttribute();
-            body.WebId = Attr.ID;
-            body.Name = Attr.Name;
-            body.Description = Attr.Description;
-            body.ConfigString = Attr.ConfigString;
-            body.DefaultUnitsName = Attr.UnitsName;
-            body.Path = Attr.Path;
+            ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
 
-            request.AddBody(body);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -109,12 +102,9 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/attributes/{webId}", Method.POST);
             request.AddUrlSegment("webId", ParentID);
 
-            //Copy to api object
-            ResponseModels.AFAttribute clientAttr = new ResponseModels.AFAttribute();
-            clientAttr.Name = Attr.Name;
-            clientAttr.Description = Attr.Description;
+            ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
 
-            request.AddBody(clientAttr);
+            request.AddParameter("application/json", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -124,6 +114,33 @@ namespace LazyPI.WebAPI
         //TODO: Implement GetAttributes
 
         //TODO: Implement GetCategories
+
+        /// <summary>
+        /// Assumes that the attribute is of type PIPoint and returns the PIPoint.
+        /// </summary>
+        /// <param name="Connection"></param>
+        /// <param name="AttrID"></param>
+        /// <returns></returns>
+        /// <remarks>This is kind of hacky...</remarks>
+        public LazyObjects.PIPoint GetPoint(LazyPI.Common.Connection Connection, string AttrID)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/attributes/{webId}");
+            request.AddUrlSegment("webId", AttrID);
+            var attrResponse = webConnection.Client.Execute<ResponseModels.AFAttribute>(request);
+
+            string pointLink = attrResponse.Data.Links["Point"];
+            int pos = pointLink.LastIndexOf("/") + 1;
+            string webID = pointLink.Substring(pos, pointLink.Length - pos);
+
+            request = new RestRequest("/points/{webId}");
+            request.AddUrlSegment("webId", webID);
+            var pointResponse = webConnection.Client.Execute<ResponseModels.DataPoint>(request);
+            ResponseModels.DataPoint point = pointResponse.Data;
+
+            LazyObjects.PIPoint result = new LazyObjects.PIPoint(Connection, point.WebId, point.Id, point.Name, point.Description, point.Path, point.PointType, point.PointClass, point.Future);
+            return result;  
+        }
 
         /// <summary>
         /// Get the attribute's value. This call is intended for use with attributes that have no data reference only. For attributes with a data reference, consult the documentation for Streams.
