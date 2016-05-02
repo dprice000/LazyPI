@@ -53,5 +53,8 @@ namespace LazyPI.LazyObjects
         }
         #endregion
 
+        #region "Interactions"
+
+        #endregion
     }
 }

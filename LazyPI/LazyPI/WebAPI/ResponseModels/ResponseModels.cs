@@ -209,6 +209,18 @@ namespace LazyPI.WebAPI.ResponseModels
     }
 
     [Serializable]
+    public class Stream
+    {
+        public Stream()
+        {
+        }
+
+        public Dictionary<string, string> Links { get; set; }
+        public string UnitAbbreviation { get; set; }
+        public List<AFValue> Items { get; set; }
+    }
+
+    [Serializable]
     public class AFElementTemplate : BaseResponse
     {
         public AFElementTemplate()

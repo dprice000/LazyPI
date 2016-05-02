@@ -29,7 +29,7 @@ namespace LazyPI.WebAPI
             }
 
             var data = response.Data;
-            return new LazyObjects.AFAttribute(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
+            return new LazyObjects.AFAttribute(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path, data.DefaultUnitsName, data.ConfigString, data.DataReferencePlugIn, data.Type, data.CategoryNames);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace LazyPI.WebAPI
             }
             
             var data = response.Data;
-            return new LazyObjects.AFAttribute(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
+            return new LazyObjects.AFAttribute(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path, data.DefaultUnitsName, data.ConfigString, data.DataReferencePlugIn, data.Type, data.CategoryNames);
         }
 
         /// <summary>

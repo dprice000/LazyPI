@@ -133,6 +133,18 @@ namespace LazyPI.LazyObjects
             Initialize();
         }
 
+        internal AFAttribute(LazyPI.Common.Connection Connection, string WebID, string ID, string Name, string Description, string Path, string UnitsName, string ConfigString, string DataReferencePlugin, string AttrType, IEnumerable<string> Categories)
+            : base(Connection, WebID, ID, Name, Description, Path)
+        {
+            Initialize();
+
+            _Categories = Categories;
+            _ConfigString = ConfigString;
+            _AttrType = AttrType;
+            _DataReferencePlugin = DataReferencePlugin;
+            _UnitsName = UnitsName;
+        }
+
         /// <summary>
         /// Initialize all lazy loaded objects
         /// </summary>

@@ -89,6 +89,40 @@ namespace LazyPI.Common
         ForwardInProgress
     }
 
+    public enum BoundryType
+    {
+        Inside,
+        Outside,
+        Interpolated
+    }
+
+    public enum RetreivalMode
+    {
+        Auto, 
+        AtOrBefore, 
+        Before,
+        AtOrAfter,
+        After,
+        Exact
+    }
+
+    public enum UpdateOption
+    {
+        Replace, 
+        Insert,
+        NoReplace,
+        ReplaceOnly, 
+        InsertNoCompression,
+        Remove
+    }
+
+    public enum BufferOption
+    {
+        DoNotBuffer,
+        BufferIfPossible,
+        Buffer
+    }
+
     public class BaseObject
     {
         protected LazyPI.Common.Connection _Connection;

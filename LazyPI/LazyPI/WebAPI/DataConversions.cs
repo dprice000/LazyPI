@@ -8,6 +8,7 @@ namespace LazyPI.WebAPI
 {
     public class DataConversions
     {
+        #region "To Response Model"
         public static ResponseModels.DataPoint Convert(LazyObjects.PIPoint point)
         {
             ResponseModels.DataPoint result = new ResponseModels.DataPoint(point.ID, point.WebID, point.Name, point.Description, point.Path);
@@ -66,5 +67,7 @@ namespace LazyPI.WebAPI
 
             return result;
         }
+        #endregion
+
     }
 }
