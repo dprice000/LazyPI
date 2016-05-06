@@ -14,7 +14,7 @@ namespace LazyPI.LazyObjects
 		{
 			get
 			{
-				return this.SingleOrDefault(x => x.Name == Name && !x.IsDeleted);
+				return this.SingleOrDefault(x => x.Name == Name);
 			}
 		}
 
@@ -31,8 +31,7 @@ namespace LazyPI.LazyObjects
 		protected override void RemoveItem(int index)
 		{
 			AFElement ele = this[index];
-			ele.Delete();
-			ele.CheckIn();
+            ele.Delete();
 			base.RemoveItem(index);
 		}
 	}
@@ -223,40 +222,23 @@ namespace LazyPI.LazyObjects
 		#region "Interactions"
 			public void CheckIn()
 			{
-				if (_IsDeleted)
-				{
-					_ElementController.Delete(_Connection, _WebID);
-				}
-				else if (_IsDirty)
+				if (_IsDirty)
 				{
 					_ElementController.Update(_Connection, this);
 
 					if (_Elements != null)
 					{
-						foreach (AFElement ele in _Elements.Where(x => x.IsNew || IsDeleted))
+						foreach (AFElement ele in _Elements.Where(x => x.IsNew))
 						{
-							if (ele.IsNew)
-							{
-								_ElementController.CreateChildElement(_Connection, _WebID, ele);
-							}
-							else if (ele.IsDeleted)
-							{
-								ele.Delete();
-								ele.CheckIn();
-							}
+                            _ElementController.CreateChildElement(_Connection, _WebID, ele);
 						}
 					}
 
 					if (_Attributes != null)
 					{
-						foreach (AFAttribute attr in _Attributes.Where(x => x.IsDeleted || x.IsDirty))
+						foreach (AFAttribute attr in _Attributes.Where(x => x.IsNew))
 						{
-							if(attr.IsDeleted)
-								AFAttribute.Delete(_Connection, attr.WebID);
-							else if (attr.IsDirty)
-							{
-								
-							}
+                            AFAttribute.Create(_Connection, _WebID, attr);
 						}
 					}
 				}
@@ -266,7 +248,8 @@ namespace LazyPI.LazyObjects
 
 			public void Delete()
 			{
-				_IsDeleted = true;
+                _IsDeleted = true;
+				_ElementController.Delete(_Connection, _WebID);
 			}
 		#endregion
 

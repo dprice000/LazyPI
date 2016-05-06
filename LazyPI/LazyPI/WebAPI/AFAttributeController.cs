@@ -103,8 +103,21 @@ namespace LazyPI.WebAPI
             request.AddUrlSegment("webId", ParentID);
 
             ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
+            request.AddJsonBody(body);
 
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            var statusCode = webConnection.Client.Execute(request).StatusCode;
+
+            return ((int)statusCode == 201);
+        }
+
+        public bool CreateChild(LazyPI.Common.Connection Connection, string AttrID, LazyObjects.AFAttribute Attr)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/attributes/{webId}", Method.POST);
+            request.AddUrlSegment("webId", AttrID);
+
+            ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
+            request.AddJsonBody(body);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 

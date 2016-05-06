@@ -21,6 +21,12 @@ namespace LazyPI.LazyObjects
         {
         }
 
+        protected override void InsertItem(int index, AFAttribute item)
+        {
+            item.IsNew = true;
+            base.InsertItem(index, item);
+        }
+
         protected override void RemoveItem(int index)
         {
             this[index].IsDeleted = true;
@@ -29,6 +35,7 @@ namespace LazyPI.LazyObjects
 
     public class AFAttribute : BaseObject
     {
+        private bool _IsNew;
         private bool _IsDirty;
         private bool _IsDeleted;
         private string _UnitsName;
@@ -36,9 +43,22 @@ namespace LazyPI.LazyObjects
         private IEnumerable<string> _Categories;
         private string _DataReferencePlugin;
         private string _ConfigString;
+        private AFAttributes _Attributes;
         private static IAFAttributeController _AttrController;
 
         #region "Properties"
+        public bool IsNew
+        {
+            get
+            {
+                return _IsNew;
+            }
+            internal set
+            {
+                _IsNew = value;
+            }
+        }
+
         public bool IsDeleted
         {
             get
@@ -120,6 +140,22 @@ namespace LazyPI.LazyObjects
                 _AttrType = value;
             }
         }
+
+        public AFAttributes Attributes
+        {
+            get
+            {
+                //if(_Attributes == null)
+                    //  _Attributes = Get Attributes
+
+                return _Attributes;
+            }
+            set
+            {
+                _Attributes = value;
+                _IsDirty = true;
+            }
+        }
         #endregion
 
         #region "Constructors"
@@ -190,9 +226,34 @@ namespace LazyPI.LazyObjects
            return _AttrController.SetValue(_Connection, _WebID, Value);
         }
 
+        public void Delete()
+        {
+            _AttrController.Delete(_Connection, _WebID);
+        }
+
+        public void CheckIn()
+        {
+            if (_IsDirty)
+            {
+                _AttrController.Update(_Connection, this);
+
+                if (_IsDirty)
+                {
+                    foreach (AFAttribute attr in _Attributes.Where(x => x.IsNew))
+                    {
+                        _AttrController.CreateChild(_Connection, _WebID, attr);
+                    }
+                }
+            }
+        }
         #endregion
 
-        #region "Static Functions"
+        #region "Static Functions"     
+            public static void Create(Connection Connection, string ElementID, AFAttribute Attr)
+            {
+                GetController(Connection).Create(Connection, ElementID, Attr);
+            }
+
             /// <summary>
             /// Finds attribute with the ID specified.
             /// </summary>
@@ -211,8 +272,7 @@ namespace LazyPI.LazyObjects
             public static AFAttribute FindByPath(Connection Connection, string Path)
             {
                 return GetController(Connection).FindByPath(Connection, Path);
-            }
-
+            }    
 
             /// <summary>
             /// Deletes attribute specified by ID.
