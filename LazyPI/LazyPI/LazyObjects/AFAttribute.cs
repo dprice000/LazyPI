@@ -7,7 +7,7 @@ using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
-    public class AFAttributes : System.Collections.ObjectModel.Collection<AFAttribute>
+    public class AFAttributes : System.Collections.ObjectModel.ObservableCollection<AFAttribute>
     {
         public AFAttribute this[string Name]
         {
