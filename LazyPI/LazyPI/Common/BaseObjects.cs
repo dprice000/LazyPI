@@ -128,11 +128,9 @@ namespace LazyPI.Common
 
         protected void ItemsChangedMethod(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            System.Collections.ObjectModel.ObservableCollection<BaseObject> list = (System.Collections.ObjectModel.ObservableCollection<BaseObject>)(sender);
-
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                foreach (BaseObject item in list)
+                foreach (BaseObject item in e.NewItems)
                 {
                     item.IsNew = true;
                     _IsDirty = true;
@@ -140,7 +138,7 @@ namespace LazyPI.Common
             }
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                foreach (BaseObject item in list)
+                foreach (BaseObject item in e.OldItems)
                 {
                     item.IsDeleted = true;
                     _IsDirty = true;

@@ -194,6 +194,7 @@ namespace LazyPI.WebAPI.ResponseModels
         public bool IsExcluded { get; set; }
         public bool IsHidden { get; set; }
         public List<string> CategoryNames { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public bool Step { get; set; }
     }
 

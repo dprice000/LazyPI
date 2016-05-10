@@ -193,7 +193,7 @@ namespace LazyPI.LazyObjects
 					{
 						foreach (AFAttribute attr in _Attributes.Where(x => x.IsNew))
 						{
-                            AFAttribute.Create(_Connection, _WebID, attr);
+                            _ElementController.CreateAttribute(_Connection, _WebID, attr);
 						}
 					}
 				}
