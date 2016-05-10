@@ -23,7 +23,7 @@ namespace LazyPI.WebAPI
         {
             ResponseModels.AFAttribute result = new ResponseModels.AFAttribute(Attrbute.ID, Attrbute.WebID, Attrbute.Name, Attrbute.Description, Attrbute.Path);
 
-            result.CategoryNames = Attrbute.Categories.ToList();
+            //result.CategoryNames = Attrbute.Categories.ToList();
             result.ConfigString = Attrbute.ConfigString;
             result.DataReferencePlugIn = Attrbute.DataReferencePlugIn;
             result.Type = Attrbute.Type;
@@ -35,8 +35,8 @@ namespace LazyPI.WebAPI
         {
             ResponseModels.AFElement result = new ResponseModels.AFElement(element.ID, element.WebID, element.Name, element.Description, element.Path);
 
-            result.TemplateName = element.Template.Name;
-            result.CategoryNames = element.Categories.ToList();
+            //result.TemplateName = element.Template.Name;
+            //result.CategoryNames = element.Categories.ToList();
 
             return result;
         }
@@ -45,7 +45,8 @@ namespace LazyPI.WebAPI
         {
             ResponseModels.AFEventFrame result = new ResponseModels.AFEventFrame(frame.ID, frame.WebID, frame.Name, frame.Description, frame.Path);
 
-            result.CategoryNames = frame.CategoryNames.ToList();
+            //TODO: Need to add support for categories
+            //result.CategoryNames = frame.CategoryNames.ToList();
             result.StartTime = frame.StartTime;
             result.EndTime = frame.EndTime;
             result.TemplateName = frame.Template.Name;
