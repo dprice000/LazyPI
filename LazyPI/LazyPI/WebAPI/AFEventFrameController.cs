@@ -54,7 +54,7 @@ namespace LazyPI.WebAPI
 			request.AddUrlSegment("webId", Eventframe.WebID);
 
             ResponseModels.AFEventFrame body = DataConversions.Convert(Eventframe);
-			request.AddJsonBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -89,7 +89,7 @@ namespace LazyPI.WebAPI
 			var request = new RestRequest("/eventframes/{webId}/attributes", Method.POST);
 			request.AddUrlSegment("webId", FrameID);
             ResponseModels.AFAttribute body = DataConversions.Convert(attribute);
-			request.AddJsonBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -103,7 +103,7 @@ namespace LazyPI.WebAPI
 			request.AddUrlSegment("webId", FrameID);
 
             ResponseModels.AFEventFrame body = DataConversions.Convert(Eventframe);
-			request.AddJsonBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
 			var statusCode = webConnection.Client.Execute(request).StatusCode;
 

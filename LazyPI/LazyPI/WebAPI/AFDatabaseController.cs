@@ -48,7 +48,7 @@ namespace LazyPI.WebAPI
             request.AddUrlSegment("webId", AFDB.WebID);
 
             ResponseModels.AFDB body = DataConversions.Convert(AFDB);
-            request.AddJsonBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -72,7 +72,7 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/assetdatabases/{webId}/elements", Method.POST);
             request.AddUrlSegment("webId", DatabaseID);
             ResponseModels.AFElement body = DataConversions.Convert(Element);
-            request.AddJsonBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -85,7 +85,7 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/assetdatabases/{webId}/eventframes", Method.POST);
             request.AddUrlSegment("webId", DatabaseID);
             ResponseModels.AFEventFrame body = DataConversions.Convert(EventFrame);
-            request.AddBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 

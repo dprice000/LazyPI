@@ -66,8 +66,7 @@ namespace LazyPI.WebAPI
             request.AddUrlSegment("webId", Attr.WebID);
 
             ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
-
-            request.AddParameter("application/json", body, ParameterType.RequestBody);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -103,7 +102,7 @@ namespace LazyPI.WebAPI
             request.AddUrlSegment("webId", ParentID);
 
             ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
-            request.AddJsonBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -117,7 +116,7 @@ namespace LazyPI.WebAPI
             request.AddUrlSegment("webId", AttrID);
 
             ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
-            request.AddJsonBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 

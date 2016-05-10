@@ -26,11 +26,15 @@ namespace LazyPI.WebAPI.ResponseModels
             this.Path = Path;
         }
 
+        [Newtonsoft.Json.JsonIgnore]
         public string WebId { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public string Path { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
         public Dictionary<string, string> Links { get; set; }
     }
 

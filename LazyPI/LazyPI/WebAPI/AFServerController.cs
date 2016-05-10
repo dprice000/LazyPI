@@ -130,7 +130,7 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/assetservers/{webId}/assetdatabases", Method.POST);
             request.AddUrlSegment("webId", AFServerID);
             ResponseModels.AFDB body = DataConversions.Convert(AFDB);
-            request.AddJsonBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 
@@ -143,7 +143,7 @@ namespace LazyPI.WebAPI
             var request = new RestRequest("/assetservers/{webId}/unitclasses", Method.POST);
             request.AddUrlSegment("webId", AFServerID);
             ResponseModels.UnitClass body = DataConversions.Convert(UnitClass);
-            request.AddJsonBody(body);
+            request.AddParameter("application/json; charset=utf-8", body, ParameterType.RequestBody);
 
             var statusCode = webConnection.Client.Execute(request).StatusCode;
 
