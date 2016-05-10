@@ -72,6 +72,27 @@ namespace LazyPI.LazyObjects
             public void CheckIn()
             {
                 _DBController.Update(_Connection, this);
+
+				if (_IsDirty)
+				{
+					_DBController.Update(_Connection, this);
+
+					if (_Elements != null)
+					{
+						foreach (AFElement ele in _Elements.Where(x => x.IsNew))
+						{
+                            _DBController.CreateElement(_Connection, _WebID, ele);
+						}
+					}
+
+					if (_EventFrames != null)
+					{
+						foreach (AFEventFrame frame in _EventFrames.Where(x => x.IsNew))
+						{
+                            _DBController.CreateEventFrame(_Connection, _WebID, frame);
+						}
+					}
+				}
             }
         #endregion
     }
