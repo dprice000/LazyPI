@@ -26,9 +26,6 @@ namespace LazyPI.LazyObjects
 
 	public class AFElement : BaseObject
 	{
-		private bool _IsNew;
-		private bool _IsDirty;
-		private bool _IsDeleted;
 		private AFElementTemplate _Template;
 		private AFElement _Parent;
 		private AFElements _Elements;
@@ -60,42 +57,6 @@ namespace LazyPI.LazyObjects
 				{
 					base.Description = value;
 					_IsDirty = true;
-				}
-			}
-
-			public bool IsNew
-			{
-				get
-				{
-					return _IsNew;
-				}
-				internal set
-				{
-					_IsNew = value;
-				}
-			}
-
-			public bool IsDirty
-			{
-				get
-				{
-					return _IsDirty;
-				}
-				internal set
-				{
-					_IsDirty = value;
-				}
-			}
-
-			public bool IsDeleted
-			{
-				get
-				{
-					return _IsDeleted;
-				}
-				internal set
-				{
-					_IsDeleted = value;
 				}
 			}
 
@@ -147,7 +108,7 @@ namespace LazyPI.LazyObjects
                     if (_Elements == null)
                     {
                         _Elements = new AFElements(_ElementController.GetElements(_Connection, _WebID).ToList());
-                        _Elements.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ElementsChangedMethod);
+                        _Elements.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ItemsChangedMethod);
                     }
 
 					return _Elements;
@@ -166,7 +127,7 @@ namespace LazyPI.LazyObjects
                     if (_Attributes == null)
                     {
                         _Attributes = new AFAttributes(_ElementController.GetAttributes(_Connection, _WebID).ToList());
-                        _Attributes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(AttributesChangedMethod);
+                        _Attributes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ItemsChangedMethod);
                     }
 
 					return _Attributes;
@@ -199,54 +160,6 @@ namespace LazyPI.LazyObjects
 
 				//Initialize Category List
 			}
-
-            private void ElementsChangedMethod(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-            {
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                {
-                    AFElement ele = (AFElement)sender;
-                    ele.IsNew = true;
-                    _IsDirty = true;
-                }
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-                {
-                    AFElement ele = (AFElement)sender;
-                    ele.Delete();
-                    _IsDirty = true;
-                }
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-                {
-                    throw new NotImplementedException("Replace not implemented by LazyPI");
-                }
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-                {
-                    throw new NotImplementedException("Move not implemented by LazyPI");
-                }
-            }
-
-            private void AttributesChangedMethod(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-            {
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-                {
-                    AFAttribute ele = (AFAttribute)sender;
-                    ele.IsNew = true;
-                    _IsDirty = true;
-                }
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-                {
-                    AFAttribute ele = (AFAttribute)sender;
-                    ele.Delete();
-                    _IsDirty = true;
-                }
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-                {
-                    throw new NotImplementedException("Replace not implemented by LazyPI");
-                }
-                if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-                {
-                    throw new NotImplementedException("Move not implemented by LazyPI");
-                }
-            }
 
 			private static IAFElementController GetController(Connection Connection)
 			{

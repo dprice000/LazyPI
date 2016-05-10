@@ -14,6 +14,9 @@ namespace LazyPI.Common
         protected string _Name;
         protected string _Path;
         protected string _Description;
+        protected bool _IsNew;
+        protected bool _IsDirty;
+        protected bool _IsDeleted;
 
         #region "Properties"
         public string ID
@@ -63,6 +66,42 @@ namespace LazyPI.Common
                 return this._Path;
             }
         }
+
+        public bool IsNew
+        {
+            get
+            {
+                return _IsNew;
+            }
+            internal set
+            {
+                _IsNew = value;
+            }
+        }
+
+        public bool IsDirty
+        {
+            get
+            {
+                return _IsDirty;
+            }
+            internal set
+            {
+                _IsDirty = value;
+            }
+        }
+
+        public bool IsDeleted
+        {
+            get
+            {
+                return _IsDeleted;
+            }
+            internal set
+            {
+                _IsDeleted = value;
+            }
+        }
         #endregion
 
         #region "Constructors"
@@ -86,5 +125,35 @@ namespace LazyPI.Common
             _WebID = webId;
         }
         #endregion
+
+        protected void ItemsChangedMethod(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            System.Collections.ObjectModel.ObservableCollection<BaseObject> list = (System.Collections.ObjectModel.ObservableCollection<BaseObject>)(sender);
+
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                foreach (BaseObject item in list)
+                {
+                    item.IsNew = true;
+                    _IsDirty = true;
+                }
+            }
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+            {
+                foreach (BaseObject item in list)
+                {
+                    item.IsDeleted = true;
+                    _IsDirty = true;
+                }
+            }
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+            {
+                throw new NotImplementedException("Replace not implemented by LazyPI");
+            }
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
+            {
+                throw new NotImplementedException("Move not implemented by LazyPI");
+            }
+        }
     }
 }

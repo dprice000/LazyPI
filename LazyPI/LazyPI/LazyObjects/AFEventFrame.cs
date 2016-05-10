@@ -40,9 +40,6 @@ namespace LazyPI.LazyObjects
 
     public class AFEventFrame : BaseObject
     {
-        private bool _IsNew;
-        private bool _IsDirty;
-        private bool _IsDeleted;
         private DateTime _StartTime;
         private DateTime _EndTime;
         private AFElementTemplate _Template;
@@ -75,38 +72,6 @@ namespace LazyPI.LazyObjects
             {
                 base.Description = value;
                 _IsDirty = true;
-            }
-        }
-
-        public bool IsNew
-        {
-            get
-            {
-                return _IsNew;
-            }
-            internal set
-            {
-                _IsNew = value;
-            }
-        }
-
-        public bool IsDirty
-        {
-            get
-            {
-                return _IsDirty;
-            }
-        }
-
-        public bool IsDeleted
-        {
-            get
-            {
-                return _IsDeleted;
-            }
-            internal set
-            {
-                _IsDeleted = value;
             }
         }
 
@@ -158,6 +123,7 @@ namespace LazyPI.LazyObjects
                 {
                     var attrs = _EventFrameController.GetAttributes(_Connection, _WebID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
                     _Attributes = new AFAttributes(attrs.ToList());
+                    _Attributes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ItemsChangedMethod);
                 }
 
                 return _Attributes;
@@ -175,8 +141,8 @@ namespace LazyPI.LazyObjects
             {
                 if (_EventFrames == null)
                 {
-                    List<AFEventFrame> frames = _EventFrameController.GetEventFrames(_Connection, _WebID).ToList();
-                    _EventFrames = new AFEventFrames(frames);
+                    _EventFrames = new AFEventFrames(_EventFrameController.GetEventFrames(_Connection, _WebID));
+                    _EventFrames.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ItemsChangedMethod);
                 }
 
                 return _EventFrames;
@@ -211,6 +177,7 @@ namespace LazyPI.LazyObjects
             private void Initialize()
             {
                 _EventFrameController = GetController(_Connection);
+
             }
 
             private static IAFEventFrameController GetController(Connection Connection)

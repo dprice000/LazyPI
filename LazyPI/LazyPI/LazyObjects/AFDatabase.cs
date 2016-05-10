@@ -58,7 +58,7 @@ namespace LazyPI.LazyObjects
             }
         #endregion
 
-        #region "Interacitons"
+        #region "Interactions"
             public bool CreateElement(AFElement Element)
             {
                 return _DBController.CreateElement(_Connection, _WebID, Element);

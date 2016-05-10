@@ -35,9 +35,6 @@ namespace LazyPI.LazyObjects
 
     public class AFAttribute : BaseObject
     {
-        private bool _IsNew;
-        private bool _IsDirty;
-        private bool _IsDeleted;
         private string _UnitsName;
         private string _AttrType;
         private IEnumerable<string> _Categories;
@@ -47,41 +44,6 @@ namespace LazyPI.LazyObjects
         private static IAFAttributeController _AttrController;
 
         #region "Properties"
-        public bool IsNew
-        {
-            get
-            {
-                return _IsNew;
-            }
-            internal set
-            {
-                _IsNew = value;
-            }
-        }
-
-        public bool IsDeleted
-        {
-            get
-            {
-                return _IsDeleted;
-            }
-            internal set
-            {
-                _IsDeleted = value;
-            }
-        }
-
-        public bool IsDirty
-        {
-            get
-            {
-                return _IsDirty; 
-            }
-            internal set
-            {
-                _IsDirty = value;
-            }
-        }
 
         public IEnumerable<string> Categories
         {
