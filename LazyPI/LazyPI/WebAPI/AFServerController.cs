@@ -7,37 +7,23 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-    public class AFServerController : LazyObjects.IAFServerController
+    public class AFServerController : RestRequester<ResponseModels.AFServer>, LazyObjects.IAFServerController
     {
         public LazyPI.LazyObjects.AFServer Find(LazyPI.Common.Connection Connection, string ID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/assetservers/{webId}");
-            request.AddUrlSegment("webId", ID);
-            var response = webConnection.Client.Execute<ResponseModels.AFServer>(request);
+            var endpoint = "/assetservers/{webId}";
+            ResponseModels.AFServer data = base.Read(webConnection, endpoint, ID);
 
-            if (response.ErrorException != null)
-            {
-                throw new ApplicationException("Error finding database by ID. (See Inner Details)", response.ErrorException);
-            }
-
-            var data = response.Data;
             return new LazyObjects.AFServer(Connection, data.WebId, data.Id, data.Name, data.Description, data.IsConnected, data.ServerVersion, data.Path);
         }
 
         public LazyObjects.AFServer FindByPath(LazyPI.Common.Connection Connection, string Path)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/assetservers");
-            request.AddParameter("path", Path, ParameterType.GetOrPost);
-            var response = webConnection.Client.Execute<ResponseModels.AFServer>(request);
+            var endpoint = "/assetservers";
+            ResponseModels.AFServer data = base.ReadByPath(webConnection, endpoint, Path);
 
-            if (response.ErrorException != null)
-            {
-                throw new ApplicationException("Error finding attribute by path. (See Inner Details)", response.ErrorException);
-            }
-
-            var data = response.Data;
             return new LazyObjects.AFServer(Connection, data.WebId, data.Id, data.Name, data.Description, data.IsConnected, data.ServerVersion, data.Path);
         }
 

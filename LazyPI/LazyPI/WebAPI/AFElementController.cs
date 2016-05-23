@@ -9,40 +9,24 @@ using ResponseModels = LazyPI.WebAPI.ResponseModels;
 
 namespace LazyPI.WebAPI
 {
-	public class AFElementController : LazyObjects.IAFElementController
+	public class AFElementController : RestRequester<ResponseModels.AFElement>, LazyObjects.IAFElementController
 	{
 		// These functions have direct references to WebAPI calls
 		#region "Public Methods"
 			public LazyObjects.AFElement Find(LazyPI.Common.Connection Connection, string ElementID)
 			{
 				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}");
-				request.AddUrlSegment("webId", ElementID);
+				var endpoint = "/elements/{webId}";
+				ResponseModels.AFElement data = base.Read(webConnection, endpoint, ElementID);
 
-				var response = webConnection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
-
-				if (response.ErrorException != null)
-				{
-					throw new ApplicationException("Error finding element by ID. (See Inner Details)", response.ErrorException);
-				}
-
-				ResponseModels.AFElement data = response.Data;
 				return new LazyObjects.AFElement(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
 			}
 
 			public LazyObjects.AFElement FindByPath(LazyPI.Common.Connection Connection, string Path)
 			{
 				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements");
-				request.AddParameter("path", Path, ParameterType.GetOrPost);
-
-				var response = webConnection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
-				var data = response.Data;
-
-				if (response.ErrorException != null)
-				{
-					throw new ApplicationException("Error finding element by path. (See Inner Details)", response.ErrorException);
-				}
+				var endpoint = "/elements";
+                ResponseModels.AFElement data = base.ReadByPath(webConnection, endpoint, Path);
 
 				return new LazyObjects.AFElement(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
 			}
@@ -50,26 +34,18 @@ namespace LazyPI.WebAPI
 			public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFElement Element)
 			{
 				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}", Method.PATCH);
-				request.AddUrlSegment("webId", Element.WebID);
+				var endpoint = "/elements/{webId}";
+                ResponseModels.AFElement body = DataConversions.Convert(Element);
 
-				ResponseModels.AFElement body = DataConversions.Convert(Element);
-                request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
-
-				var statusCode = webConnection.Client.Execute(request).StatusCode;
-
-				return ((int)statusCode == 204);
+				return base.Update(webConnection,endpoint, body);
 			}
 
 			public bool Delete(LazyPI.Common.Connection Connection, string ElementID)
 			{
 				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}", Method.DELETE);
-				request.AddUrlSegment("webId", ElementID);
+				var endpoint = "/elements/{webId}";
 
-				var statusCode = webConnection.Client.Execute(request).StatusCode;
-
-				return ((int)statusCode == 204);
+				return base.Delete(webConnection, endpoint, ElementID);
 			}
 
 			public bool CreateAttribute(LazyPI.Common.Connection Connection, string ParentID, LazyObjects.AFAttribute Attr)

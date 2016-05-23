@@ -9,22 +9,13 @@ using ResponseModels = LazyPI.WebAPI.ResponseModels;
 
 namespace LazyPI.WebAPI
 {
-	public class AFEventFrameController : LazyObjects.IAFEventFrameController
+	public class AFEventFrameController : RestRequester<ResponseModels.AFEventFrame>, LazyObjects.IAFEventFrameController
 	{
 		public LazyObjects.AFEventFrame Find(LazyPI.Common.Connection Connection, string FrameID)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
-			var request = new RestRequest("/eventframes/{webId}");
-			request.AddUrlSegment("webId", FrameID);
-
-			var response = webConnection.Client.Execute<ResponseModels.AFEventFrame>(request);
-
-			if (response.ErrorException != null)
-			{
-				throw new ApplicationException("Error finding event frame by ID. (See Inner Details)", response.ErrorException);
-			}
-
-			var data = response.Data;
+			var endpoint = "/eventframes/{webId}";
+			ResponseModels.AFEventFrame data = base.Read(webConnection, endpoint, FrameID);
 
 			return new LazyObjects.AFEventFrame(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
 		}
@@ -32,17 +23,9 @@ namespace LazyPI.WebAPI
 		public LazyObjects.AFEventFrame FindByPath(LazyPI.Common.Connection Connection, string Path)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
-			var request = new RestRequest("/eventframes");
-			request.AddParameter("path", Path, ParameterType.GetOrPost);
+			var endpoint = "/eventframes";
 
-			var response = webConnection.Client.Execute<ResponseModels.AFEventFrame>(request);
-
-			if (response.ErrorException != null)
-			{
-				throw new ApplicationException("Error finding element by path. (See Inner Details)", response.ErrorException);
-			}
-
-			var data = response.Data;
+			ResponseModels.AFEventFrame data = base.ReadByPath(webConnection, endpoint, Path);
 
 			return new LazyObjects.AFEventFrame(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
 		}
@@ -50,26 +33,18 @@ namespace LazyPI.WebAPI
 		public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFEventFrame Eventframe)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
-			var request = new RestRequest("/eventframes/{webId}", Method.PATCH);
-			request.AddUrlSegment("webId", Eventframe.WebID);
-
+			var endpoint = "/eventframes/{webId}";
             ResponseModels.AFEventFrame body = DataConversions.Convert(Eventframe);
-            request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
 
-			var statusCode = webConnection.Client.Execute(request).StatusCode;
-
-			return ((int)statusCode == 204 ? true : false);
+			return base.Update(webConnection, endpoint, body);
 		}
 
 		public bool Delete(LazyPI.Common.Connection Connection, string FrameID)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
-			var request = new RestRequest("/eventframes/{webId}", Method.DELETE);
-			request.AddUrlSegment("webId", FrameID);
+			var endpoint = "/eventframes/{webId}";
 
-			var statusCode = webConnection.Client.Execute(request).StatusCode;
-
-			return ((int)statusCode == 204 ? true : false);
+			return base.Delete(webConnection, endpoint, FrameID);
 		}
 
 		public bool CaptureValues(LazyPI.Common.Connection Connection, string FrameID)

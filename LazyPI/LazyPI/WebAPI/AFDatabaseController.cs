@@ -7,63 +7,41 @@ using RestSharp;
 
 namespace LazyPI.WebAPI
 {
-    public class AFDatabaseController : LazyPI.LazyObjects.IAFDatabaseController
+    public class AFDatabaseController : RestRequester<ResponseModels.AFDB>, LazyPI.LazyObjects.IAFDatabaseController
     {
         public LazyPI.LazyObjects.AFDatabase Find(LazyPI.Common.Connection Connection, string ID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/assetdatabases/{webId}");
-            request.AddUrlSegment("webId", ID);
-            var response = webConnection.Client.Execute<ResponseModels.AFAttribute>(request);
+            var endpoint = "/assetdatabases/{webId}";
+            var data = base.Read(webConnection, endpoint, ID);
 
-            if (response.ErrorException != null)
-            {
-                throw new ApplicationException("Error finding database by ID. (See Inner Details)", response.ErrorException);
-            }
-
-            var data = response.Data;
             return new LazyObjects.AFDatabase(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
         }
 
         public LazyObjects.AFDatabase FindByPath(LazyPI.Common.Connection Connection, string Path)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/assetdatabases");
-            request.AddParameter("path", Path, ParameterType.GetOrPost);
-            var response = webConnection.Client.Execute<ResponseModels.AFAttribute>(request);
+            var endpoint = "/assetdatabases";
+            var data = base.ReadByPath(webConnection, endpoint, Path);
 
-            if (response.ErrorException != null)
-            {
-                throw new ApplicationException("Error finding attribute by path. (See Inner Details)", response.ErrorException);
-            }
-
-            var data = response.Data;
             return new LazyObjects.AFDatabase(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
         }
 
         public bool Update(LazyPI.Common.Connection Connection, LazyPI.LazyObjects.AFDatabase AFDB)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/attributes/{webId}", Method.PATCH);
-            request.AddUrlSegment("webId", AFDB.WebID);
-
+            var endpoint = "/attributes/{webId}";
             ResponseModels.AFDB body = DataConversions.Convert(AFDB);
-            request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
 
-            var statusCode = webConnection.Client.Execute(request).StatusCode;
-
-            return ((int)statusCode == 204);
+            return base.Update(webConnection, endpoint, body);
         }
 
         public bool Delete(LazyPI.Common.Connection Connection, string DatabaseID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/attributes/{webId}", Method.DELETE);
-            request.AddUrlSegment("webId", DatabaseID);
+            var endpoint = "/attributes/{webId}";
 
-            var statusCode = webConnection.Client.Execute(request).StatusCode;
-
-            return ((int)statusCode == 204);
+            return base.Delete(webConnection, endpoint, DatabaseID);
         }
 
         public bool CreateElement(LazyPI.Common.Connection Connection, string DatabaseID, LazyPI.LazyObjects.AFElement Element)

@@ -54,10 +54,10 @@ namespace LazyPI.WebAPI
             return response.Data;
         }
 
-        public bool Update(WebAPIConnection Connection, string Endpoint, T AFObject)
+        public bool Update(WebAPIConnection Connection, string Endpoint, T Body)
         {
             var request = new RestRequest(Endpoint, Method.PATCH);
-            request.AddUrlSegment("webId", AFObject.ID);
+            request.AddUrlSegment("webId", Body.ID);
 
 
             request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(AFObject), ParameterType.RequestBody);

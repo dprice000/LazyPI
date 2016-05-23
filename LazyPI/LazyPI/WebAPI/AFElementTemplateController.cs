@@ -9,22 +9,13 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-	public class AFElementTemplateController : LazyObjects.IAFElementTemplateContoller
+	public class AFElementTemplateController : RestRequester<ResponseModels.AFElementTemplate>, LazyObjects.IAFElementTemplateContoller
 	{
 		public LazyObjects.AFElementTemplate Find(LazyPI.Common.Connection Connection, string TemplateID)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
-			var request = new RestRequest("/elementtemplates/{webId}");
-			request.AddUrlSegment("webId", TemplateID);
-
-			var response = webConnection.Client.Execute<ResponseModels.AFElementTemplate>(request);
-
-			if (response.ErrorException != null)
-			{
-				throw new ApplicationException("Error finding element template by ID. (See Inner Details)", response.ErrorException);
-			}
-
-			var data = response.Data;
+			var endpoint = "/elementtemplates/{webId}";
+			ResponseModels.AFElementTemplate data = base.Read(webConnection, endpoint, TemplateID);
 
 			return new LazyObjects.AFElementTemplate(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
 		}
@@ -32,17 +23,8 @@ namespace LazyPI.WebAPI
 		public LazyObjects.AFElementTemplate FindByPath(LazyPI.Common.Connection Connection, string Path)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
-			var request = new RestRequest("/elementtemplates");
-			request.AddParameter("path", Path, ParameterType.GetOrPost);
-
-			var response = webConnection.Client.Execute<ResponseModels.AFElementTemplate>(request);
-
-			if (response.ErrorException != null)
-			{
-				throw new ApplicationException("Error finding element template by path. (See Inner Details)", response.ErrorException);
-			}
-
-			var data = response.Data;
+			var endpoint = "/elementtemplates";
+			ResponseModels.AFElementTemplate data = base.ReadByPath(webConnection, endpoint, Path);
 
 			return new LazyObjects.AFElementTemplate(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
 		}
@@ -50,27 +32,20 @@ namespace LazyPI.WebAPI
 		public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFElementTemplate template)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
-			var request = new RestRequest("/elementtemplates/{webId}", Method.PATCH);
-			request.AddUrlSegment("webId", template.WebID);
-            ResponseModels.AFElementTemplate temp = new ResponseModels.AFElementTemplate(template.ID, template.WebID, template.Name, template.Description, template.Path);
-            temp.AllowElementToExtend = template.IsExtendable;
+			var endpoint = "/elementtemplates/{webId}";
+            ResponseModels.AFElementTemplate body = new ResponseModels.AFElementTemplate(template.ID, template.WebID, template.Name, template.Description, template.Path);
+            body.AllowElementToExtend = template.IsExtendable;
 
-			request.AddBody(temp);
-			var statusCode = webConnection.Client.Execute(request).StatusCode;
-
-			return ((int)statusCode == 204);
+			return base.Update(webConnection, endpoint, body);
 		}
 
 		public bool Delete(LazyPI.Common.Connection Connection, string TemplateID)
 		{
 			WebAPIConnection webConnection = (WebAPIConnection)Connection;
-			var request = new RestRequest("/elementtemplates/{webId}", Method.DELETE);
-			request.AddUrlSegment("webId", TemplateID);
-			var statusCode = webConnection.Client.Execute(request).StatusCode;
+			var endpoint = "/elementtemplates/{webId}";
 
-			return ((int)statusCode == 204);
+			return base.Delete(webConnection, endpoint, TemplateID);
 		}
-
 
 		public bool CreateElementTemplate(LazyPI.Common.Connection Connection, string ParentID, LazyObjects.AFElementTemplate Template)
 		{
