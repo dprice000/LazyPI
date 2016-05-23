@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
-    public class AFAttributeController : LazyObjects.IAFAttributeController
+    public class AFAttributeController : RestRequester<ResponseModels.AFAttribute>, LazyObjects.IAFAttributeController
     {
         /// <summary>
         /// Returns the AF Attribute specified by the WebID.
@@ -19,16 +19,10 @@ namespace LazyPI.WebAPI
         public LazyObjects.AFAttribute Find(LazyPI.Common.Connection Connection, string ID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/attributes/{webId}");
-            request.AddUrlSegment("webId", ID);
-            var response = webConnection.Client.Execute<ResponseModels.AFAttribute>(request);
+            string endpoint = "/attributes/{webId}";
 
-            if (response.ErrorException != null)
-            {
-                throw new ApplicationException("Error finding attribute by ID. (See Inner Details)", response.ErrorException);
-            }
+            var data = base.Read(webConnection, endpoint, ID);
 
-            var data = response.Data;
             return new LazyObjects.AFAttribute(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path, data.DefaultUnitsName, data.ConfigString, data.DataReferencePlugIn, data.Type, data.CategoryNames);
         }
 
@@ -41,16 +35,9 @@ namespace LazyPI.WebAPI
         public LazyObjects.AFAttribute FindByPath(LazyPI.Common.Connection Connection,  string Path)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/attributes");
-            request.AddParameter("path", Path, ParameterType.GetOrPost);
-            var response = webConnection.Client.Execute<ResponseModels.AFAttribute>(request);
+            var endpoint = "/attributes";
+            var data = base.ReadByPath(webConnection, endpoint, Path);
 
-            if (response.ErrorException != null)
-            {
-                throw new ApplicationException("Error finding attribute by path. (See Inner Details)", response.ErrorException);
-            }
-            
-            var data = response.Data;
             return new LazyObjects.AFAttribute(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path, data.DefaultUnitsName, data.ConfigString, data.DataReferencePlugIn, data.Type, data.CategoryNames);
         }
 
@@ -62,15 +49,10 @@ namespace LazyPI.WebAPI
         public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFAttribute Attr)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/attributes/{webId}", Method.PATCH);
-            request.AddUrlSegment("webId", Attr.WebID);
-
+            var endpoint = "/attributes/{webId}";
             ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
-            request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
 
-            var statusCode = webConnection.Client.Execute(request).StatusCode;
-
-            return ((int)statusCode == 204);
+            return base.Update(webConnection, endpoint, body);
         }
 
         /// <summary>
@@ -81,12 +63,9 @@ namespace LazyPI.WebAPI
         public bool Delete(LazyPI.Common.Connection Connection,  string ID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
-            var request = new RestRequest("/attributes/{webId}", Method.DELETE);
-            request.AddUrlSegment("webId", ID);
+            var endpoint = "/attributes/{webId}";
 
-            var statusCode = webConnection.Client.Execute(request).StatusCode;
-
-            return ((int)statusCode == 204);
+            return base.Delete(webConnection, endpoint, ID);
         }
 
         /// <summary>

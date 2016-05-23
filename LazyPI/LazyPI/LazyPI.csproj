@@ -60,6 +60,7 @@
     <Compile Include="WebAPI\AFDatabaseController.cs" />
     <Compile Include="WebAPI\AFServerController.cs" />
     <Compile Include="WebAPI\DataConversions.cs" />
+    <Compile Include="WebAPI\RestRequester.cs" />
     <Compile Include="WebAPI\WebAPIConnection.cs" />
     <Compile Include="LazyObjects\AFAttribute.cs" />
     <Compile Include="LazyObjects\AFAttributeCategory.cs" />
