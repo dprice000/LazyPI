@@ -3,7 +3,7 @@
 
 **Summary**
 
-The goal of this project was to create a high level abstraction on top of the the AFSDK. LazyPI acts as a wrapper class and uses interfaces to define a general set of operations that must be implemented. These interfaces can be implemented for a WebAPI, WCF, OLEDB, or native DLL. The goal is to create a standard API which can interact with all OSIsoft AFSDK implementations. 
+The goal of this project is to create a high level abstraction on top of the the AFSDK. LazyPI acts as a wrapper class and uses interfaces to define a general set of operations that must be implemented. These interfaces can be implemented for a WebAPI, WCF, OLEDB, or native DLL. The goal is to create a standard API which can interact with all OSIsoft AFSDK implementations. 
 
 **PI WebAPI**
 
