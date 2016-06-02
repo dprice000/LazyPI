@@ -8,3 +8,5 @@ The goal of this project is to create a high level abstraction on top of the the
 **PI WebAPI**
 
 Using the WebAPIConnection object configures LazyPI to make use of the OSIsoft WebAPI. The library will make use of the interfraces defined in the WebAPI namespace.
+
+     WebAPIConnection conn = new WebAPIConnection(AuthType.Basic, "MyHost", "Username", "Password");
