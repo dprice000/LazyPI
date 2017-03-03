@@ -14,7 +14,7 @@ namespace LazyPI.LazyObjects
         bool Update(Connection Connection, AFEventFrame EventFrame);
         bool Delete(Connection Connection, string FrameID);
         bool CaptureValues(Connection Connection, string FrameID);
-        bool CreateAttribute(Connection Connection, string FrameID, AFAttribute EventFrame);
+        bool CreateAttribute(Connection Connection, string FrameID, AFAttribute Attribute);
         bool CreateEventFrame(Connection Connection, string ParentID, AFEventFrame EventFrame);
         string GetEventFrameTemplate(Connection Connection, string FrameID);
         IEnumerable<AFAttribute> GetAttributes(Connection Connection, string FrameID, string NameFilter, string CategoryName, string TemplateName, string ValueType, bool SearchFullHierarchy, string SortField, string SortOrder, int StartIndex, bool ShowExcluded, bool ShowHidden, int MaxCount);
