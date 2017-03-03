@@ -66,7 +66,10 @@
     <Compile Include="Controllers\EventFrameTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\ElementTests.cs" />
+    <Compile Include="WebAPI\AFDatabaseController.cs" />
+    <Compile Include="WebAPI\AFServerController.cs" />
     <Compile Include="WebAPI\ElementController.cs" />
+    <Compile Include="WebAPI\EventFrameController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LazyPI\LazyPI.csproj">
