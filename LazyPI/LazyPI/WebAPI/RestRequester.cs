@@ -11,7 +11,7 @@ namespace LazyPI.WebAPI
     /// <summary>
     /// A class 
     /// </summary>
-    public abstract class RestRequester<T> where T : new()
+    internal abstract class RestRequester<T> where T : new()
     {
         //public bool Create(WebAPIConnection Connection, string EndPoint, string ID) 
         //{
@@ -60,7 +60,7 @@ namespace LazyPI.WebAPI
             request.AddUrlSegment("webId", Body.ID);
 
 
-            request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(AFObject), ParameterType.RequestBody);
+            request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(Body), ParameterType.RequestBody);
 
             var statusCode = Connection.Client.Execute(request).StatusCode;
 
