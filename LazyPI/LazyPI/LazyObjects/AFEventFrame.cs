@@ -48,32 +48,6 @@ namespace LazyPI.LazyObjects
 
         #region "Properties"
 
-        public string Name
-        {
-            get
-            {
-                return base.Name;
-            }
-            set
-            {
-                base.Name = value;
-                _IsDirty = true;
-            }
-        }
-
-        public string Description
-        {
-            get
-            {
-                return base.Description;
-            }
-            set
-            {
-                base.Description = value;
-                _IsDirty = true;
-            }
-        }
-
         public DateTime StartTime
         {
             get
