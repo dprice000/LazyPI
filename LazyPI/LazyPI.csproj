@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <Description>A wrapper arround OSIsoft WebAPI.</Description>
+    <RepositoryUrl>https://github.com/dprice809/LazyPI.git</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageProjectUrl>https://github.com/dprice809/LazyPI</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
