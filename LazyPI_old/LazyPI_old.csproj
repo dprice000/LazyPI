@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9FE127E8-C2D2-4C03-949B-655C2C0A523E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LazyPI</RootNamespace>
+    <AssemblyName>LazyPI</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net452\RestSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\CheckInAble.cs" />
+    <Compile Include="Common\Connection.cs" />
+    <Compile Include="Common\Enums.cs" />
+    <Compile Include="LazyObjects\AFDatabase.cs" />
+    <Compile Include="LazyObjects\AFServer.cs" />
+    <Compile Include="LazyObjects\IAFDatabaseController.cs" />
+    <Compile Include="LazyObjects\IAFServerController.cs" />
+    <Compile Include="LazyObjects\IStreams.cs" />
+    <Compile Include="LazyObjects\PIPoint.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebAPI\AFDatabaseController.cs" />
+    <Compile Include="WebAPI\AFServerController.cs" />
+    <Compile Include="WebAPI\DataConversions.cs" />
+    <Compile Include="WebAPI\WebAPIConnection.cs" />
+    <Compile Include="LazyObjects\AFAttribute.cs" />
+    <Compile Include="LazyObjects\AFAttributeCategory.cs" />
+    <Compile Include="LazyObjects\AFEventFrame.cs" />
+    <Compile Include="LazyObjects\AFUnit.cs" />
+    <Compile Include="LazyObjects\AFValue.cs" />
+    <Compile Include="LazyObjects\IAFEventFrameController.cs" />
+    <Compile Include="LazyObjects\IAFUnitController.cs" />
+    <Compile Include="LazyObjects\IAFAttributeCategoryController.cs" />
+    <Compile Include="WebAPI\AFAttributeController.cs" />
+    <Compile Include="WebAPI\AFAttributeTemplateController.cs" />
+    <Compile Include="LazyObjects\IAFAttributeTemplateController.cs" />
+    <Compile Include="WebAPI\AFElementTemplateController.cs" />
+    <Compile Include="LazyObjects\IAFElementTemplateContoller.cs" />
+    <Compile Include="LazyObjects\AFElement.cs" />
+    <Compile Include="WebAPI\AFElementController.cs" />
+    <Compile Include="LazyObjects\AFElementTemplate.cs" />
+    <Compile Include="LazyObjects\AFAttributeTemplate.cs" />
+    <Compile Include="LazyObjects\IAFElementController.cs" />
+    <Compile Include="Common\BaseObjects.cs" />
+    <Compile Include="LazyObjects\IAFAttributeController.cs" />
+    <Compile Include="WebAPI\AFEventFrameController.cs" />
+    <Compile Include="WebAPI\ResponseModels\ResponseModels.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

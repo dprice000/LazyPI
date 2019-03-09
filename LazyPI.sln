@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.438
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyPI", "LazyPI\LazyPI.csproj", "{9FE127E8-C2D2-4C03-949B-655C2C0A523E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyPI", "LazyPI\LazyPI.csproj", "{153CF3DB-7458-4B87-A7EB-ABA98BCC937C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyPI_Test", "LazyPI_Test\LazyPI_Test.csproj", "{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyPI_Test", "LazyPI_Test\LazyPI_Test.csproj", "{111BB529-25AB-44C5-9D71-B4BCB1DB69B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,16 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9FE127E8-C2D2-4C03-949B-655C2C0A523E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9FE127E8-C2D2-4C03-949B-655C2C0A523E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9FE127E8-C2D2-4C03-949B-655C2C0A523E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9FE127E8-C2D2-4C03-949B-655C2C0A523E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3690D1DD-5CCF-40D8-AF92-9EB156D7A1C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{153CF3DB-7458-4B87-A7EB-ABA98BCC937C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{153CF3DB-7458-4B87-A7EB-ABA98BCC937C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{153CF3DB-7458-4B87-A7EB-ABA98BCC937C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{153CF3DB-7458-4B87-A7EB-ABA98BCC937C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{111BB529-25AB-44C5-9D71-B4BCB1DB69B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{111BB529-25AB-44C5-9D71-B4BCB1DB69B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{111BB529-25AB-44C5-9D71-B4BCB1DB69B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{111BB529-25AB-44C5-9D71-B4BCB1DB69B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B7ED3465-C703-4FB9-BDB0-E2B66E1C558D}
 	EndGlobalSection
 EndGlobal
