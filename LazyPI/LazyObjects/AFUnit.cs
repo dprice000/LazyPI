@@ -14,6 +14,11 @@ namespace LazyPI.LazyObjects
 
         #region "Properties"
 
+        /// <summary>
+        /// Only for testing purposes.
+        /// </summary>
+        internal IAFUnitController UnitController { get; set; }
+
         public string Abbreviation
         {
             get

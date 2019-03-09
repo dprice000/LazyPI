@@ -11,6 +11,11 @@ namespace LazyPI.LazyObjects
         private AFElements _Elements;
         private AFEventFrames _EventFrames;
 
+        /// <summary>
+        /// Only for testing purposes.
+        /// </summary>
+        internal IAFDatabaseController DBController{ get; set; }
+
         public AFElements Elements
         {
             get

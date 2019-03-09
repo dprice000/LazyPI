@@ -37,6 +37,11 @@ namespace LazyPI.LazyObjects
 
         #region "Properties"
 
+        /// <summary>
+        /// Only for testing purposes.
+        /// </summary>
+        internal IAFAttributeController AttrController { get; set; }
+
         public IEnumerable<string> Categories
         {
             get;

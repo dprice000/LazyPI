@@ -31,6 +31,11 @@ namespace LazyPI.LazyObjects
 
         #region "Properties"
 
+        /// <summary>
+        /// Only for testing purposes.
+        /// </summary>
+        internal IAFElementController ElementController { get; set; }
+
         public List<string> Categories
         {
             get

@@ -48,6 +48,11 @@ namespace LazyPI.LazyObjects
 
         #region "Properties"
 
+        /// <summary>
+        /// Only for testing purposes.
+        /// </summary>
+        internal IAFEventFrameController EventFrameController { get; set; }
+
         public DateTime StartTime
         {
             get

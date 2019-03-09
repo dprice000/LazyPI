@@ -10,6 +10,11 @@ namespace LazyPI.LazyObjects
 
         #region "Properties"
 
+        /// <summary>
+        /// Only for testing purposes.
+        /// </summary>
+        internal IAFServerController ServerController { get; set; }
+
         public bool IsConnected { get; }
 
         public string ServerVersion { get; }

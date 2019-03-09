@@ -13,6 +13,11 @@ namespace LazyPI.LazyObjects
 
         #region "Properties"
 
+        /// <summary>
+        /// Only for testing purposes.
+        /// </summary>
+        internal IAFElementTemplateContoller TemplateController { get; set; }
+
         public bool IsExtendable { get; }
 
         public ObservableCollection<string> Categories
