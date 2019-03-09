@@ -199,7 +199,7 @@ namespace LazyPI.LazyObjects
             {
                 _AttrController.Update(_Connection, this);
 
-                if (_IsDirty)
+                if (_Attributes != null)
                 {
                     foreach (AFAttribute attr in _Attributes.Where(x => x.IsNew))
                     {
