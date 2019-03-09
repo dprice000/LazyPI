@@ -1,17 +1,13 @@
 ﻿using LazyPI.Common;
 using LazyPI.LazyObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LazyPI_Test.WebAPI
 {
     public class EventFrameController : IAFEventFrameController
     {
-        List<AFEventFrame> _eventFrames = new List<AFEventFrame>();
-        List<AFAttribute> _attrs = new List<AFAttribute>();
+        private List<AFEventFrame> _eventFrames = new List<AFEventFrame>();
+        private List<AFAttribute> _attrs = new List<AFAttribute>();
 
         public AFEventFrame Find(Connection Connection, string FrameID)
         {
@@ -44,7 +40,6 @@ namespace LazyPI_Test.WebAPI
 
         public bool CaptureValues(Connection Connection, string FrameID)
         {
-
         }
 
         public bool CreateAttribute(Connection Connection, string FrameID, AFAttribute Attribute)
@@ -68,22 +63,18 @@ namespace LazyPI_Test.WebAPI
 
         public IEnumerable<AFAttribute> GetAttributes(Connection Connection, string FrameID, string NameFilter, string CategoryName, string TemplateName, string ValueType, bool SearchFullHierarchy, string SortField, string SortOrder, int StartIndex, bool ShowExcluded, bool ShowHidden, int MaxCount)
         {
-
         }
 
         public IEnumerable<string> GetCategories(Connection Connection, string FrameID)
         {
-
         }
 
         public IEnumerable<AFElement> GetReferencedElements(Connection Connection, string FrameID)
         {
-
         }
 
         public IEnumerable<AFEventFrame> GetEventFrames(Connection Connection, string FrameID)
         {
-
         }
     }
 }

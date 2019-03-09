@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LazyPI.WebAPI
+﻿namespace LazyPI.WebAPI
 {
     public class DataConversions
     {
         #region "To Response Model"
+
         public static ResponseModels.DataPoint Convert(LazyObjects.PIPoint point)
         {
             ResponseModels.DataPoint result = new ResponseModels.DataPoint(point.ID, point.WebID, point.Name, point.Description, point.Path);
@@ -68,7 +63,7 @@ namespace LazyPI.WebAPI
 
             return result;
         }
-        #endregion
 
+        #endregion "To Response Model"
     }
 }

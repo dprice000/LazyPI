@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LazyPI.Common;
+﻿using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
@@ -12,7 +7,7 @@ namespace LazyPI.LazyObjects
         private IAFAttributeCategoryController _CategoryLoader;
 
         private void Initialize()
-        { 
+        {
         }
 
         public void CheckIn()

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using LazyPI.Common;
+using System.Collections.Generic;
 using System.Linq;
-using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
@@ -38,62 +38,66 @@ namespace LazyPI.LazyObjects
         }
 
         #region "Constructors"
-            internal AFDatabase(Connection Connection, string WebID, string ID, string Name, string Description, string Path) : base(Connection, WebID, ID, Name, Description, Path)
-            {
-                Initialize();
-            }
 
-            private void Initialize()
-            {
-                _DBController = GetController(_Connection);
-            }
+        internal AFDatabase(Connection Connection, string WebID, string ID, string Name, string Description, string Path) : base(Connection, WebID, ID, Name, Description, Path)
+        {
+            Initialize();
+        }
 
-            private static IAFDatabaseController GetController(Connection Connection)
-            {
-                IAFDatabaseController result = null;
+        private void Initialize()
+        {
+            _DBController = GetController(_Connection);
+        }
 
-                if(Connection is WebAPI.WebAPIConnection)
-                    result = new WebAPI.AFDatabaseController();
+        private static IAFDatabaseController GetController(Connection Connection)
+        {
+            IAFDatabaseController result = null;
 
-                return result;
-            }
-        #endregion
+            if (Connection is WebAPI.WebAPIConnection)
+                result = new WebAPI.AFDatabaseController();
+
+            return result;
+        }
+
+        #endregion "Constructors"
 
         #region "Interactions"
-            public bool CreateElement(AFElement Element)
+
+        public bool CreateElement(AFElement Element)
+        {
+            return _DBController.CreateElement(_Connection, _WebID, Element);
+        }
+
+        public bool CreateEventFrame(AFEventFrame Frame)
+        {
+            return _DBController.CreateEventFrame(_Connection, _WebID, Frame);
+        }
+
+        public void CheckIn()
+        {
+            if (_IsDirty && !_IsDeleted)
             {
-                return _DBController.CreateElement(_Connection, _WebID, Element);
+                _DBController.Update(_Connection, this);
+
+                if (_Elements != null)
+                {
+                    foreach (AFElement ele in _Elements.Where(x => x.IsNew))
+                    {
+                        _DBController.CreateElement(_Connection, _WebID, ele);
+                    }
+                }
+
+                if (_EventFrames != null)
+                {
+                    foreach (AFEventFrame frame in _EventFrames.Where(x => x.IsNew))
+                    {
+                        _DBController.CreateEventFrame(_Connection, _WebID, frame);
+                    }
+                }
             }
+        }
 
-            public bool CreateEventFrame(AFEventFrame Frame)
-            {
-                return _DBController.CreateEventFrame(_Connection, _WebID, Frame);
-            }
-
-            public void CheckIn()
-            {
-				if (_IsDirty && !_IsDeleted)
-				{
-					_DBController.Update(_Connection, this);
-
-					if (_Elements != null)
-					{
-						foreach (AFElement ele in _Elements.Where(x => x.IsNew))
-						{
-                            _DBController.CreateElement(_Connection, _WebID, ele);
-						}
-					}
-
-					if (_EventFrames != null)
-					{
-						foreach (AFEventFrame frame in _EventFrames.Where(x => x.IsNew))
-						{
-                            _DBController.CreateEventFrame(_Connection, _WebID, frame);
-						}
-					}
-				}
-            }
-        #endregion
+        #endregion "Interactions"
     }
 
     public class AFDatabases : System.Collections.ObjectModel.Collection<AFDatabase>
@@ -103,13 +107,15 @@ namespace LazyPI.LazyObjects
         }
 
         #region "Properties"
-            public AFDatabase this[string Name]
+
+        public AFDatabase this[string Name]
+        {
+            get
             {
-                get
-                {
-                    return this.SingleOrDefault(x => x.Name == Name);
-                }
+                return this.SingleOrDefault(x => x.Name == Name);
             }
-        #endregion
+        }
+
+        #endregion "Properties"
     }
 }

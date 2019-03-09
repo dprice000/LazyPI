@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LazyPI.Common
+﻿namespace LazyPI.Common
 {
     /// <summary>
-    /// Values to indicate which summary type calculation(s) should be performed. 
+    /// Values to indicate which summary type calculation(s) should be performed.
     /// </summary>
     public enum SummaryType
     {
@@ -26,7 +20,7 @@ namespace LazyPI.Common
     }
 
     /// <summary>
-    /// Defines the timestamp returned for a value when a summary calculation is done. 
+    /// Defines the timestamp returned for a value when a summary calculation is done.
     /// </summary>
     public enum TimeType
     {

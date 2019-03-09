@@ -1,16 +1,16 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using LazyPI.LazyObjects;
 using LazyPI.WebAPI;
-using LazyPI.LazyObjects;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace LazyPI_Test.Controllers
 {
     [TestClass]
     public class EventFrameTests
     {
-        AFServer _server;
-        AFDatabase _db;
-        WebAPIConnection _conn;
+        private AFServer _server;
+        private AFDatabase _db;
+        private WebAPIConnection _conn;
 
         [TestInitialize]
         public void Initialize()
@@ -28,10 +28,10 @@ namespace LazyPI_Test.Controllers
             newFrame.Name = "Test Frame";
             newFrame.Description = "This is a test frame";
 
-            if(start.HasValue)
+            if (start.HasValue)
                 newFrame.StartTime = start.Value;
 
-            if(end.HasValue)
+            if (end.HasValue)
                 newFrame.EndTime = end.Value;
 
             return newFrame;
@@ -63,7 +63,7 @@ namespace LazyPI_Test.Controllers
                 var x = _db.EventFrames[foundFrame.Name];
                 Assert.Fail("Index out of bound was not thrown!");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
             }
         }
@@ -109,7 +109,7 @@ namespace LazyPI_Test.Controllers
             frame.CheckIn();
 
             AFEventFrame temp = AFEventFrame.Find(_conn, frame.WebID);
-            Assert.IsNull(temp); 
+            Assert.IsNull(temp);
         }
     }
 }

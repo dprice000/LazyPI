@@ -1,18 +1,14 @@
 ﻿using LazyPI.Common;
 using LazyPI.LazyObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LazyPI_Test.WebAPI
 {
     public class AFServerController : IAFServerController
     {
-        List<AFServer> _servers = new List<AFServer>();
-        List<AFDatabase> _databases = new List<AFDatabase>();
-        List<AFUnit> _units = new List<AFUnit>();
+        private List<AFServer> _servers = new List<AFServer>();
+        private List<AFDatabase> _databases = new List<AFDatabase>();
+        private List<AFUnit> _units = new List<AFUnit>();
 
         public AFServer Find(Connection Connection, string ServerID)
         {

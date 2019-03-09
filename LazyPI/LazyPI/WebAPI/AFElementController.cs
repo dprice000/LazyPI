@@ -1,287 +1,284 @@
+using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RestSharp;
-using LazyObjects = LazyPI.LazyObjects;
-using ResponseModels = LazyPI.WebAPI.ResponseModels;
 
 namespace LazyPI.WebAPI
 {
-	public class AFElementController : LazyObjects.IAFElementController
-	{
-		// These functions have direct references to WebAPI calls
-		#region "Public Methods"
-			public LazyObjects.AFElement Find(LazyPI.Common.Connection Connection, string ElementID)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}");
-				request.AddUrlSegment("webId", ElementID);
-
-				var response = webConnection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
-
-				if (response.ErrorException != null)
-				{
-					throw new ApplicationException("Error finding element by ID. (See Inner Details)", response.ErrorException);
-				}
-
-				ResponseModels.AFElement data = response.Data;
-				return new LazyObjects.AFElement(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
-			}
-
-			public LazyObjects.AFElement FindByPath(LazyPI.Common.Connection Connection, string Path)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements");
-				request.AddParameter("path", Path, ParameterType.GetOrPost);
-
-				var response = webConnection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
-				var data = response.Data;
-
-				if (response.ErrorException != null)
-				{
-					throw new ApplicationException("Error finding element by path. (See Inner Details)", response.ErrorException);
-				}
+    public class AFElementController : LazyObjects.IAFElementController
+    {
+        // These functions have direct references to WebAPI calls
 
-				return new LazyObjects.AFElement(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
-			}
+        #region "Public Methods"
 
-			public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFElement Element)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}", Method.PATCH);
-				request.AddUrlSegment("webId", Element.WebID);
+        public LazyObjects.AFElement Find(LazyPI.Common.Connection Connection, string ElementID)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}");
+            request.AddUrlSegment("webId", ElementID);
 
-				ResponseModels.AFElement body = DataConversions.Convert(Element);
-                request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
+            var response = webConnection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
+
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error finding element by ID. (See Inner Details)", response.ErrorException);
+            }
 
-				var statusCode = webConnection.Client.Execute(request).StatusCode;
+            ResponseModels.AFElement data = response.Data;
+            return new LazyObjects.AFElement(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
+        }
 
-				return ((int)statusCode == 204);
-			}
+        public LazyObjects.AFElement FindByPath(LazyPI.Common.Connection Connection, string Path)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements");
+            request.AddParameter("path", Path, ParameterType.GetOrPost);
 
-			public bool Delete(LazyPI.Common.Connection Connection, string ElementID)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}", Method.DELETE);
-				request.AddUrlSegment("webId", ElementID);
+            var response = webConnection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
+            var data = response.Data;
 
-				var statusCode = webConnection.Client.Execute(request).StatusCode;
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error finding element by path. (See Inner Details)", response.ErrorException);
+            }
 
-				return ((int)statusCode == 204);
-			}
+            return new LazyObjects.AFElement(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path);
+        }
 
-			public bool CreateAttribute(LazyPI.Common.Connection Connection, string ParentID, LazyObjects.AFAttribute Attr)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}/attributes", Method.POST);
-				request.AddUrlSegment("webId", ParentID);
+        public bool Update(LazyPI.Common.Connection Connection, LazyObjects.AFElement Element)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}", Method.PATCH);
+            request.AddUrlSegment("webId", Element.WebID);
 
-                ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
-                request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
+            ResponseModels.AFElement body = DataConversions.Convert(Element);
+            request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
 
-				var statusCode = webConnection.Client.Execute(request).StatusCode;
+            var statusCode = webConnection.Client.Execute(request).StatusCode;
 
-				return ((int)statusCode == 201);
-			}
+            return ((int)statusCode == 204);
+        }
 
-			public bool CreateChildElement(LazyPI.Common.Connection Connection, string ParentID, LazyObjects.AFElement Element)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}/elements", Method.POST);
-				request.AddUrlSegment("webId", ParentID);
+        public bool Delete(LazyPI.Common.Connection Connection, string ElementID)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}", Method.DELETE);
+            request.AddUrlSegment("webId", ElementID);
 
-                ResponseModels.AFElement body = DataConversions.Convert(Element);
-                request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
-
-				var statusCode = webConnection.Client.Execute(request).StatusCode;
+            var statusCode = webConnection.Client.Execute(request).StatusCode;
 
-				return ((int)statusCode == 201);
-			}
+            return ((int)statusCode == 204);
+        }
 
-			public string GetElementTemplate(LazyPI.Common.Connection Connection, string ElementID)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}");
-				request.AddUrlSegment("webId", ElementID);
-				var response = webConnection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
-
-				if (response.ErrorException != null)
-				{
-					throw new ApplicationException("Error searching for element template. (See Inner Details)", response.ErrorException);
-				}
+        public bool CreateAttribute(LazyPI.Common.Connection Connection, string ParentID, LazyObjects.AFAttribute Attr)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}/attributes", Method.POST);
+            request.AddUrlSegment("webId", ParentID);
 
-				var data = response.Data;
-				return data.TemplateName;
-			}
+            ResponseModels.AFAttribute body = DataConversions.Convert(Attr);
+            request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
 
-			public IEnumerable<LazyObjects.AFAttribute> GetAttributes(LazyPI.Common.Connection Connection, string ParentID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", string ValueType = "*", bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, bool ShowExcluded = false, bool ShowHidden = false, int MaxCount = 1000)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}/attributes");
-				request.AddUrlSegment("webId", ParentID);
+            var statusCode = webConnection.Client.Execute(request).StatusCode;
 
-				if(NameFilter != "*")
-					request.AddParameter("nameFilter", NameFilter);
+            return ((int)statusCode == 201);
+        }
 
-				if(CategoryName != "*")
-					request.AddParameter("categoryName", CategoryName);
+        public bool CreateChildElement(LazyPI.Common.Connection Connection, string ParentID, LazyObjects.AFElement Element)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}/elements", Method.POST);
+            request.AddUrlSegment("webId", ParentID);
 
-				if(TemplateName != "*")
-					request.AddParameter("templateName", TemplateName);
+            ResponseModels.AFElement body = DataConversions.Convert(Element);
+            request.AddParameter("application/json; charset=utf-8", Newtonsoft.Json.JsonConvert.SerializeObject(body), ParameterType.RequestBody);
 
-				if(ValueType != "*")
-					request.AddParameter("valueType", ValueType);
+            var statusCode = webConnection.Client.Execute(request).StatusCode;
 
-				if(SearchFullHierarchy)
-					request.AddParameter("searchFullHierarchy", SearchFullHierarchy);
+            return ((int)statusCode == 201);
+        }
 
-				if(SortField != "Name")
-					request.AddParameter("sortField", SortField);
+        public string GetElementTemplate(LazyPI.Common.Connection Connection, string ElementID)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}");
+            request.AddUrlSegment("webId", ElementID);
+            var response = webConnection.Client.Execute<LazyPI.WebAPI.ResponseModels.AFElement>(request);
 
-				if(SortOrder != "Ascending")
-					request.AddParameter("sortOrder", SortOrder);
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error searching for element template. (See Inner Details)", response.ErrorException);
+            }
 
-				if(StartIndex != 0)
-					request.AddParameter("startIndex", StartIndex);
+            var data = response.Data;
+            return data.TemplateName;
+        }
 
-				if(ShowExcluded)
-					request.AddParameter("showExcluded", ShowExcluded);
+        public IEnumerable<LazyObjects.AFAttribute> GetAttributes(LazyPI.Common.Connection Connection, string ParentID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", string ValueType = "*", bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, bool ShowExcluded = false, bool ShowHidden = false, int MaxCount = 1000)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}/attributes");
+            request.AddUrlSegment("webId", ParentID);
 
-				if(ShowHidden)
-					request.AddParameter("showHidden", ShowHidden);
+            if (NameFilter != "*")
+                request.AddParameter("nameFilter", NameFilter);
 
-				if(MaxCount != 1000)
-					request.AddParameter("maxCount", MaxCount);
+            if (CategoryName != "*")
+                request.AddParameter("categoryName", CategoryName);
 
-				var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttribute>>(request);
+            if (TemplateName != "*")
+                request.AddParameter("templateName", TemplateName);
 
-				if (response.ErrorException != null)
-				{
-					throw new ApplicationException("Error searching for element attributes. (See Inner Details)", response.ErrorException);
-				}
-				
-				var data = response.Data;
+            if (ValueType != "*")
+                request.AddParameter("valueType", ValueType);
 
-				List<LazyObjects.AFAttribute> resultList = new List<LazyObjects.AFAttribute>();
+            if (SearchFullHierarchy)
+                request.AddParameter("searchFullHierarchy", SearchFullHierarchy);
 
-				foreach(var result in data.Items)
-				{
-					resultList.Add(LazyObjects.AFAttribute.Find(Connection, result.WebId));
-				}
-
-				return resultList;
-			}
+            if (SortField != "Name")
+                request.AddParameter("sortField", SortField);
 
-			public IEnumerable<string> GetCategories(LazyPI.Common.Connection Connection, string ElementID)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}/categories");
-				request.AddUrlSegment("webId", ElementID);
+            if (SortOrder != "Ascending")
+                request.AddParameter("sortOrder", SortOrder);
 
-				var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.ElementCategory>>(request);
+            if (StartIndex != 0)
+                request.AddParameter("startIndex", StartIndex);
 
-				if (response.ErrorException != null)
-				{
-					throw new ApplicationException("Error searching for element categories. (See Inner Details)", response.ErrorException);
-				}
+            if (ShowExcluded)
+                request.AddParameter("showExcluded", ShowExcluded);
 
-				var data = response.Data;
-				List<string> results = new List<string>();
-				
-				foreach(ResponseModels.ElementCategory category in data.Items)
-				{
-					results.Add(category.Name);
-				}
+            if (ShowHidden)
+                request.AddParameter("showHidden", ShowHidden);
 
-				return results;
-			}
+            if (MaxCount != 1000)
+                request.AddParameter("maxCount", MaxCount);
 
-			public IEnumerable<LazyObjects.AFElement> GetElements(LazyPI.Common.Connection Connection, string RootID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", LazyPI.Common.ElementType ElementType = LazyPI.Common.ElementType.Any, bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, int MaxCount = 1000)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}/elements");
-				request.AddUrlSegment("webId", RootID);
+            var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFAttribute>>(request);
 
-				if(NameFilter != "*")
-					request.AddParameter("nameFilter", NameFilter);
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error searching for element attributes. (See Inner Details)", response.ErrorException);
+            }
 
-				if(TemplateName != "*")
-					request.AddParameter("templateName", TemplateName);
+            var data = response.Data;
 
-				if(ElementType != Common.ElementType.Any)
-					request.AddParameter("elementType", ElementType);
+            List<LazyObjects.AFAttribute> resultList = new List<LazyObjects.AFAttribute>();
 
-				if(SearchFullHierarchy)
-					request.AddParameter("searchFullHierarchy", SearchFullHierarchy);
+            foreach (var result in data.Items)
+            {
+                resultList.Add(LazyObjects.AFAttribute.Find(Connection, result.WebId));
+            }
 
-				if(SortField != "Name")
-					request.AddParameter("sortField", SortField);
+            return resultList;
+        }
 
-				if(SortOrder != "Ascending")
-					request.AddParameter("sortOrder", SortOrder);
+        public IEnumerable<string> GetCategories(LazyPI.Common.Connection Connection, string ElementID)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}/categories");
+            request.AddUrlSegment("webId", ElementID);
 
-				if(StartIndex != 0)
-					request.AddParameter("startIndex", StartIndex);
+            var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.ElementCategory>>(request);
 
-				if(MaxCount != 1000)
-					request.AddParameter("maxCount", MaxCount);
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error searching for element categories. (See Inner Details)", response.ErrorException);
+            }
 
-				var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request);
+            var data = response.Data;
+            List<string> results = new List<string>();
 
-				if (response.ErrorException != null)
-				{
-					throw new ApplicationException("Error searching for child elements of and element. (See Inner Details)", response.ErrorException);
-				}
-				
-				var data = response.Data;
+            foreach (ResponseModels.ElementCategory category in data.Items)
+            {
+                results.Add(category.Name);
+            }
 
-				List<LazyObjects.AFElement> results = new List<LazyObjects.AFElement>();
+            return results;
+        }
 
-				foreach (var element in data.Items)
-				{
-					results.Add(new LazyObjects.AFElement(Connection, element.WebId, element.Id, element.Name, element.Description, element.Path));
-				}
+        public IEnumerable<LazyObjects.AFElement> GetElements(LazyPI.Common.Connection Connection, string RootID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", LazyPI.Common.ElementType ElementType = LazyPI.Common.ElementType.Any, bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, int MaxCount = 1000)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}/elements");
+            request.AddUrlSegment("webId", RootID);
 
-				return results;
-			}
+            if (NameFilter != "*")
+                request.AddParameter("nameFilter", NameFilter);
 
-			public IEnumerable<LazyObjects.AFEventFrame> GetEventFrames(LazyPI.Common.Connection Connection, string ElementID, LazyPI.Common.SearchMode SearchMode, DateTime StartTime, DateTime EndTime, string NameFilter, string CategoryName, string TemplateName, string SortField, string SortOrder, int StartIndex, int MaxCount)
-			{
-				WebAPIConnection webConnection = (WebAPIConnection)Connection;
-				var request = new RestRequest("/elements/{webId}/eventframes");
-				request.AddUrlSegment("webId", ElementID);
-				request.AddParameter("searchMode", SearchMode);
-				request.AddParameter("startTime", StartTime);
-				request.AddParameter("endTime", EndTime);
-				request.AddParameter("nameFilter", NameFilter);
-				request.AddParameter("categoryName", CategoryName);
-				request.AddParameter("templateName", TemplateName);
-				request.AddParameter("sortField", SortField);
-				request.AddParameter("sortOrder", SortOrder);
-				request.AddParameter("startIndex", StartIndex);
-				request.AddParameter("maxCount", MaxCount);
+            if (TemplateName != "*")
+                request.AddParameter("templateName", TemplateName);
 
-				var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request);
+            if (ElementType != Common.ElementType.Any)
+                request.AddParameter("elementType", ElementType);
 
-				if (response.ErrorException != null)
-				{
-					throw new ApplicationException("Error searching for element template. (See Inner Details)", response.ErrorException);
-				}
-				
-				var data = response.Data;
+            if (SearchFullHierarchy)
+                request.AddParameter("searchFullHierarchy", SearchFullHierarchy);
 
-				List<LazyObjects.AFEventFrame> results = new List<LazyObjects.AFEventFrame>();
+            if (SortField != "Name")
+                request.AddParameter("sortField", SortField);
 
-				foreach (ResponseModels.AFEventFrame frame in data.Items)
-				{
-					results.Add(new LazyObjects.AFEventFrame(Connection, frame.WebId, frame.Id, frame.Name, frame.Description, frame.Path));
-				}
+            if (SortOrder != "Ascending")
+                request.AddParameter("sortOrder", SortOrder);
 
-				return results;
-			}
-		#endregion
+            if (StartIndex != 0)
+                request.AddParameter("startIndex", StartIndex);
 
-	}
+            if (MaxCount != 1000)
+                request.AddParameter("maxCount", MaxCount);
+
+            var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFElement>>(request);
+
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error searching for child elements of and element. (See Inner Details)", response.ErrorException);
+            }
+
+            var data = response.Data;
+
+            List<LazyObjects.AFElement> results = new List<LazyObjects.AFElement>();
+
+            foreach (var element in data.Items)
+            {
+                results.Add(new LazyObjects.AFElement(Connection, element.WebId, element.Id, element.Name, element.Description, element.Path));
+            }
+
+            return results;
+        }
+
+        public IEnumerable<LazyObjects.AFEventFrame> GetEventFrames(LazyPI.Common.Connection Connection, string ElementID, LazyPI.Common.SearchMode SearchMode, DateTime StartTime, DateTime EndTime, string NameFilter, string CategoryName, string TemplateName, string SortField, string SortOrder, int StartIndex, int MaxCount)
+        {
+            WebAPIConnection webConnection = (WebAPIConnection)Connection;
+            var request = new RestRequest("/elements/{webId}/eventframes");
+            request.AddUrlSegment("webId", ElementID);
+            request.AddParameter("searchMode", SearchMode);
+            request.AddParameter("startTime", StartTime);
+            request.AddParameter("endTime", EndTime);
+            request.AddParameter("nameFilter", NameFilter);
+            request.AddParameter("categoryName", CategoryName);
+            request.AddParameter("templateName", TemplateName);
+            request.AddParameter("sortField", SortField);
+            request.AddParameter("sortOrder", SortOrder);
+            request.AddParameter("startIndex", StartIndex);
+            request.AddParameter("maxCount", MaxCount);
+
+            var response = webConnection.Client.Execute<ResponseModels.ResponseList<ResponseModels.AFEventFrame>>(request);
+
+            if (response.ErrorException != null)
+            {
+                throw new ApplicationException("Error searching for element template. (See Inner Details)", response.ErrorException);
+            }
+
+            var data = response.Data;
+
+            List<LazyObjects.AFEventFrame> results = new List<LazyObjects.AFEventFrame>();
+
+            foreach (ResponseModels.AFEventFrame frame in data.Items)
+            {
+                results.Add(new LazyObjects.AFEventFrame(Connection, frame.WebId, frame.Id, frame.Name, frame.Description, frame.Path));
+            }
+
+            return results;
+        }
+
+        #endregion "Public Methods"
+    }
 }

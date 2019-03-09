@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LazyPI.LazyObjects;
+﻿using LazyPI.LazyObjects;
 using LazyPI.WebAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using System;
 
 namespace LazyPI_Test.Controllers
 {
     [TestClass]
     public class ElementTests
     {
-        AFServer _server;
-        AFDatabase _db;
-        WebAPIConnection _conn;
+        private AFServer _server;
+        private AFDatabase _db;
+        private WebAPIConnection _conn;
 
         [TestInitialize]
         public void Initialize()
@@ -48,7 +43,7 @@ namespace LazyPI_Test.Controllers
 
             Console.WriteLine("Test element creation.");
             Assert.IsTrue(_db.CreateElement(element), "Assert creation passed");
-            
+
             //Check that the the element can be found through the AFDB
             Assert.IsNotNull(_db.Elements[element.Name], "Check AFDB element collection for new element.");
             Assert.IsNotNull(AFElement.Find(_conn, element.WebID));
@@ -113,7 +108,7 @@ namespace LazyPI_Test.Controllers
             parent.Elements.Add(child);
 
             child = AFElement.FindByPath(_conn, child.Path);
-   
+
             Assert.IsNotNull(child.Name);
             Assert.IsNotNull(child.ID);
             Assert.IsNotNull(child.Path);

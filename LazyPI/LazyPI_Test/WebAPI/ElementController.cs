@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LazyPI.Common;
 using LazyPI.LazyObjects;
-using LazyPI.Common;
+using System;
+using System.Collections.Generic;
 
 namespace LazyPI_Test.WebAPI
 {
@@ -23,7 +20,7 @@ namespace LazyPI_Test.WebAPI
 
         public AFElement FindByPath(Connection Connection, string Path)
         {
-           var ele = _elements.Find(x => x.Path == Path);
+            var ele = _elements.Find(x => x.Path == Path);
 
             return ele;
         }

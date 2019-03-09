@@ -1,11 +1,5 @@
-﻿using LazyObjects = LazyPI.LazyObjects;
-using ResponseModels = LazyPI.WebAPI.ResponseModels;
-using RestSharp;
+﻿using RestSharp;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
@@ -38,7 +32,7 @@ namespace LazyPI.WebAPI
         /// <param name="Path">The path provided by the WebAPI.</param>
         /// <returns>A specific AF Attribute.</returns>
         /// <remarks>It is recommended to use Get By ID over path.</remarks>
-        public LazyObjects.AFAttribute FindByPath(LazyPI.Common.Connection Connection,  string Path)
+        public LazyObjects.AFAttribute FindByPath(LazyPI.Common.Connection Connection, string Path)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/attributes");
@@ -49,7 +43,7 @@ namespace LazyPI.WebAPI
             {
                 throw new ApplicationException("Error finding attribute by path. (See Inner Details)", response.ErrorException);
             }
-            
+
             var data = response.Data;
             return new LazyObjects.AFAttribute(Connection, data.WebId, data.Id, data.Name, data.Description, data.Path, data.DefaultUnitsName, data.ConfigString, data.DataReferencePlugIn, data.Type, data.CategoryNames);
         }
@@ -78,7 +72,7 @@ namespace LazyPI.WebAPI
         /// </summary>
         /// <param name="webID">The WebID of the AFAttribute to be deleted</param>
         /// <returns>Returns true if delete completed.</returns>
-        public bool Delete(LazyPI.Common.Connection Connection,  string ID)
+        public bool Delete(LazyPI.Common.Connection Connection, string ID)
         {
             WebAPIConnection webConnection = (WebAPIConnection)Connection;
             var request = new RestRequest("/attributes/{webId}", Method.DELETE);
@@ -151,7 +145,7 @@ namespace LazyPI.WebAPI
             ResponseModels.DataPoint point = pointResponse.Data;
 
             LazyObjects.PIPoint result = new LazyObjects.PIPoint(Connection, point.WebId, point.Id, point.Name, point.Description, point.Path, point.PointType, point.PointClass, point.Future);
-            return result;  
+            return result;
         }
 
         /// <summary>

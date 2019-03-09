@@ -1,9 +1,6 @@
-﻿using System;
+﻿using LazyPI.Common;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
 {
@@ -108,7 +105,7 @@ namespace LazyPI.LazyObjects
             get
             {
                 //if(_Attributes == null)
-                    //  _Attributes = Get Attributes
+                //  _Attributes = Get Attributes
 
                 return _Attributes;
             }
@@ -118,7 +115,8 @@ namespace LazyPI.LazyObjects
                 _IsDirty = true;
             }
         }
-        #endregion
+
+        #endregion "Properties"
 
         #region "Constructors"
 
@@ -126,7 +124,7 @@ namespace LazyPI.LazyObjects
         {
         }
 
-        internal AFAttribute(LazyPI.Common.Connection Connection,string WebID, string ID, string Name, string Description, string Path) : base(Connection, WebID, ID, Name, Description, Path)
+        internal AFAttribute(LazyPI.Common.Connection Connection, string WebID, string ID, string Name, string Description, string Path) : base(Connection, WebID, ID, Name, Description, Path)
         {
             Initialize();
         }
@@ -160,7 +158,8 @@ namespace LazyPI.LazyObjects
 
             return result;
         }
-        #endregion
+
+        #endregion "Constructors"
 
         #region "Interactions"
 
@@ -185,7 +184,7 @@ namespace LazyPI.LazyObjects
         /// <returns>Returns true if no errors occur.</returns>
         public bool SetValue(AFValue Value)
         {
-           return _AttrController.SetValue(_Connection, _WebID, Value);
+            return _AttrController.SetValue(_Connection, _WebID, Value);
         }
 
         public void Delete()
@@ -209,43 +208,46 @@ namespace LazyPI.LazyObjects
                 }
             }
         }
-        #endregion
 
-        #region "Static Functions"     
-            public static void Create(Connection Connection, string ElementID, AFAttribute Attr)
-            {
-                GetController(Connection).Create(Connection, ElementID, Attr);
-            }
+        #endregion "Interactions"
 
-            /// <summary>
-            /// Finds attribute with the ID specified.
-            /// </summary>
-            /// <param name="ID">The unique ID of the attribute.</param>
-            /// <returns>Returns a complete AFAttribute.</returns>
-            public static AFAttribute Find(Connection Connection,string ID)
-            {
-                return GetController(Connection).Find(Connection, ID);
-            }
+        #region "Static Functions"
 
-            /// <summary>
-            /// Uses Path to find AFAttribute.
-            /// </summary>
-            /// <param name="Path">The full Path to the AFAttribute.</param>
-            /// <returns></returns>
-            public static AFAttribute FindByPath(Connection Connection, string Path)
-            {
-                return GetController(Connection).FindByPath(Connection, Path);
-            }    
+        public static void Create(Connection Connection, string ElementID, AFAttribute Attr)
+        {
+            GetController(Connection).Create(Connection, ElementID, Attr);
+        }
 
-            /// <summary>
-            /// Deletes attribute specified by ID.
-            /// </summary>
-            /// <param name="ID">The unique ID of the attribute to be deleted.</param>
-            /// <returns></returns>
-            public static bool Delete(Connection Connection, string ID)
-            {
-                return GetController(Connection).Delete(Connection, ID);
-            }
-        #endregion
+        /// <summary>
+        /// Finds attribute with the ID specified.
+        /// </summary>
+        /// <param name="ID">The unique ID of the attribute.</param>
+        /// <returns>Returns a complete AFAttribute.</returns>
+        public static AFAttribute Find(Connection Connection, string ID)
+        {
+            return GetController(Connection).Find(Connection, ID);
+        }
+
+        /// <summary>
+        /// Uses Path to find AFAttribute.
+        /// </summary>
+        /// <param name="Path">The full Path to the AFAttribute.</param>
+        /// <returns></returns>
+        public static AFAttribute FindByPath(Connection Connection, string Path)
+        {
+            return GetController(Connection).FindByPath(Connection, Path);
+        }
+
+        /// <summary>
+        /// Deletes attribute specified by ID.
+        /// </summary>
+        /// <param name="ID">The unique ID of the attribute to be deleted.</param>
+        /// <returns></returns>
+        public static bool Delete(Connection Connection, string ID)
+        {
+            return GetController(Connection).Delete(Connection, ID);
+        }
+
+        #endregion "Static Functions"
     }
 }

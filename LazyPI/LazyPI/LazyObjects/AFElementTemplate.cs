@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
@@ -16,98 +13,105 @@ namespace LazyPI.LazyObjects
         private static IAFElementTemplateContoller _templateLoader;
 
         #region "Properties"
-            public ObservableCollection<string> Categories
-            {
-                get
-                {
-                    return _Categories.Value;
-                }
-            }
 
-            public bool IsExtendable
+        public ObservableCollection<string> Categories
+        {
+            get
             {
-                get
-                {
-                    return _IsExtendable;
-                }
+                return _Categories.Value;
             }
-        #endregion
+        }
+
+        public bool IsExtendable
+        {
+            get
+            {
+                return _IsExtendable;
+            }
+        }
+
+        #endregion "Properties"
 
         #region "Constructors"
-            public AFElementTemplate()
-            {
-            }
 
-            internal AFElementTemplate(Connection Connection, string WebID, string ID, string Name, string Description, string Path)
-                : base(Connection, WebID, ID, Name, Description, Path)
-            {
-                Initialize();
-            }
+        public AFElementTemplate()
+        {
+        }
 
-            private void Initialize()
-            {
-                // Load Categories
-                _Categories = new Lazy<ObservableCollection<string>>(() => {
-                   ObservableCollection<string> collection = new ObservableCollection<string>(_templateLoader.GetCategories(_Connection, this._ID));
-                   collection.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(CategoriesChanged);
-                   return collection;
-                }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-            }
+        internal AFElementTemplate(Connection Connection, string WebID, string ID, string Name, string Description, string Path)
+            : base(Connection, WebID, ID, Name, Description, Path)
+        {
+            Initialize();
+        }
 
-            /// <summary>
-            /// Handles when changes are made to the categories list. Notifies and updates WebAPI.
-            /// </summary>
-            /// <param name="sender">The object that triggered notify.</param>
-            /// <param name="e">Arguments describing the event.</param>
-            private void CategoriesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void Initialize()
+        {
+            // Load Categories
+            _Categories = new Lazy<ObservableCollection<string>>(() =>
             {
-                //TODO: Implement
-            }
-        #endregion
+                ObservableCollection<string> collection = new ObservableCollection<string>(_templateLoader.GetCategories(_Connection, this._ID));
+                collection.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(CategoriesChanged);
+                return collection;
+            }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        }
+
+        /// <summary>
+        /// Handles when changes are made to the categories list. Notifies and updates WebAPI.
+        /// </summary>
+        /// <param name="sender">The object that triggered notify.</param>
+        /// <param name="e">Arguments describing the event.</param>
+        private void CategoriesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            //TODO: Implement
+        }
+
+        #endregion "Constructors"
 
         #region "Static Methods"
-            public static AFElementTemplate Find(Connection Connection, string ID)
+
+        public static AFElementTemplate Find(Connection Connection, string ID)
+        {
+            return _templateLoader.Find(Connection, ID);
+        }
+
+        public static AFElementTemplate FindByName(string Name)
+        {
+            throw new NotImplementedException("Needs to be Implemented");
+        }
+
+        public static AFElementTemplate FindByPath(Connection Connection, string Path)
+        {
+            return _templateLoader.FindByPath(Connection, Path);
+        }
+
+        public static bool Delete(Connection Connection, string ID)
+        {
+            return _templateLoader.Delete(Connection, ID);
+        }
+
+        public static bool CreateElementTemplate(Connection Connection, string ParentID, AFElementTemplate Template)
+        {
+            return _templateLoader.CreateElementTemplate(Connection, ParentID, Template);
+        }
+
+        public static IEnumerable<AFAttributeTemplate> GetAttributeTemplates(Connection Connection, string ElementID)
+        {
+            return _templateLoader.GetAttributeTemplates(Connection, ElementID);
+        }
+
+        public class ElementTemplateFactory
+        {
+            public static AFElementTemplate CreateInstance(Connection Connection, BaseObject bObj)
             {
-                return _templateLoader.Find(Connection, ID);
+                return new AFElementTemplate(Connection, bObj.WebID, bObj.ID, bObj.Name, bObj.Description, bObj.Path);
             }
 
-            public static AFElementTemplate FindByName(string Name)
+            public static AFElementTemplate CreateInstance(Connection Connection, string WebID, string ID, string Name, string Description, string Path)
             {
-                throw new NotImplementedException("Needs to be Implemented");
+                return new AFElementTemplate(Connection, WebID, ID, Name, Description, Path);
             }
+        }
 
-            public static AFElementTemplate FindByPath(Connection Connection, string Path)
-            {
-                return _templateLoader.FindByPath(Connection, Path);
-            }
-
-            public static bool Delete(Connection Connection, string ID)
-            {
-                return _templateLoader.Delete(Connection, ID);
-            }
-
-            public static bool CreateElementTemplate(Connection Connection, string ParentID, AFElementTemplate Template)
-            {
-                return _templateLoader.CreateElementTemplate(Connection, ParentID, Template);
-            }
-
-            public static IEnumerable<AFAttributeTemplate> GetAttributeTemplates(Connection Connection, string ElementID)
-            {
-                return _templateLoader.GetAttributeTemplates(Connection, ElementID);
-            }
-
-            public class ElementTemplateFactory
-            {
-                public static AFElementTemplate CreateInstance(Connection Connection, BaseObject bObj)
-                {
-                    return new AFElementTemplate(Connection, bObj.WebID, bObj.ID, bObj.Name, bObj.Description, bObj.Path);
-                }
-
-                public static AFElementTemplate CreateInstance(Connection Connection, string WebID, string ID, string Name, string Description, string Path)
-                {
-                    return new AFElementTemplate(Connection, WebID, ID, Name, Description, Path);
-                }
-            }
-        #endregion
+        #endregion "Static Methods"
     }
 }

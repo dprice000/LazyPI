@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LazyPI.Common
 {
     public class BaseObject
     {
-        protected LazyPI.Common.Connection _Connection;
+        protected Connection _Connection;
         protected string _ID;
         protected string _WebID;
         protected string _Name;
@@ -19,6 +15,7 @@ namespace LazyPI.Common
         protected bool _IsDeleted;
 
         #region "Properties"
+
         public string ID
         {
             get
@@ -104,11 +101,13 @@ namespace LazyPI.Common
                 _IsDeleted = value;
             }
         }
-        #endregion
+
+        #endregion "Properties"
 
         #region "Constructors"
+
         public BaseObject()
-        { 
+        {
         }
 
         public BaseObject(string Name, string Description)
@@ -126,7 +125,8 @@ namespace LazyPI.Common
             _Path = path;
             _WebID = webId;
         }
-        #endregion
+
+        #endregion "Constructors"
 
         protected void ItemsChangedMethod(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {

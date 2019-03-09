@@ -47,6 +47,7 @@ namespace LazyPI.LazyObjects
         private static IAFEventFrameController _EventFrameController;
 
         #region "Properties"
+
         public string Name
         {
             get
@@ -106,7 +107,7 @@ namespace LazyPI.LazyObjects
                 if (_Template == null)
                 {
                     var templateName = _EventFrameController.GetEventFrameTemplate(_Connection, _WebID);
-                    _Template =  AFElementTemplate.FindByName(templateName);
+                    _Template = AFElementTemplate.FindByName(templateName);
                 }
 
                 return _Template;
@@ -159,93 +160,99 @@ namespace LazyPI.LazyObjects
                 return _CategoryNames;
             }
         }
-        #endregion
+
+        #endregion "Properties"
 
         #region "Constructors"
-            public AFEventFrame()
+
+        public AFEventFrame()
+        {
+        }
+
+        internal AFEventFrame(Connection Connection, string WebID, string ID, string Name, string Description, string Path)
+            : base(Connection, WebID, ID, Name, Description, Path)
+        {
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+            _EventFrameController = GetController(_Connection);
+        }
+
+        private static IAFEventFrameController GetController(Connection Connection)
+        {
+            IAFEventFrameController result = null;
+
+            if (Connection is WebAPI.WebAPIConnection)
             {
+                result = new WebAPI.AFEventFrameController();
             }
 
-            internal AFEventFrame(Connection Connection, string WebID, string ID, string Name, string Description, string Path) 
-                : base(Connection, WebID, ID, Name, Description, Path)
-            {
-                Initialize();
-            }
+            return result;
+        }
 
-            private void Initialize()
-            {
-                _EventFrameController = GetController(_Connection);
-
-            }
-
-            private static IAFEventFrameController GetController(Connection Connection)
-            {
-                IAFEventFrameController result = null;
-
-                if (Connection is WebAPI.WebAPIConnection)
-                {
-                    result = new WebAPI.AFEventFrameController();
-                }
-
-                return result;
-            }
-        #endregion
+        #endregion "Constructors"
 
         #region "Static Methods"
-            public static AFEventFrame Find(Connection Connection, string ID)
-            {
-                return GetController(Connection).Find(Connection, ID);
-            }
 
-            public static AFEventFrame FindByPath(Connection Connection, string Path)
-            {
-                return GetController(Connection).FindByPath(Connection, Path);
-            }
-        #endregion
+        public static AFEventFrame Find(Connection Connection, string ID)
+        {
+            return GetController(Connection).Find(Connection, ID);
+        }
+
+        public static AFEventFrame FindByPath(Connection Connection, string Path)
+        {
+            return GetController(Connection).FindByPath(Connection, Path);
+        }
+
+        #endregion "Static Methods"
 
         #region "Public Methods"
-            public void CheckIn()
+
+        public void CheckIn()
+        {
+            if (_IsDirty && !_IsDeleted)
             {
-                if(_IsDirty && !_IsDeleted)
+                _EventFrameController.Update(_Connection, this);
+
+                if (_EventFrames != null)
                 {
-                    _EventFrameController.Update(_Connection, this);
-
-                    if (_EventFrames != null)
+                    foreach (AFEventFrame frame in _EventFrames.Where(x => x.IsNew || x.IsDeleted))
                     {
-                        foreach (AFEventFrame frame in _EventFrames.Where(x => x.IsNew || x.IsDeleted))
+                        if (frame.IsNew)
+                            _EventFrameController.CreateEventFrame(_Connection, _WebID, frame);
+                        else if (frame.IsDeleted)
                         {
-                            if (frame.IsNew)
-                                _EventFrameController.CreateEventFrame(_Connection, _WebID, frame);
-                            else if (frame.IsDeleted)
-                            {
-                                frame.Delete();
-                                frame.CheckIn();
-                            }
-                        }
-                    }
-
-                    if (_Attributes != null)
-                    {
-                        foreach (AFAttribute attr in _Attributes.Where(x => x.IsDeleted))
-                        {
-                            AFAttribute.Delete(_Connection, attr.WebID);
+                            frame.Delete();
+                            frame.CheckIn();
                         }
                     }
                 }
 
-                ResetState();
-            }      
-
-            /// <summary>
-            /// Sets the 
-            /// </summary>
-            /// <returns></returns>
-            public void Delete()
-            {
-                _EventFrameController.Delete(_Connection, _WebID);
-                _IsDeleted = true;
+                if (_Attributes != null)
+                {
+                    foreach (AFAttribute attr in _Attributes.Where(x => x.IsDeleted))
+                    {
+                        AFAttribute.Delete(_Connection, attr.WebID);
+                    }
+                }
             }
-        #endregion
+
+            ResetState();
+        }
+
+        /// <summary>
+        /// Sets the
+        /// </summary>
+        /// <returns></returns>
+        public void Delete()
+        {
+            _EventFrameController.Delete(_Connection, _WebID);
+            _IsDeleted = true;
+        }
+
+        #endregion "Public Methods"
 
         private void ResetState()
         {

@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LazyPI.LazyObjects;
 
 namespace LazyPI.WebAPI.ResponseModels
 {
@@ -28,12 +24,16 @@ namespace LazyPI.WebAPI.ResponseModels
 
         [Newtonsoft.Json.JsonIgnore]
         public string WebId { get; set; }
+
         [Newtonsoft.Json.JsonIgnore]
         public string Id { get; set; }
+
         public string Name { get; set; }
         public string Description { get; set; }
+
         [Newtonsoft.Json.JsonIgnore]
         public string Path { get; set; }
+
         [Newtonsoft.Json.JsonIgnore]
         public Dictionary<string, string> Links { get; set; }
     }
@@ -145,7 +145,6 @@ namespace LazyPI.WebAPI.ResponseModels
         {
         }
 
-
         public string TemplateName { get; set; }
         public List<string> CategoryNames { get; set; }
     }
@@ -194,6 +193,7 @@ namespace LazyPI.WebAPI.ResponseModels
         public bool IsExcluded { get; set; }
         public bool IsHidden { get; set; }
         public List<string> CategoryNames { get; set; }
+
         [Newtonsoft.Json.JsonIgnore]
         public bool Step { get; set; }
     }

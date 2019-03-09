@@ -1,9 +1,8 @@
-﻿using System;
-using LazyPI.Common;
+﻿using LazyPI.Common;
+using System;
 
 namespace LazyPI.LazyObjects
 {
-    
     public class AFValue : BaseObject
     {
         private DateTime _Timestamp;
@@ -14,6 +13,7 @@ namespace LazyPI.LazyObjects
         private bool _Substituted;
 
         #region "Properties"
+
         public DateTimeOffset Timestamp
         {
             get
@@ -66,9 +66,11 @@ namespace LazyPI.LazyObjects
                 return _Substituted;
             }
         }
-        #endregion
+
+        #endregion "Properties"
 
         #region "Constructors"
+
         public AFValue()
         {
         }
@@ -87,6 +89,7 @@ namespace LazyPI.LazyObjects
             _Questionable = Questionable;
             _Substituted = Substituted;
         }
-        #endregion
+
+        #endregion "Constructors"
     }
 }

@@ -1,18 +1,14 @@
 ﻿using LazyPI.Common;
 using LazyPI.LazyObjects;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LazyPI_Test.WebAPI
 {
     public class AFDatabaseController
     {
-        List<AFDatabase> _database = new List<AFDatabase>();
-        List<AFElement> _elements = new List<AFElement>();
-        List<AFEventFrame> _frames = new List<AFEventFrame>();
+        private List<AFDatabase> _database = new List<AFDatabase>();
+        private List<AFElement> _elements = new List<AFElement>();
+        private List<AFEventFrame> _frames = new List<AFEventFrame>();
 
         public AFDatabase Find(Connection Connection, string ID)
         {
@@ -35,7 +31,7 @@ namespace LazyPI_Test.WebAPI
 
         public bool Delete(Connection Connection, string DatabaseID)
         {
-           var db =  _database.Find(x => x.ID == DatabaseID);
+            var db = _database.Find(x => x.ID == DatabaseID);
             _database.Remove(db);
 
             return true;

@@ -1,6 +1,5 @@
 ﻿using LazyPI.Common;
-using System;
-using System.Collections.Generic;
+
 namespace LazyPI.LazyObjects
 {
     public class AFUnit : BaseObject
@@ -68,9 +67,11 @@ namespace LazyPI.LazyObjects
             }
             //TODO: Implement Setter
         }
-        #endregion
+
+        #endregion "Properties"
 
         #region "Constructors"
+
         internal AFUnit(Connection Connection, string WebID, string ID, string Name, string Description, string Path) : base(Connection, WebID, ID, Name, Description, Path)
         {
             Initialize();
@@ -79,7 +80,8 @@ namespace LazyPI.LazyObjects
         private void Initialize()
         {
         }
-        #endregion
+
+        #endregion "Constructors"
 
         #region "Static Methods"
 
@@ -97,18 +99,21 @@ namespace LazyPI.LazyObjects
 
         public static bool Delete(Connection Connection, string ID)
         {
-           return _UnitLoader.Delete(Connection, ID);
+            return _UnitLoader.Delete(Connection, ID);
         }
-        #endregion
+
+        #endregion "Static Methods"
 
         #region "Interactions"
-            public void CheckIn()
+
+        public void CheckIn()
+        {
+            if (_IsDirty && !_IsDeleted)
             {
-                if (_IsDirty && !_IsDeleted)
-                {
-                    _UnitLoader.Update(_Connection, this);
-                }
+                _UnitLoader.Update(_Connection, this);
             }
-        #endregion
+        }
+
+        #endregion "Interactions"
     }
 }

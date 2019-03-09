@@ -1,9 +1,6 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LazyPI.WebAPI
 {
@@ -70,7 +67,7 @@ namespace LazyPI.WebAPI
 
             List<LazyObjects.AFServer> results = new List<LazyObjects.AFServer>();
 
-            foreach(var server in response.Data.Items)
+            foreach (var server in response.Data.Items)
             {
                 results.Add(new LazyObjects.AFServer(Connection, server.WebId, server.Id, server.Name, server.Description, server.IsConnected, server.ServerVersion, server.Path));
             }
