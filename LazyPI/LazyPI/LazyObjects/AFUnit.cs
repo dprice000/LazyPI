@@ -108,7 +108,7 @@ namespace LazyPI.LazyObjects
 
         public void CheckIn()
         {
-            if (_IsDirty && !_IsDeleted)
+            if (IsDirty && !IsDeleted)
             {
                 _UnitLoader.Update(_Connection, this);
             }

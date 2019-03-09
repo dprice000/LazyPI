@@ -57,7 +57,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _StartTime = value;
-                _IsDirty = true;
+                IsDirty = true;
             }
         }
 
@@ -70,7 +70,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _EndTime = value;
-                _IsDirty = true;
+                IsDirty = true;
             }
         }
 
@@ -80,7 +80,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Template == null)
                 {
-                    var templateName = _EventFrameController.GetEventFrameTemplate(_Connection, _WebID);
+                    var templateName = _EventFrameController.GetEventFrameTemplate(_Connection, WebID);
                     _Template = AFElementTemplate.FindByName(templateName);
                 }
 
@@ -94,7 +94,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Attributes == null)
                 {
-                    var attrs = _EventFrameController.GetAttributes(_Connection, _WebID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
+                    var attrs = _EventFrameController.GetAttributes(_Connection, WebID, "*", "*", "*", "*", false, "Name", "Ascending", 0, false, false, 1000);
                     _Attributes = new AFAttributes(attrs.ToList());
                     _Attributes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ItemsChangedMethod);
                 }
@@ -104,7 +104,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _Attributes = value;
-                _IsDirty = true;
+                IsDirty = true;
             }
         }
 
@@ -114,7 +114,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_EventFrames == null)
                 {
-                    _EventFrames = new AFEventFrames(_EventFrameController.GetEventFrames(_Connection, _WebID));
+                    _EventFrames = new AFEventFrames(_EventFrameController.GetEventFrames(_Connection, WebID));
                     _EventFrames.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ItemsChangedMethod);
                 }
 
@@ -123,7 +123,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _EventFrames = value;
-                _IsDirty = true;
+                IsDirty = true;
             }
         }
 
@@ -186,7 +186,7 @@ namespace LazyPI.LazyObjects
 
         public void CheckIn()
         {
-            if (_IsDirty && !_IsDeleted)
+            if (IsDirty && !IsDeleted)
             {
                 _EventFrameController.Update(_Connection, this);
 
@@ -195,7 +195,7 @@ namespace LazyPI.LazyObjects
                     foreach (AFEventFrame frame in _EventFrames.Where(x => x.IsNew || x.IsDeleted))
                     {
                         if (frame.IsNew)
-                            _EventFrameController.CreateEventFrame(_Connection, _WebID, frame);
+                            _EventFrameController.CreateEventFrame(_Connection, WebID, frame);
                         else if (frame.IsDeleted)
                         {
                             frame.Delete();
@@ -222,16 +222,16 @@ namespace LazyPI.LazyObjects
         /// <returns></returns>
         public void Delete()
         {
-            _EventFrameController.Delete(_Connection, _WebID);
-            _IsDeleted = true;
+            _EventFrameController.Delete(_Connection, WebID);
+            IsDeleted = true;
         }
 
         #endregion "Public Methods"
 
         private void ResetState()
         {
-            _IsNew = false;
-            _IsDirty = false;
+            IsNew = false;
+            IsDirty = false;
             _EventFrames = null;
             _Attributes = null;
             _Template = null;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LazyPI.LazyObjects
 {
-    public class PIPoint : LazyPI.Common.BaseObject
+    public class PIPoint : Common.BaseObject
     {
         private IStreams _DataStream;
 
@@ -19,12 +19,12 @@ namespace LazyPI.LazyObjects
 
         #region "Constructors"
 
-        public PIPoint(LazyPI.Common.Connection Connection, string WebID, string ID, string Name, string Description, string Path) :
+        public PIPoint(Common.Connection Connection, string WebID, string ID, string Name, string Description, string Path) :
             base(Connection, WebID, ID, Name, Description, Path)
         {
         }
 
-        public PIPoint(LazyPI.Common.Connection Connection, string WebID, string ID, string Name, string Description, string Path, string PointType, string PointClass, bool Future) :
+        public PIPoint(Common.Connection Connection, string WebID, string ID, string Name, string Description, string Path, string PointType, string PointClass, bool Future) :
             base(Connection, WebID, ID, Name, Description, Path)
         {
             this.PointClass = PointClass;
@@ -43,12 +43,12 @@ namespace LazyPI.LazyObjects
 
         public IEnumerable<AFValue> RecordedValues(string StartTime, string EndTime, Common.BoundryType BoundryType, string DesiredUnits, string FilterExpression, bool IncludeFilters, int MaxCount = 1000)
         {
-            return _DataStream.GetRecorded(_Connection, _WebID, StartTime, EndTime, BoundryType, DesiredUnits, FilterExpression, IncludeFilters, MaxCount);
+            return _DataStream.GetRecorded(_Connection, WebID, StartTime, EndTime, BoundryType, DesiredUnits, FilterExpression, IncludeFilters, MaxCount);
         }
 
         public IEnumerable<AFValue> Summary(DateTime StartTime, DateTime EndTime, Common.SummaryType SummaryType, Common.CalculationBasis CalcBasis, Common.TimeType TimeType, string SummaryDuration, Common.SampleType SampleType)
         {
-            return _DataStream.GetSummary(_Connection, _WebID, StartTime, EndTime, SummaryType, CalcBasis, TimeType, SummaryDuration, SampleType);
+            return _DataStream.GetSummary(_Connection, WebID, StartTime, EndTime, SummaryType, CalcBasis, TimeType, SummaryDuration, SampleType);
         }
 
         #endregion

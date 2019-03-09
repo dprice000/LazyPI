@@ -5,43 +5,33 @@ namespace LazyPI.Common
     public class BaseObject
     {
         protected Connection _Connection;
-        protected string _ID;
-        protected string _WebID;
         protected string _Name;
-        protected string _Path;
         protected string _Description;
-        protected bool _IsNew;
-        protected bool _IsDirty;
-        protected bool _IsDeleted;
 
         #region "Properties"
 
-        public string ID
-        {
-            get
-            {
-                return _ID;
-            }
-        }
+        public string ID { get; protected set; }
 
-        public string WebID
-        {
-            get
-            {
-                return _WebID;
-            }
-        }
+        public string WebID { get; protected set; }
+
+        public string Path { get; protected set; }
+
+        public bool IsNew { get; internal set; }
+
+        public bool IsDirty { get; internal set; }
+
+        public bool IsDeleted { get; internal set; }
 
         public string Name
         {
             get
             {
-                return this._Name;
+                return _Name;
             }
             set
             {
-                this._Name = value;
-                this._IsDirty = true;
+                _Name = value;
+                IsDirty = true;
             }
         }
 
@@ -49,58 +39,16 @@ namespace LazyPI.Common
         {
             get
             {
-                return this._Description;
+                return _Description;
             }
             set
             {
-                this._Description = value;
-                this._IsDirty = true;
+                _Description = value;
+                IsDirty = true;
             }
         }
 
-        public string Path
-        {
-            get
-            {
-                return this._Path;
-            }
-        }
 
-        public bool IsNew
-        {
-            get
-            {
-                return _IsNew;
-            }
-            internal set
-            {
-                _IsNew = value;
-            }
-        }
-
-        public bool IsDirty
-        {
-            get
-            {
-                return _IsDirty;
-            }
-            internal set
-            {
-                _IsDirty = value;
-            }
-        }
-
-        public bool IsDeleted
-        {
-            get
-            {
-                return _IsDeleted;
-            }
-            internal set
-            {
-                _IsDeleted = value;
-            }
-        }
 
         #endregion "Properties"
 
@@ -119,11 +67,11 @@ namespace LazyPI.Common
         public BaseObject(LazyPI.Common.Connection Connection, string webId, string id, string name, string description, string path)
         {
             _Connection = Connection;
-            _ID = id;
-            _Name = name;
-            _Description = description;
-            _Path = path;
-            _WebID = webId;
+            ID = id;
+            Name = name;
+            Description = description;
+            Path = path;
+            WebID = webId;
         }
 
         #endregion "Constructors"
@@ -135,7 +83,7 @@ namespace LazyPI.Common
                 foreach (BaseObject item in e.NewItems)
                 {
                     item.IsNew = true;
-                    _IsDirty = true;
+                    IsDirty = true;
                 }
             }
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
@@ -143,7 +91,7 @@ namespace LazyPI.Common
                 foreach (BaseObject item in e.OldItems)
                 {
                     item.IsDeleted = true;
-                    _IsDirty = true;
+                    IsDirty = true;
                 }
             }
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)

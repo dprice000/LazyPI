@@ -20,7 +20,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Databases == null)
                 {
-                    _Databases = new AFDatabases(_ServerController.GetDatabases(_Connection, _WebID));
+                    _Databases = new AFDatabases(_ServerController.GetDatabases(_Connection, WebID));
                 }
 
                 return _Databases;

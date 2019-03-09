@@ -62,7 +62,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _Attributes = value;
-                _IsDirty = true;
+                IsDirty = true;
             }
         }
 
@@ -115,7 +115,7 @@ namespace LazyPI.LazyObjects
 
         public PIPoint GetPoint()
         {
-            return _AttrController.GetPoint(_Connection, _WebID);
+            return _AttrController.GetPoint(_Connection, WebID);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace LazyPI.LazyObjects
         /// <returns>Returns a complete AFAttribute.</returns>
         public AFValue GetValue()
         {
-            return _AttrController.GetValue(_Connection, _WebID);
+            return _AttrController.GetValue(_Connection, WebID);
         }
 
         /// <summary>
@@ -134,18 +134,18 @@ namespace LazyPI.LazyObjects
         /// <returns>Returns true if no errors occur.</returns>
         public bool SetValue(AFValue Value)
         {
-            return _AttrController.SetValue(_Connection, _WebID, Value);
+            return _AttrController.SetValue(_Connection, WebID, Value);
         }
 
         public void Delete()
         {
-            _AttrController.Delete(_Connection, _WebID);
-            _IsDeleted = true;
+            _AttrController.Delete(_Connection, WebID);
+            IsDeleted = true;
         }
 
         public void CheckIn()
         {
-            if (_IsDirty && !_IsDeleted)
+            if (IsDirty && !IsDeleted)
             {
                 _AttrController.Update(_Connection, this);
 
@@ -153,7 +153,7 @@ namespace LazyPI.LazyObjects
                 {
                     foreach (AFAttribute attr in _Attributes.Where(x => x.IsNew))
                     {
-                        _AttrController.CreateChild(_Connection, _WebID, attr);
+                        _AttrController.CreateChild(_Connection, WebID, attr);
                     }
                 }
             }

@@ -9,24 +9,17 @@ namespace LazyPI.LazyObjects
     {
         private IEnumerable<string> _CategoryList;
         private Lazy<ObservableCollection<string>> _Categories;
-        private bool _IsExtendable;
-        private static IAFElementTemplateContoller _templateLoader;
+        private static IAFElementTemplateContoller _templateController;
 
         #region "Properties"
+
+        public bool IsExtendable { get; }
 
         public ObservableCollection<string> Categories
         {
             get
             {
                 return _Categories.Value;
-            }
-        }
-
-        public bool IsExtendable
-        {
-            get
-            {
-                return _IsExtendable;
             }
         }
 
@@ -46,13 +39,27 @@ namespace LazyPI.LazyObjects
 
         private void Initialize()
         {
+            _templateController = GetController(_Connection);
+
             // Load Categories
             _Categories = new Lazy<ObservableCollection<string>>(() =>
             {
-                ObservableCollection<string> collection = new ObservableCollection<string>(_templateLoader.GetCategories(_Connection, this._ID));
+                ObservableCollection<string> collection = new ObservableCollection<string>(_templateController.GetCategories(_Connection, ID));
                 collection.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(CategoriesChanged);
                 return collection;
             }, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        }
+
+        private static IAFElementTemplateContoller GetController(Connection Connection)
+        {
+            IAFElementTemplateContoller result = null;
+
+            if(Connection is WebAPI.WebAPIConnection)
+            {
+                result = new WebAPI.AFElementTemplateController();
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -63,6 +70,7 @@ namespace LazyPI.LazyObjects
         private void CategoriesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             //TODO: Implement
+            throw new NotImplementedException("Needs to be implemented");
         }
 
         #endregion "Constructors"
@@ -71,7 +79,7 @@ namespace LazyPI.LazyObjects
 
         public static AFElementTemplate Find(Connection Connection, string ID)
         {
-            return _templateLoader.Find(Connection, ID);
+            return _templateController.Find(Connection, ID);
         }
 
         public static AFElementTemplate FindByName(string Name)
@@ -81,22 +89,22 @@ namespace LazyPI.LazyObjects
 
         public static AFElementTemplate FindByPath(Connection Connection, string Path)
         {
-            return _templateLoader.FindByPath(Connection, Path);
+            return _templateController.FindByPath(Connection, Path);
         }
 
         public static bool Delete(Connection Connection, string ID)
         {
-            return _templateLoader.Delete(Connection, ID);
+            return _templateController.Delete(Connection, ID);
         }
 
         public static bool CreateElementTemplate(Connection Connection, string ParentID, AFElementTemplate Template)
         {
-            return _templateLoader.CreateElementTemplate(Connection, ParentID, Template);
+            return _templateController.CreateElementTemplate(Connection, ParentID, Template);
         }
 
         public static IEnumerable<AFAttributeTemplate> GetAttributeTemplates(Connection Connection, string ElementID)
         {
-            return _templateLoader.GetAttributeTemplates(Connection, ElementID);
+            return _templateController.GetAttributeTemplates(Connection, ElementID);
         }
 
         public class ElementTemplateFactory

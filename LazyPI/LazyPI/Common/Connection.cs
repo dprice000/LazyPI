@@ -5,9 +5,9 @@
 
         #region "Properties"
 
-        public string Hostname { get; }
+        public string Hostname { get; protected set; }
 
-        public string Username { get; }
+        public string Username { get; protected set; }
 
         #endregion "Properties"
     }

@@ -17,7 +17,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Elements == null)
                 {
-                    _Elements = new AFElements(_DBController.GetElements(_Connection, _WebID));
+                    _Elements = new AFElements(_DBController.GetElements(_Connection, WebID));
                 }
 
                 return _Elements;
@@ -30,7 +30,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_EventFrames == null)
                 {
-                    _EventFrames = new AFEventFrames(_DBController.GetEventFrames(_Connection, _WebID));
+                    _EventFrames = new AFEventFrames(_DBController.GetEventFrames(_Connection, WebID));
                 }
 
                 return _EventFrames;
@@ -65,17 +65,17 @@ namespace LazyPI.LazyObjects
 
         public bool CreateElement(AFElement Element)
         {
-            return _DBController.CreateElement(_Connection, _WebID, Element);
+            return _DBController.CreateElement(_Connection, WebID, Element);
         }
 
         public bool CreateEventFrame(AFEventFrame Frame)
         {
-            return _DBController.CreateEventFrame(_Connection, _WebID, Frame);
+            return _DBController.CreateEventFrame(_Connection, WebID, Frame);
         }
 
         public void CheckIn()
         {
-            if (_IsDirty && !_IsDeleted)
+            if (IsDirty && !IsDeleted)
             {
                 _DBController.Update(_Connection, this);
 
@@ -83,7 +83,7 @@ namespace LazyPI.LazyObjects
                 {
                     foreach (AFElement ele in _Elements.Where(x => x.IsNew))
                     {
-                        _DBController.CreateElement(_Connection, _WebID, ele);
+                        _DBController.CreateElement(_Connection, WebID, ele);
                     }
                 }
 
@@ -91,7 +91,7 @@ namespace LazyPI.LazyObjects
                 {
                     foreach (AFEventFrame frame in _EventFrames.Where(x => x.IsNew))
                     {
-                        _DBController.CreateEventFrame(_Connection, _WebID, frame);
+                        _DBController.CreateEventFrame(_Connection, WebID, frame);
                     }
                 }
             }

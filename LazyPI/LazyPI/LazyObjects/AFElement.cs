@@ -37,7 +37,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Categories == null)
                 {
-                    _Categories = new List<string>(_ElementController.GetCategories(_Connection, _WebID));
+                    _Categories = new List<string>(_ElementController.GetCategories(_Connection, WebID));
                 }
 
                 return _Categories;
@@ -50,7 +50,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Template == null)
                 {
-                    string templateName = _ElementController.GetElementTemplate(_Connection, _WebID);
+                    string templateName = _ElementController.GetElementTemplate(_Connection, WebID);
                     _Template = AFElementTemplate.Find(_Connection, templateName);
                 }
 
@@ -64,7 +64,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Parent == null)
                 {
-                    string parentPath = _Path.Substring(0, _Path.LastIndexOf('\\'));
+                    string parentPath = this.Path.Substring(0, this.Path.LastIndexOf('\\'));
                     _Parent = _ElementController.FindByPath(_Connection, parentPath);
                 }
 
@@ -78,7 +78,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Elements == null)
                 {
-                    _Elements = new AFElements(_ElementController.GetElements(_Connection, _WebID).ToList());
+                    _Elements = new AFElements(_ElementController.GetElements(_Connection, WebID).ToList());
                     _Elements.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ItemsChangedMethod);
                 }
 
@@ -87,7 +87,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _Elements = value;
-                _IsDirty = true;
+                IsDirty = true;
             }
         }
 
@@ -97,7 +97,7 @@ namespace LazyPI.LazyObjects
             {
                 if (_Attributes == null)
                 {
-                    _Attributes = new AFAttributes(_ElementController.GetAttributes(_Connection, _WebID).ToList());
+                    _Attributes = new AFAttributes(_ElementController.GetAttributes(_Connection, WebID).ToList());
                     _Attributes.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(ItemsChangedMethod);
                 }
 
@@ -106,7 +106,7 @@ namespace LazyPI.LazyObjects
             set
             {
                 _Attributes = value;
-                _IsDirty = true;
+                IsDirty = true;
             }
         }
 
@@ -152,7 +152,7 @@ namespace LazyPI.LazyObjects
 
         public void CheckIn()
         {
-            if (_IsDirty && !_IsDeleted)
+            if (IsDirty && !IsDeleted)
             {
                 _ElementController.Update(_Connection, this);
 
@@ -160,7 +160,7 @@ namespace LazyPI.LazyObjects
                 {
                     foreach (AFElement ele in _Elements.Where(x => x.IsNew))
                     {
-                        _ElementController.CreateChildElement(_Connection, _WebID, ele);
+                        _ElementController.CreateChildElement(_Connection, WebID, ele);
                     }
                 }
 
@@ -168,7 +168,7 @@ namespace LazyPI.LazyObjects
                 {
                     foreach (AFAttribute attr in _Attributes.Where(x => x.IsNew))
                     {
-                        _ElementController.CreateAttribute(_Connection, _WebID, attr);
+                        _ElementController.CreateAttribute(_Connection, WebID, attr);
                     }
                 }
             }
@@ -178,8 +178,8 @@ namespace LazyPI.LazyObjects
 
         public void Delete()
         {
-            _ElementController.Delete(_Connection, _WebID);
-            _IsDeleted = true;
+            _ElementController.Delete(_Connection, WebID);
+            IsDeleted = true;
         }
 
         #endregion "Interactions"
@@ -234,8 +234,8 @@ namespace LazyPI.LazyObjects
 
         private void ResetState()
         {
-            _IsNew = false;
-            _IsDirty = false;
+            IsNew = false;
+            IsDirty = false;
             _Elements = null;
             _Attributes = null;
             _Template = null;
