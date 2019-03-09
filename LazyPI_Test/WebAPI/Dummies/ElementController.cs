@@ -3,7 +3,7 @@ using LazyPI.LazyObjects;
 using System;
 using System.Collections.Generic;
 
-namespace LazyPI_Test.WebAPI
+namespace LazyPI_Test.WebAPI.Dummies
 {
     public class ElementController : IAFElementController
     {
