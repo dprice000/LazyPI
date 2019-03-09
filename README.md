@@ -1,5 +1,5 @@
 # LazyPI
-[![Gitter](https://badges.gitter.im/dprice809/LazyPI.svg)](https://gitter.im/dprice809/LazyPI?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Coverage Status](https://coveralls.io/repos/github/dprice809/LazyPI/badge.svg?branch=master)](https://coveralls.io/github/dprice809/LazyPI?branch=master)
+[![Gitter](https://badges.gitter.im/dprice809/LazyPI.svg)](https://gitter.im/dprice809/LazyPI?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Build Status](https://travis-ci.org/dprice809/LazyPI.svg?branch=master)](https://travis-ci.org/dprice809/LazyPI) [![Coverage Status](https://coveralls.io/repos/github/dprice809/LazyPI/badge.svg?branch=master)](https://coveralls.io/github/dprice809/LazyPI?branch=master)
 
 **Summary**
 
