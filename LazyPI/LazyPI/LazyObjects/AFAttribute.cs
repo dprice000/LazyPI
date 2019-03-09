@@ -191,6 +191,7 @@ namespace LazyPI.LazyObjects
         public void Delete()
         {
             _AttrController.Delete(_Connection, _WebID);
+            _IsDeleted = true;
         }
 
         public void CheckIn()
