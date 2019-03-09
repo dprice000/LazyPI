@@ -196,7 +196,7 @@ namespace LazyPI.LazyObjects
 
         public void CheckIn()
         {
-            if (_IsDirty)
+            if (_IsDirty && !_IsDeleted)
             {
                 _AttrController.Update(_Connection, this);
 

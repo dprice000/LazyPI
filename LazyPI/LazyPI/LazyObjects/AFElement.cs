@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
@@ -21,7 +18,6 @@ namespace LazyPI.LazyObjects
 		internal AFElements(IEnumerable<AFElement> elements) : base(elements.ToList())
 		{
 		}
-
 	}
 
 	public class AFElement : BaseObject
@@ -34,32 +30,6 @@ namespace LazyPI.LazyObjects
 		private static IAFElementController _ElementController;
 
 		#region "Properties"
-			public string Name
-			{
-				get
-				{
-					return base.Name;
-				}
-				set
-				{
-					base.Name = value;
-					_IsDirty = true;
-				}
-			}
-
-			public string Description
-			{
-				get
-				{
-					return base.Description;
-				}
-				set
-				{
-					base.Description = value;
-					_IsDirty = true;
-				}
-			}
-
 			public List<string> Categories
 			{
 				get
@@ -177,7 +147,7 @@ namespace LazyPI.LazyObjects
 		#region "Interactions"
 			public void CheckIn()
 			{
-				if (_IsDirty)
+				if (_IsDirty && !_IsDeleted)
 				{
 					_ElementController.Update(_Connection, this);
 
@@ -202,10 +172,10 @@ namespace LazyPI.LazyObjects
 			}
 
 			public void Delete()
-			{
-                _IsDeleted = true;
+			{               
 				_ElementController.Delete(_Connection, _WebID);
-			}
+                _IsDeleted = true;
+            }
 		#endregion
 
 		#region "Static Methods"
@@ -258,7 +228,6 @@ namespace LazyPI.LazyObjects
 		{
 			_IsNew = false;
 			_IsDirty = false;
-			_IsDeleted = false;
 			_Elements = null;
 			_Attributes = null;
 			_Template = null;

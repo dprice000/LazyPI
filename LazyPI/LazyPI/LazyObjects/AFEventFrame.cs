@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LazyPI.LazyObjects
 {
@@ -208,11 +206,7 @@ namespace LazyPI.LazyObjects
         #region "Public Methods"
             public void CheckIn()
             {
-                if (_IsDeleted)
-                {
-                    _EventFrameController.Delete(_Connection, _WebID);
-                }
-                else if(_IsDirty)
+                if(_IsDirty && !_IsDeleted)
                 {
                     _EventFrameController.Update(_Connection, this);
 
@@ -248,6 +242,7 @@ namespace LazyPI.LazyObjects
             /// <returns></returns>
             public void Delete()
             {
+                _EventFrameController.Delete(_Connection, _WebID);
                 _IsDeleted = true;
             }
         #endregion
@@ -256,7 +251,6 @@ namespace LazyPI.LazyObjects
         {
             _IsNew = false;
             _IsDirty = false;
-            _IsDeleted = false;
             _EventFrames = null;
             _Attributes = null;
             _Template = null;

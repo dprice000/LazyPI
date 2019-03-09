@@ -1,10 +1,6 @@
 ﻿using LazyPI.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace LazyPI.LazyObjects
 {
     public class AFUnit : BaseObject
@@ -106,9 +102,12 @@ namespace LazyPI.LazyObjects
         #endregion
 
         #region "Interactions"
-            public bool CheckIn()
+            public void CheckIn()
             {
-                return _UnitLoader.Update(_Connection, this);
+                if (_IsDirty && !_IsDeleted)
+                {
+                    _UnitLoader.Update(_Connection, this);
+                }
             }
         #endregion
     }

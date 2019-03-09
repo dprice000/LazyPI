@@ -44,6 +44,7 @@ namespace LazyPI.Common
             set
             {
                 this._Name = value;
+                this._IsDirty = true;
             }
         }
 
@@ -56,6 +57,7 @@ namespace LazyPI.Common
             set
             {
                 this._Description = value;
+                this._IsDirty = true;
             }
         }
 

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LazyPI.Common;
 
 namespace LazyPI.LazyObjects
@@ -18,8 +15,10 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                if(_Elements == null)
+                if (_Elements == null)
+                {
                     _Elements = new AFElements(_DBController.GetElements(_Connection, _WebID));
+                }
 
                 return _Elements;
             }
@@ -29,8 +28,10 @@ namespace LazyPI.LazyObjects
         {
             get
             {
-                if(_EventFrames == null)
+                if (_EventFrames == null)
+                {
                     _EventFrames = new AFEventFrames(_DBController.GetEventFrames(_Connection, _WebID));
+                }
 
                 return _EventFrames;
             }
@@ -71,9 +72,7 @@ namespace LazyPI.LazyObjects
 
             public void CheckIn()
             {
-                _DBController.Update(_Connection, this);
-
-				if (_IsDirty)
+				if (_IsDirty && !_IsDeleted)
 				{
 					_DBController.Update(_Connection, this);
 

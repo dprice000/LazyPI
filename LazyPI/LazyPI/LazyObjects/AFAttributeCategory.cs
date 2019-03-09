@@ -17,7 +17,10 @@ namespace LazyPI.LazyObjects
 
         public void CheckIn()
         {
-            _CategoryLoader.Update(_Connection, this);
+            if (_IsDirty && !_IsDeleted)
+            {
+                _CategoryLoader.Update(_Connection, this);
+            }
         }
     }
 }
