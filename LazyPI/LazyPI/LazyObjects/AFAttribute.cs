@@ -37,9 +37,11 @@ namespace LazyPI.LazyObjects
 
         #region "Properties"
 
-        public IEnumerable<string> Categories { get;
+        public IEnumerable<string> Categories
+        {
+            get;
 
-        //TODO: Implement setter
+            //TODO: Implement setter
         }
 
         public string ConfigString { get; set; }

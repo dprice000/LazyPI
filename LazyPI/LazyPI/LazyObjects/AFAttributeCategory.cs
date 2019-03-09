@@ -2,20 +2,27 @@
 
 namespace LazyPI.LazyObjects
 {
-    public class AFAttributeCategory : BaseObject
+    public class AFAttributeCategory : CheckInAble
     {
-        private IAFAttributeCategoryController _CategoryLoader;
+        private IAFAttributeCategoryController _CategoryController;
 
         private void Initialize()
         {
         }
 
-        public void CheckIn()
+        public override void CheckIn()
         {
             if (IsDirty && !IsDeleted)
             {
-                _CategoryLoader.Update(_Connection, this);
+                _CategoryController.Update(_Connection, this);
+                ResetState();
             }
+        }
+
+        protected override void ResetState()
+        {
+            IsNew = false;
+            IsDirty = false;
         }
     }
 }

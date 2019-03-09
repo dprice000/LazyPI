@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace LazyPI.LazyObjects
 {
-    public class AFDatabase : BaseObject
+    public class AFDatabase : CheckInAble
     {
         private IAFDatabaseController _DBController;
 
@@ -73,7 +73,7 @@ namespace LazyPI.LazyObjects
             return _DBController.CreateEventFrame(_Connection, WebID, Frame);
         }
 
-        public void CheckIn()
+        public override void CheckIn()
         {
             if (IsDirty && !IsDeleted)
             {
@@ -94,7 +94,17 @@ namespace LazyPI.LazyObjects
                         _DBController.CreateEventFrame(_Connection, WebID, frame);
                     }
                 }
-            }
+
+                ResetState();
+            }    
+        }
+
+        protected override void ResetState()
+        {
+            IsNew = false;
+            IsDirty = false;
+            _Elements = null;
+            _EventFrames = null;
         }
 
         #endregion "Interactions"

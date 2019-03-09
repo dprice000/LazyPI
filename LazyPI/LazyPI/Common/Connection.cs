@@ -2,7 +2,6 @@
 {
     public abstract class Connection
     {
-
         #region "Properties"
 
         public string Hostname { get; protected set; }

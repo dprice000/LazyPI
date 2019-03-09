@@ -36,7 +36,7 @@ namespace LazyPI.LazyObjects
         }
     }
 
-    public class AFEventFrame : BaseObject
+    public class AFEventFrame : CheckInAble
     {
         private DateTime _StartTime;
         private DateTime _EndTime;
@@ -184,7 +184,7 @@ namespace LazyPI.LazyObjects
 
         #region "Public Methods"
 
-        public void CheckIn()
+        public override void CheckIn()
         {
             if (IsDirty && !IsDeleted)
             {
@@ -211,9 +211,9 @@ namespace LazyPI.LazyObjects
                         AFAttribute.Delete(_Connection, attr.WebID);
                     }
                 }
-            }
 
-            ResetState();
+                ResetState();
+            }         
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace LazyPI.LazyObjects
 
         #endregion "Public Methods"
 
-        private void ResetState()
+        protected override void ResetState()
         {
             IsNew = false;
             IsDirty = false;

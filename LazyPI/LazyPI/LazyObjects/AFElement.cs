@@ -20,7 +20,7 @@ namespace LazyPI.LazyObjects
         }
     }
 
-    public class AFElement : BaseObject
+    public class AFElement : CheckInAble
     {
         private AFElementTemplate _Template;
         private AFElement _Parent;
@@ -150,7 +150,7 @@ namespace LazyPI.LazyObjects
 
         #region "Interactions"
 
-        public void CheckIn()
+        public override void CheckIn()
         {
             if (IsDirty && !IsDeleted)
             {
@@ -171,9 +171,20 @@ namespace LazyPI.LazyObjects
                         _ElementController.CreateAttribute(_Connection, WebID, attr);
                     }
                 }
-            }
 
-            ResetState();
+                ResetState();
+            }
+        }
+
+        protected override void ResetState()
+        {
+            IsNew = false;
+            IsDirty = false;
+            _Elements = null;
+            _Attributes = null;
+            _Template = null;
+            _Categories = null;
+            _Parent = null;
         }
 
         public void Delete()
@@ -231,16 +242,5 @@ namespace LazyPI.LazyObjects
         }
 
         #endregion "Static Methods"
-
-        private void ResetState()
-        {
-            IsNew = false;
-            IsDirty = false;
-            _Elements = null;
-            _Attributes = null;
-            _Template = null;
-            _Categories = null;
-            _Parent = null;
-        }
     }
 }

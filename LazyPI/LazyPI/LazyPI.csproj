@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CheckInAble.cs" />
     <Compile Include="Common\Connection.cs" />
     <Compile Include="Common\Enums.cs" />
     <Compile Include="LazyObjects\AFDatabase.cs" />

@@ -2,7 +2,7 @@
 
 namespace LazyPI.LazyObjects
 {
-    public class AFUnit : BaseObject
+    public class AFUnit : CheckInAble
     {
         private string _Abbreviation;
         private double _Factor;
@@ -10,7 +10,7 @@ namespace LazyPI.LazyObjects
         private double _ReferenceFactor;
         private double _ReferenceOffset;
         private string _ReferenceUnitAbbreviation;
-        private static IAFUnitController _UnitLoader;
+        private static IAFUnitController _UnitController;
 
         #region "Properties"
 
@@ -81,37 +81,57 @@ namespace LazyPI.LazyObjects
         {
         }
 
+        private static IAFUnitController GetController(Connection Connection)
+        {
+            IAFUnitController result = null;
+
+            if(Connection is WebAPI.WebAPIConnection)
+            {
+                throw new System.NotImplementedException("AFUnitController has not been implemented for WebAPI.");
+            }
+
+            return result;
+        }
+
         #endregion "Constructors"
 
         #region "Static Methods"
 
         public AFUnit Find(Connection Connection, string ID)
         {
-            BaseObject baseObj = _UnitLoader.Find(Connection, ID);
+            BaseObject baseObj = _UnitController.Find(Connection, ID);
             return new AFUnit(Connection, baseObj.WebID, baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
         }
 
         public AFUnit FindByPath(Connection Connection, string Path)
         {
-            BaseObject baseObj = _UnitLoader.FindByPath(Connection, Path);
+            BaseObject baseObj = _UnitController.FindByPath(Connection, Path);
             return new AFUnit(Connection, baseObj.WebID, baseObj.ID, baseObj.Name, baseObj.Description, baseObj.Path);
         }
 
         public static bool Delete(Connection Connection, string ID)
         {
-            return _UnitLoader.Delete(Connection, ID);
+            return GetController(Connection).Delete(Connection, ID);
         }
 
         #endregion "Static Methods"
 
         #region "Interactions"
 
-        public void CheckIn()
+        public override void CheckIn()
         {
             if (IsDirty && !IsDeleted)
             {
-                _UnitLoader.Update(_Connection, this);
+                _UnitController.Update(_Connection, this);
+
+                ResetState();
             }
+        }
+
+        protected override void ResetState()
+        {
+            IsNew = false;
+            IsDirty = false;
         }
 
         #endregion "Interactions"

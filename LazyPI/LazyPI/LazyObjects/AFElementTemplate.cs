@@ -54,7 +54,7 @@ namespace LazyPI.LazyObjects
         {
             IAFElementTemplateContoller result = null;
 
-            if(Connection is WebAPI.WebAPIConnection)
+            if (Connection is WebAPI.WebAPIConnection)
             {
                 result = new WebAPI.AFElementTemplateController();
             }

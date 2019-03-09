@@ -48,8 +48,6 @@ namespace LazyPI.Common
             }
         }
 
-
-
         #endregion "Properties"
 
         #region "Constructors"
@@ -64,7 +62,7 @@ namespace LazyPI.Common
             _Description = Description;
         }
 
-        public BaseObject(LazyPI.Common.Connection Connection, string webId, string id, string name, string description, string path)
+        public BaseObject(Connection Connection, string webId, string id, string name, string description, string path)
         {
             _Connection = Connection;
             ID = id;
