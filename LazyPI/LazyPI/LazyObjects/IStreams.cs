@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace LazyPI.LazyObjects
 {
-    internal interface IStreams
+    public interface IStreams
     {
         AFValue GetEnd(Connection Connection, string PointID, string DesiredUnits);
 

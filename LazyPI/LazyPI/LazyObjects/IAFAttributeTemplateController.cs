@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LazyPI.LazyObjects
 {
-    internal interface IAFAttributeTemplateController
+    public interface IAFAttributeTemplateController
     {
         AFAttributeTemplate Find(Connection Connection, string AttrTempID);
 
