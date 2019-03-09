@@ -34,7 +34,17 @@ namespace LazyPI.LazyObjects
         /// <summary>
         /// Only for testing purposes.
         /// </summary>
-        internal IAFElementController ElementController { get; set; }
+        internal IAFElementController ElementController
+        {
+            get
+            {
+                return _ElementController;
+            }
+            set
+            {
+                _ElementController = value;
+            }
+        }
 
         public List<string> Categories
         {

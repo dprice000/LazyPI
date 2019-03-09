@@ -13,7 +13,17 @@ namespace LazyPI.LazyObjects
         /// <summary>
         /// Only for testing purposes.
         /// </summary>
-        internal IAFServerController ServerController { get; set; }
+        internal IAFServerController ServerController
+        {
+            get
+            {
+                return _ServerController;
+            }
+            set
+            {
+                _ServerController = value;
+            }
+        }
 
         public bool IsConnected { get; }
 

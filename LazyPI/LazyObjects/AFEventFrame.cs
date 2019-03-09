@@ -51,7 +51,17 @@ namespace LazyPI.LazyObjects
         /// <summary>
         /// Only for testing purposes.
         /// </summary>
-        internal IAFEventFrameController EventFrameController { get; set; }
+        internal IAFEventFrameController EventFrameController
+        {
+            get
+            {
+                return _EventFrameController;
+            }
+            set
+            {
+                _EventFrameController = value;
+            }
+        }
 
         public DateTime StartTime
         {

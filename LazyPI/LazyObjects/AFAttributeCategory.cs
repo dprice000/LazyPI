@@ -9,7 +9,18 @@ namespace LazyPI.LazyObjects
         /// <summary>
         /// Only for testing purposes.
         /// </summary>
-        internal IAFAttributeCategoryController CategoryController { get; set; }
+        internal IAFAttributeCategoryController CategoryController
+        {
+            get
+            {
+                return _CategoryController;
+            }
+            set
+            {
+                _CategoryController = value;
+            }
+        }
+
 
         private void Initialize()
         {

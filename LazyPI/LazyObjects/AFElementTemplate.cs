@@ -16,7 +16,17 @@ namespace LazyPI.LazyObjects
         /// <summary>
         /// Only for testing purposes.
         /// </summary>
-        internal IAFElementTemplateContoller TemplateController { get; set; }
+        internal IAFElementTemplateContoller TemplateController
+        {
+            get
+            {
+                return _templateController;
+            }
+            set
+            {
+                _templateController = value;
+            }
+        }
 
         public bool IsExtendable { get; }
 

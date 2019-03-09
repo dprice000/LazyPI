@@ -40,7 +40,17 @@ namespace LazyPI.LazyObjects
         /// <summary>
         /// Only for testing purposes.
         /// </summary>
-        internal IAFAttributeController AttrController { get; set; }
+        internal IAFAttributeController AttrController
+        {
+            get
+            {
+                return _AttrController;
+            }
+            set
+            {
+                _AttrController = value;
+            }
+        }
 
         public IEnumerable<string> Categories
         {

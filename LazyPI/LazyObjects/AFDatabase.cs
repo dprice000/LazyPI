@@ -14,7 +14,17 @@ namespace LazyPI.LazyObjects
         /// <summary>
         /// Only for testing purposes.
         /// </summary>
-        internal IAFDatabaseController DBController{ get; set; }
+        internal IAFDatabaseController DBController
+        {
+            get
+            {
+                return _DBController;
+            }
+            set
+            {
+                _DBController = value;
+            }
+        }
 
         public AFElements Elements
         {

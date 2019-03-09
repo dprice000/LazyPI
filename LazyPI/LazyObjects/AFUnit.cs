@@ -17,7 +17,17 @@ namespace LazyPI.LazyObjects
         /// <summary>
         /// Only for testing purposes.
         /// </summary>
-        internal IAFUnitController UnitController { get; set; }
+        internal IAFUnitController UnitController
+        {
+            get
+            {
+                return _UnitController;
+            }
+            set
+            {
+                _UnitController = value;
+            }
+        }
 
         public string Abbreviation
         {
