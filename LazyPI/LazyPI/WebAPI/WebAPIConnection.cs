@@ -7,15 +7,11 @@
         Kerberos
     }
 
-    public class WebAPIConnection : LazyPI.Common.Connection
+    public class WebAPIConnection : Common.Connection
     {
-        private RestSharp.RestClient _Client;
-        protected AuthType _AuthType;
+        private AuthType _AuthType;
 
-        public RestSharp.RestClient Client
-        {
-            get { return _Client; }
-        }
+        public RestSharp.RestClient Client { get; }
 
         /// <summary>
         /// Creates a new webAPI connection
@@ -27,26 +23,26 @@
         public WebAPIConnection(AuthType AuthType, string Hostname = null, string Username = null, string Password = null)
         {
             _AuthType = AuthType;
-            _Hostname = Hostname;
+            this.Hostname = Hostname;
 
             if (AuthType == AuthType.Basic)
             {
-                _Client = new RestSharp.RestClient(Hostname)
+                Client = new RestSharp.RestClient(Hostname)
                 {
                     Authenticator = new RestSharp.Authenticators.HttpBasicAuthenticator(Username, Password.ToString())
                 };
-                _Username = Username;
+                this.Username = Username;
             }
             else if (AuthType == AuthType.Kerberos)
             {
                 System.Net.NetworkCredential netCred = new System.Net.NetworkCredential(Username, Password);
 
-                //Looksup credentails of the application is using the library
-                _Client = new RestSharp.RestClient(Hostname)
+                //Looksup credentials of the application is using the library
+                Client = new RestSharp.RestClient(Hostname)
                 {
                     Authenticator = new RestSharp.Authenticators.NtlmAuthenticator(netCred)
                 };
-                _Username = netCred.UserName;
+                this.Username = netCred.UserName;
             }
         }
     }

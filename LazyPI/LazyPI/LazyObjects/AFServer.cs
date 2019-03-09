@@ -5,28 +5,14 @@ namespace LazyPI.LazyObjects
 {
     public class AFServer : BaseObject
     {
-        private bool _IsConnected;
-        private string _ServerVersion;
         private static IAFServerController _ServerController;
         private static AFDatabases _Databases;
 
         #region "Properties"
 
-        public bool IsConnected
-        {
-            get
-            {
-                return _IsConnected;
-            }
-        }
+        public bool IsConnected { get; }
 
-        public string ServerVersion
-        {
-            get
-            {
-                return _ServerVersion;
-            }
-        }
+        public string ServerVersion { get; }
 
         public AFDatabases Databases
         {
@@ -48,8 +34,8 @@ namespace LazyPI.LazyObjects
         internal AFServer(Connection Connection, string WebID, string ID, string Name, string Description, bool IsConnected, string ServerVersion, string Path) : base(Connection, WebID, ID, Name, Description, Path)
         {
             Initialize();
-            _IsConnected = IsConnected;
-            _ServerVersion = ServerVersion;
+            this.IsConnected = IsConnected;
+            this.ServerVersion = ServerVersion;
         }
 
         private void Initialize()

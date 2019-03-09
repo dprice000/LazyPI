@@ -32,73 +32,23 @@ namespace LazyPI.LazyObjects
 
     public class AFAttribute : BaseObject
     {
-        private string _UnitsName;
-        private string _AttrType;
-        private IEnumerable<string> _Categories;
-        private string _DataReferencePlugin;
-        private string _ConfigString;
         private AFAttributes _Attributes;
         private static IAFAttributeController _AttrController;
 
         #region "Properties"
 
-        public IEnumerable<string> Categories
-        {
-            get
-            {
-                return _Categories;
-            }
+        public IEnumerable<string> Categories { get;
 
-            //TODO: Implement setter
+        //TODO: Implement setter
         }
 
-        public string ConfigString
-        {
-            get
-            {
-                return _ConfigString;
-            }
-            set
-            {
-                _ConfigString = value;
-            }
-        }
+        public string ConfigString { get; set; }
 
-        public string UnitsName
-        {
-            get
-            {
-                return _UnitsName;
-            }
-            set
-            {
-                _UnitsName = value;
-            }
-        }
+        public string UnitsName { get; set; }
 
-        public string DataReferencePlugIn
-        {
-            get
-            {
-                return _DataReferencePlugin;
-            }
-            set
-            {
-                _DataReferencePlugin = value;
-            }
-        }
+        public string DataReferencePlugIn { get; set; }
 
-        public string Type
-        {
-            get
-            {
-                return _AttrType;
-            }
-            set
-            {
-                _AttrType = value;
-            }
-        }
+        public string Type { get; set; }
 
         public AFAttributes Attributes
         {
@@ -134,11 +84,11 @@ namespace LazyPI.LazyObjects
         {
             Initialize();
 
-            _Categories = Categories;
-            _ConfigString = ConfigString;
-            _AttrType = AttrType;
-            _DataReferencePlugin = DataReferencePlugin;
-            _UnitsName = UnitsName;
+            this.Categories = Categories;
+            this.ConfigString = ConfigString;
+            Type = AttrType;
+            DataReferencePlugIn = DataReferencePlugin;
+            this.UnitsName = UnitsName;
         }
 
         /// <summary>

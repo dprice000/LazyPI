@@ -2,26 +2,12 @@
 {
     public abstract class Connection
     {
-        protected string _Hostname;
-        protected string _Username;
 
         #region "Properties"
 
-        public string Hostname
-        {
-            get
-            {
-                return _Hostname;
-            }
-        }
+        public string Hostname { get; }
 
-        public string Username
-        {
-            get
-            {
-                return _Username;
-            }
-        }
+        public string Username { get; }
 
         #endregion "Properties"
     }

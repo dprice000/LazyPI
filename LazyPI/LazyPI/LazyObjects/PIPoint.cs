@@ -5,36 +5,15 @@ namespace LazyPI.LazyObjects
 {
     public class PIPoint : LazyPI.Common.BaseObject
     {
-        private string _PointClass;
-        private string _PointType;
-        private bool _Future;
         private IStreams _DataStream;
 
         #region"Properties"
 
-        public string PointClass
-        {
-            get
-            {
-                return _PointClass;
-            }
-        }
+        public string PointClass { get; }
 
-        public string PointType
-        {
-            get
-            {
-                return _PointType;
-            }
-        }
+        public string PointType { get; }
 
-        public bool Future
-        {
-            get
-            {
-                return _Future;
-            }
-        }
+        public bool Future { get; }
 
         #endregion
 
@@ -48,9 +27,9 @@ namespace LazyPI.LazyObjects
         public PIPoint(LazyPI.Common.Connection Connection, string WebID, string ID, string Name, string Description, string Path, string PointType, string PointClass, bool Future) :
             base(Connection, WebID, ID, Name, Description, Path)
         {
-            _PointClass = PointClass;
-            _PointType = PointType;
-            _Future = Future;
+            this.PointClass = PointClass;
+            this.PointType = PointType;
+            this.Future = Future;
         }
 
         #endregion
