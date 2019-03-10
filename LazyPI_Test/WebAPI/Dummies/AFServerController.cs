@@ -12,30 +12,9 @@ namespace LazyPI_Test.WebAPI.Dummies
 
         public AFServerController()
         {
-            FixtureWrapper fixture = new FixtureWrapper();
-            Servers = new List<AFServer>();
-            Databases = new List<AFDatabase>();
-            Units = new List<AFUnit>();
-
-            var server1 = fixture.Create<AFServer>();
-            server1.Name = "Server1";
-            Servers.Add(server1);
-
-            var server2 = fixture.Create<AFServer>();
-            server2.Name = "Server2";
-            Servers.Add(server2);
-
-            var db1 = fixture.Create<AFDatabase>();
-            db1.Name = "Database1";
-            Databases.Add(db1);
-
-            var db2 = fixture.Create<AFDatabase>();
-            db2.Name = "Database2";
-            Databases.Add(db2);
-
-            var unit1 = fixture.Create<AFUnit>();
-            unit1.Name = "Unit1";
-            Units.Add(unit1);
+            Servers = DataGenerator.Servers;
+            Databases = DataGenerator.Databases;
+            Units = DataGenerator.Units;
         }
 
         public AFServer Find(Connection Connection, string ServerID)
@@ -71,14 +50,12 @@ namespace LazyPI_Test.WebAPI.Dummies
         public bool CreateAssetDatabase(Connection Connection, string AFServerID, AFDatabase AFDB)
         {
             Databases.Add(AFDB);
-
             return true;
         }
 
         public bool CreateUnitClass(Connection Connection, string AFServerID, AFUnit UnitClass)
         {
             Units.Add(UnitClass);
-
             return true;
         }
     }

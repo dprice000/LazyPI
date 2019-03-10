@@ -176,6 +176,8 @@ namespace LazyPI.LazyObjects
                     foreach (AFElement ele in _Elements.Where(x => x.IsNew))
                     {
                         _ElementController.CreateChildElement(_Connection, WebID, ele);
+                        ele.IsNew = false;
+                        ele.IsDirty = false;
                     }
                 }
 
@@ -184,6 +186,8 @@ namespace LazyPI.LazyObjects
                     foreach (AFAttribute attr in _Attributes.Where(x => x.IsNew))
                     {
                         _ElementController.CreateAttribute(_Connection, WebID, attr);
+                        attr.IsNew = false;
+                        attr.IsDirty = false;
                     }
                 }
 

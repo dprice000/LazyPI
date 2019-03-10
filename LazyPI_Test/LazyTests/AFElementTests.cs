@@ -8,9 +8,10 @@ namespace LazyPI_Test.LazyTests
     public class AFElementTests
     {
         private static IAFServerController serverController = new Dummies.AFServerController();
+        private static IAFDatabaseController dbController = new Dummies.AFDatabaseController();
+        private static IAFElementController eleController = new Dummies.ElementController();
         private static AFServer server;
         private static AFDatabase AFDB;
-
 
         [ClassInitialize]
         public static void InitializeClass(TestContext testContext)
@@ -19,7 +20,7 @@ namespace LazyPI_Test.LazyTests
             server.ServerController = serverController;
 
             AFDB = server.Databases["Database1"];
-            AFDB.DBController = new Dummies.AFDatabaseController();
+            AFDB.DBController = dbController;
         }
 
         [TestMethod]
@@ -41,13 +42,46 @@ namespace LazyPI_Test.LazyTests
 
             AFDB.Elements.Add(element);
             AFDB.CheckIn();
+
+            Assert.IsFalse(element.IsNew);
+            Assert.IsFalse(element.IsDirty);
+            Assert.IsFalse(element.IsDeleted);
+            Assert.IsNotNull(AFDB.Elements["Create New Element"]);
+        }
+
+        [TestMethod]
+        public void CreateChildElement()
+        {
+            var ele = AFDB.Elements[0];
+            ele.ElementController = eleController;
+
+            AFElement ele2 = new AFElement();
+            ele2.Name = "Test Child Element";
+            ele2.Description = "Element Created to test child creation.";
+
+            ele.Elements.Add(ele2);
+            Assert.IsTrue(ele.IsDirty);
+            ele.CheckIn();
+
+            Assert.IsFalse(ele2.IsNew);
+            Assert.IsFalse(ele2.IsDirty);
+            Assert.IsFalse(ele2.IsDeleted);
+            Assert.IsNotNull(ele.Elements["Test Child Element"]);
         }
 
         [TestMethod]
         public void RequestParent()
         {
-            AFElement ele = new AFElement();
+            var ele = AFDB.Elements["Element1"];
 
+            AFElement ele2 = new AFElement();
+            ele2.Name = "Test Child Element";
+            ele2.Description = "Element Created to test child creation.";
+
+            ele.Elements.Add(ele2);
+            ele.CheckIn();
+
+            Assert.IsNotNull(ele2.Parent);
         }
     }
 }

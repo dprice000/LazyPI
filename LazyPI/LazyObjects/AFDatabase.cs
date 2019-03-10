@@ -103,6 +103,8 @@ namespace LazyPI.LazyObjects
                     foreach (AFElement ele in _Elements.Where(x => x.IsNew))
                     {
                         _DBController.CreateElement(_Connection, WebID, ele);
+                        ele.IsNew = false;
+                        ele.IsDirty = false;
                     }
                 }
 
@@ -111,6 +113,8 @@ namespace LazyPI.LazyObjects
                     foreach (AFEventFrame frame in _EventFrames.Where(x => x.IsNew))
                     {
                         _DBController.CreateEventFrame(_Connection, WebID, frame);
+                        frame.IsNew = false;
+                        frame.IsDirty = false;
                     }
                 }
 
