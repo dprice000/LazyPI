@@ -17,7 +17,7 @@ namespace LazyPI.LazyObjects
 
         bool IsExtendible(Connection Connection, string TemplateID);
 
-        IEnumerable<string> GetCategories(LazyPI.Common.Connection Connection, string TemplateID);
+        IEnumerable<string> GetCategories(Connection Connection, string TemplateID);
 
         IEnumerable<AFAttributeTemplate> GetAttributeTemplates(Connection Connection, string ElementID);
     }

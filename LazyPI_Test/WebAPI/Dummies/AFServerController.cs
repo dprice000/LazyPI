@@ -12,7 +12,7 @@ namespace LazyPI_Test.WebAPI.Dummies
 
         public AFServer Find(Connection Connection, string ServerID)
         {
-            return _servers.Find(x => x.ID == ServerID);
+            return _servers.Find(x => x.WebID == ServerID);
         }
 
         public AFServer FindByPath(Connection Connection, string Path)

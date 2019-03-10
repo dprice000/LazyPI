@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using Dummies = LazyPI_Test.WebAPI.Dummies;
 using LazyObjects = LazyPI.LazyObjects;
 using LazyPI.WebAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,7 +21,7 @@ namespace LazyPI_Test.WebAPI
             fixture.Register(() =>
             {
                 var ele = new LazyObjects.AFElement(new TestConnection(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>());
-
+                ele.ElementController = new Dummies.ElementController();
                 return ele;
             });
 

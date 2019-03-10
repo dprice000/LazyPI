@@ -11,7 +11,7 @@ namespace LazyPI_Test.WebAPI.Dummies
 
         public AFEventFrame Find(Connection Connection, string FrameID)
         {
-            return _eventFrames.Find(x => x.ID == FrameID);
+            return _eventFrames.Find(x => x.WebID == FrameID);
         }
 
         public AFEventFrame FindByPath(Connection Connection, string Path)

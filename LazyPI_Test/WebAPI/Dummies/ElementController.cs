@@ -61,13 +61,12 @@ namespace LazyPI_Test.WebAPI.Dummies
 
         public string GetElementTemplate(Connection Connection, string ElementID)
         {
-            return "FakeTemplateName";
+            return "Template1";
         }
 
         public IEnumerable<string> GetCategories(Connection Connection, string ElementID)
         {
-            //TODO: we need to mock this
-            return null;
+            return new string[] { "FakeCat1", "FakeCat2", "FakeCat3" };
         }
 
         public IEnumerable<AFAttribute> GetAttributes(Connection Connection, string ElementID, string NameFilter = "*", string CategoryName = "*", string TemplateName = "*", string ValueType = "*", bool SearchFullHierarchy = false, string SortField = "Name", string SortOrder = "Ascending", int StartIndex = 0, bool ShowExcluded = false, bool ShowHidden = false, int MaxCount = 1000)
