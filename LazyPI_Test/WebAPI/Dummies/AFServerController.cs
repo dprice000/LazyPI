@@ -13,6 +13,9 @@ namespace LazyPI_Test.WebAPI.Dummies
         public AFServerController()
         {
             FixtureWrapper fixture = new FixtureWrapper();
+            Servers = new List<AFServer>();
+            Databases = new List<AFDatabase>();
+            Units = new List<AFUnit>();
 
             var server1 = fixture.Create<AFServer>();
             server1.Name = "Server1";
