@@ -11,6 +11,8 @@ namespace LazyPI.LazyObjects
         private AFElements _Elements;
         private AFEventFrames _EventFrames;
 
+        #region "Properties"
+
         /// <summary>
         /// Only for testing purposes.
         /// </summary>
@@ -51,6 +53,8 @@ namespace LazyPI.LazyObjects
                 return _EventFrames;
             }
         }
+
+        #endregion "Properties"
 
         #region "Constructors"
 

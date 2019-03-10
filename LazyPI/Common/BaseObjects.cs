@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LazyPI.Common
+﻿namespace LazyPI.Common
 {
     public class BaseObject
     {
@@ -16,12 +14,6 @@ namespace LazyPI.Common
 
         public string Path { get; protected set; }
 
-        public bool IsNew { get; internal set; }
-
-        public bool IsDirty { get; internal set; }
-
-        public bool IsDeleted { get; internal set; }
-
         public string Name
         {
             get
@@ -31,7 +23,6 @@ namespace LazyPI.Common
             set
             {
                 _Name = value;
-                IsDirty = true;
             }
         }
 
@@ -44,7 +35,6 @@ namespace LazyPI.Common
             set
             {
                 _Description = value;
-                IsDirty = true;
             }
         }
 
@@ -73,33 +63,5 @@ namespace LazyPI.Common
         }
 
         #endregion "Constructors"
-
-        protected void ItemsChangedMethod(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
-            {
-                foreach (BaseObject item in e.NewItems)
-                {
-                    item.IsNew = true;
-                    IsDirty = true;
-                }
-            }
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                foreach (BaseObject item in e.OldItems)
-                {
-                    item.IsDeleted = true;
-                    IsDirty = true;
-                }
-            }
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-            {
-                throw new NotImplementedException("Replace not implemented by LazyPI");
-            }
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Move)
-            {
-                throw new NotImplementedException("Move not implemented by LazyPI");
-            }
-        }
     }
 }

@@ -30,7 +30,7 @@ namespace LazyPI.LazyObjects
         }
     }
 
-    public class AFAttribute : BaseObject
+    public class AFAttribute : CheckInAble
     {
         private AFAttributes _Attributes;
         private static IAFAttributeController _AttrController;
@@ -79,7 +79,6 @@ namespace LazyPI.LazyObjects
             set
             {
                 _Attributes = value;
-                IsDirty = true;
             }
         }
 
@@ -87,16 +86,16 @@ namespace LazyPI.LazyObjects
 
         #region "Constructors"
 
-        public AFAttribute()
+        public AFAttribute() : base()
         {
         }
 
-        internal AFAttribute(LazyPI.Common.Connection Connection, string WebID, string ID, string Name, string Description, string Path) : base(Connection, WebID, ID, Name, Description, Path)
+        internal AFAttribute(Connection Connection, string WebID, string ID, string Name, string Description, string Path) : base(Connection, WebID, ID, Name, Description, Path)
         {
             Initialize();
         }
 
-        internal AFAttribute(LazyPI.Common.Connection Connection, string WebID, string ID, string Name, string Description, string Path, string UnitsName, string ConfigString, string DataReferencePlugin, string AttrType, IEnumerable<string> Categories)
+        internal AFAttribute(Connection Connection, string WebID, string ID, string Name, string Description, string Path, string UnitsName, string ConfigString, string DataReferencePlugin, string AttrType, IEnumerable<string> Categories)
             : base(Connection, WebID, ID, Name, Description, Path)
         {
             Initialize();
@@ -160,7 +159,7 @@ namespace LazyPI.LazyObjects
             IsDeleted = true;
         }
 
-        public void CheckIn()
+        public override void CheckIn()
         {
             if (IsDirty && !IsDeleted)
             {
@@ -173,7 +172,16 @@ namespace LazyPI.LazyObjects
                         _AttrController.CreateChild(_Connection, WebID, attr);
                     }
                 }
+
+                ResetState();
             }
+        }
+
+        protected override void ResetState()
+        {
+            IsNew = false;
+            IsDirty = false;
+            _Attributes = null;
         }
 
         #endregion "Interactions"

@@ -18,8 +18,4 @@
     <ProjectReference Include="..\LazyPI\LazyPI.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="LazyObjects\" />
-  </ItemGroup>
-
 </Project>

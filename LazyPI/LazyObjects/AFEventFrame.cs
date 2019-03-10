@@ -154,7 +154,7 @@ namespace LazyPI.LazyObjects
 
         #region "Constructors"
 
-        public AFEventFrame()
+        public AFEventFrame() : base()
         {
         }
 

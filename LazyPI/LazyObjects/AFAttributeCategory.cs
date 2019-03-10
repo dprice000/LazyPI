@@ -21,6 +21,9 @@ namespace LazyPI.LazyObjects
             }
         }
 
+        public AFAttributeCategory() : base()
+        {
+        }
 
         private void Initialize()
         {

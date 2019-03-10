@@ -129,7 +129,7 @@ namespace LazyPI.LazyObjects
 
         #region "Constructors"
 
-        public AFElement()
+        public AFElement() : base()
         {
         }
 
