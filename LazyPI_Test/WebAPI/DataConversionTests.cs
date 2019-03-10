@@ -1,6 +1,4 @@
-﻿using AutoFixture;
-using Dummies = LazyPI_Test.WebAPI.Dummies;
-using LazyObjects = LazyPI.LazyObjects;
+﻿using LazyObjects = LazyPI.LazyObjects;
 using LazyPI.WebAPI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ResponseModels = LazyPI.WebAPI.ResponseModels;
@@ -11,42 +9,12 @@ namespace LazyPI_Test.WebAPI
     [TestClass]
     public class DataConversionTests
     {
-        private static Fixture fixture;
+        private static FixtureWrapper fixture;
 
         [ClassInitialize]
         public static void Setup(TestContext testContext)
         {
-            fixture = new Fixture();
-
-            fixture.Register(() =>
-            {
-                var ele = new LazyObjects.AFElement(new TestConnection(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>());
-                ele.ElementController = new Dummies.ElementController();
-                return ele;
-            });
-
-            fixture.Register(() =>
-            {
-                return new LazyObjects.AFAttribute(new TestConnection(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>());
-            });
-
-            fixture.Register(() => {
-                return new LazyObjects.AFEventFrame(new TestConnection(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>());
-            });
-
-            fixture.Register(() => {
-                return new LazyObjects.AFDatabase(new TestConnection(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>());
-            });
-
-            fixture.Register(() =>
-            {
-                return new LazyObjects.AFUnit(new TestConnection(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>());
-            });
-
-            fixture.Register(() =>
-            {
-                return new LazyObjects.PIPoint(new TestConnection(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>(), fixture.Create<string>());
-            });
+            fixture = new FixtureWrapper();
         }
 
         [TestMethod]

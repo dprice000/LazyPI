@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using LazyPI.Common;
+﻿using LazyPI.Common;
 using LazyPI.LazyObjects;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,8 @@ namespace LazyPI_Test.WebAPI.Dummies
 
         public ElementTemplateController()
         {
-            Fixture fixture = new Fixture();
+            FixtureWrapper fixture = new FixtureWrapper();
+            Templates = new List<AFElementTemplate>();
 
             var template1 = fixture.Create<AFElementTemplate>();
             template1.Name = "Template1";
